@@ -15,12 +15,12 @@ jobs:
       - run: npm install
       - run: npm run build
 
-      - name: Create Git tag
-        run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
-          git tag v$(date +%Y%m%d%H%M%S)
-          git push origin --tags
+#      - name: Create Git tag
+#        run: |
+#          git config --local user.name "GitHub Actions"
+#          git config --local user.email "actions@github.com"
+#          git tag v$(date +%Y%m%d%H%M%S)
+#          git push origin --tags
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
