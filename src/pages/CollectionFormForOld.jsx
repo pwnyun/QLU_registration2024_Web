@@ -68,14 +68,18 @@ export default function CollectionFormForOld() {
       setModalContent(res.data);
 
       if (JSON.stringify(res.data).indexOf("成功") >= 0) {
-        setTimeout(() => {window.location = 'https://wlyw.qlu.edu.cn/wiki/help/'}, 5000);
+        setTimeout(() => {
+          window.location = 'https://wlyw.qlu.edu.cn/wiki/help/'
+        }, 5000);
       }
     })
   }
 
   useEffect(() => {
     setProvince('山东省')
-    setProvinceIndex(0)
+    setProvinceIndex(level.findIndex(item => item.name === '山东省'))
+
+    console.log('level', level)
   }, []);
 
   return (<>
@@ -126,7 +130,10 @@ export default function CollectionFormForOld() {
           </div>
         </div>
 
-        <form ref={formRef} onSubmit={(e) => {e.preventDefault();submit();}}>
+        <form ref={formRef} onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}>
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
@@ -264,9 +271,6 @@ export default function CollectionFormForOld() {
                   >
                     <option value="" disabled hidden></option>
                     {level
-                      .sort((a, b) => {
-                          return b.name === "山东省" ? 1 : 0
-                      })
                       .map((province, index) =>
                         <option key={province.code} id={index}>{province.name}</option>
                       )
@@ -352,7 +356,9 @@ export default function CollectionFormForOld() {
                 <div className="mt-2 w-full flex items-center gap-x-2">
                   {/*宽度随意，高度最好小于等于36px*/}
                   <img src="/api/captcha" className="bg-amber-500 w-auto h-full flex-grow text-nowrap" alt="验证码"
-                       onClick={e => {e.target.src='/api/captcha?' + Math.random()}}
+                       onClick={e => {
+                         e.target.src = '/api/captcha?' + Math.random()
+                       }}
                   />
                   <input
                     type="text"
