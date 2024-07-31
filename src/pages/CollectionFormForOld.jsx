@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import {validateIdCard} from "../utils.js";
 import Modal from "../modal.jsx";
 import axios from "axios";
+import {TfiClose, TfiShareAlt} from "react-icons/tfi";
 
 export default function CollectionFormForOld() {
   const formRef = useRef(null);
@@ -14,6 +15,16 @@ export default function CollectionFormForOld() {
 
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
+  const [modalButtonText, setModalButtonText] = useState("关闭");
+  const [modalOptionalButton, setModalOptionalButton] = useState();
+
+  const [jumpButton] = useState(<button
+    type="button"
+    className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+    onClick={() => {setShowModal(false); window.location = 'https://wlyw.qlu.edu.cn/wiki/help/'}}
+  >
+    <TfiShareAlt />&ensp;跳转
+  </button>)
 
   const submit = () => {
     let formData = new FormData(formRef.current);
@@ -65,14 +76,19 @@ export default function CollectionFormForOld() {
     }).catch(err => {
       setShowModal(true);
       setModalContent(err.message);
+      setModalContent("确认");
+      setModalOptionalButton(null);
+
     }).then(res => {
       setShowModal(true);
-      setModalContent(res.data);
+      setModalContent(res.data.message);
 
-      if (JSON.stringify(res.data).indexOf("成功") >= 0) {
-        setTimeout(() => {
-          window.location = 'https://wlyw.qlu.edu.cn/wiki/help/'
-        }, 5000);
+      if (res.data.status === "success") {
+        setModalContent(<><TfiClose />&ensp;取消</>);
+        setModalOptionalButton(jumpButton);
+      } else {
+        setModalContent("确认");
+        setModalOptionalButton(null);
       }
     })
   }
@@ -392,7 +408,7 @@ export default function CollectionFormForOld() {
         <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
       </div>
 
-      <Modal isOpen={showModal} setIsOpen={setShowModal}>
+      <Modal isOpen={showModal} setIsOpen={setShowModal} buttonText={modalButtonText} optionalButton={modalOptionalButton}>
         {modalContent}
       </Modal>
     </>
