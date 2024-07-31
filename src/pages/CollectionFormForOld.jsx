@@ -55,6 +55,8 @@ export default function CollectionFormForOld() {
     }
 
     formData.set('address', `${province}+${prefecture}+${county}+${formData.get('address')}`);
+    formData.delete('prefecture');
+    formData.delete('county');
 
     axios({
       method: 'POST',
@@ -282,13 +284,13 @@ export default function CollectionFormForOld() {
               {/*地级市*/}
               <div
                 className={`sm:col-span-2 ${(provinceIndex === -1 || level[provinceIndex].children === undefined || level[provinceIndex].children.length === 0) && 'hidden'}`}>
-                <label htmlFor="prefectural" className="hidden sm:block text-sm font-medium leading-6">
+                <label htmlFor="prefecture" className="hidden sm:block text-sm font-medium leading-6">
                   &emsp;
                 </label>
                 <div className="mt-2 w-full">
                   <select
-                    id="prefectural"
-                    name="prefectural"
+                    id="prefecture"
+                    name="prefecture"
                     value={prefecture}
                     onChange={(e) => {
                       if (e.target.value !== prefecture) {
@@ -300,8 +302,8 @@ export default function CollectionFormForOld() {
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
-                    {provinceIndex !== -1 && level[provinceIndex]?.children?.map((prefectural, index) =>
-                      <option key={prefectural.code} id={index}>{prefectural.name}</option>
+                    {provinceIndex !== -1 && level[provinceIndex]?.children?.map((prefecture, index) =>
+                      <option key={prefecture.code} id={index}>{prefecture.name}</option>
                     )}
                   </select>
                 </div>
