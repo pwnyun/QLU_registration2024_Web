@@ -6,21 +6,27 @@ import Home from './pages/Home/Home.jsx'
 import Directions from "./pages/Directions.jsx";
 import CollectionForm from "./pages/CollectionForm.jsx";
 import PreCheckIn from "./pages/PreCheckIn.jsx";
+import CollectionFormForOld from "./pages/CollectionFormForOld.jsx";
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home/>,
-  }, {
-    path: '/directions',
-    element: <Directions />,
-  }, {
-    path: '/collection-form',
-    element: <CollectionForm />,
-  }, {
-    path: '/pre-check-in',
-    element: <PreCheckIn />
-  }
+  // {
+  //   path: '/',
+  //   element: <Home/>,
+  // }, {
+  //   path: '/directions',
+  //   element: <Directions />,
+  // }, {
+  //   path: '/collection-form',
+  //   element: <CollectionForm />,
+  // }, {
+  //   path: '/pre-check-in',
+  //   element: <PreCheckIn />
+  // }, {
+  //   path: '/old-form',
+  //   element: <CollectionFormForOld />
+  // }
+
+  {path:'/', element: <CollectionFormForOld/>}
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
