@@ -62,6 +62,8 @@ export default function CollectionFormForOld() {
     if (errorMessage !== '') {
       setShowModal(true)
       setModalContent(`${errorMessage}请检查输入。`)
+      setModalButtonText("确认");
+      setModalOptionalButton(null);
       return;
     }
 
@@ -76,7 +78,7 @@ export default function CollectionFormForOld() {
     }).catch(err => {
       setShowModal(true);
       setModalContent(err.message);
-      setModalContent("确认");
+      setModalButtonText("确认");
       setModalOptionalButton(null);
 
     }).then(res => {
@@ -84,10 +86,10 @@ export default function CollectionFormForOld() {
       setModalContent(res.data.message);
 
       if (res.data.status === "success") {
-        setModalContent(<><TfiClose />&ensp;取消</>);
+        setModalButtonText(<><TfiClose />&ensp;取消</>);
         setModalOptionalButton(jumpButton);
       } else {
-        setModalContent("确认");
+        setModalButtonText("确认");
         setModalOptionalButton(null);
       }
     })
