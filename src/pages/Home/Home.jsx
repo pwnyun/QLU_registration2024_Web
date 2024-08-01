@@ -99,7 +99,8 @@ export default function Home() {
               target="_blank"
               // rel="noopener noreferrer"
             >
-              By 网络运维
+              反诈提示：<br/>
+              请广大新生关注录取通知书内指定的官方“公众号”“QQ群”，请勿自行搜索加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。
             </a>
           </div>
         </div>
