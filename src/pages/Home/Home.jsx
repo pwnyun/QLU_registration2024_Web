@@ -191,7 +191,11 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
               验证码
             </label>
             <div className="mt-2 w-full flex items-center gap-x-2">
-              <img src="" className="bg-amber-500 w-auto h-full flex-grow text-nowrap" alt="验证码"/>
+              <img src="/api/captcha" className="bg-amber-500 w-auto h-full flex-grow text-nowrap" alt="验证码"
+                onClick={e => {
+                e.target.src = '/api/captcha?' + Math.random()
+                }}
+              />
               <input
                 type="text"
                 name="captcha"
