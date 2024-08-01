@@ -37,8 +37,7 @@ export default function Modal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel
-                  className="min-w-md max-h-[1/3vh] w-full max-w-fit transform rounded-2xl bg-white/90 p-6 text-left align-middle shadow-xl backdrop-blur transition-all dark:bg-slate-800/80"
-                  style={{ minWidth: '28rem' }}
+                  className="min-w-96 max-h-[1/3vh] w-full max-w-fit transform rounded-2xl bg-white/90 p-6 text-left align-middle shadow-xl backdrop-blur transition-all dark:bg-slate-800/80"
                 >
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
                     {title}
