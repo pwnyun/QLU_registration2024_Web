@@ -24,6 +24,10 @@ jobs:
           git tag v$TIMESTAMP
           git push origin v$TIMESTAMP
 
+      - name: Archive dist folder
+        run: |
+          tar -czf dist.tar.gz -C dist .
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
@@ -34,3 +38,4 @@ jobs:
           body: Automatic release created by GitHub Actions
           draft: false
           prerelease: false
+          files: dist.tar.gz
