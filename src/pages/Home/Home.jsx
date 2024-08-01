@@ -21,13 +21,13 @@ export default function Home() {
     setModalTitle("新生身份验证")
 
     // 检查是否到系统开放时间
-    // if (new Date().getTime() < 1723651440000) {
-    //   // TODO use time api
-    //   setModalButtonText("关闭")
-    //   setModalOptionalButton(null)
-    //   setModalContent("系统将于 8 月 15 日开通。")
-    //   return
-    // }
+    if (new Date().getTime() < 1723651440000) {
+      // TODO use time api
+      setModalButtonText("关闭")
+      setModalOptionalButton(null)
+      setModalContent("系统将于 8 月 15 日开通。")
+      return
+    }
 
     setModalOptionalButton(<button
       type="button"
@@ -94,13 +94,10 @@ export default function Home() {
           <div
             className="fixed bottom-0 left-0 flex h-48 w-full lg:max-w-64 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
             <div
-              className="pointer-events-none flex flex-col place-items-center gap-2 p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:pt-3 lg:pb-2 lg:border-2 lg:rounded"
-              // href="https://wlyw.qlu.edu.cn/"
-              // target="_blank"
-              // rel="noopener noreferrer"
+              className="pointer-events-none flex flex-col place-items-center p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:py-2 lg:border-2 lg:rounded"
             >
-              <div className="font-serif font-bold">反诈提示</div>
-              <div className="indent-8">请广大新生关注<span className="underline underline-offset-4 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。</div>
+              <div className="font-serif font-bold text-base py-1">反诈提示</div>
+              <div className="indent-8">请广大新生关注<span className="underline lg:decoration-wavy underline-offset-4 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。</div>
             </div>
           </div>
         </div>
