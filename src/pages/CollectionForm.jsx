@@ -65,7 +65,7 @@ export default function CollectionForm() {
           </div>
         </div>
 
-        <form method="post" action="/submit">
+        <form onSubmit={() => {}}>
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
@@ -93,6 +93,7 @@ export default function CollectionForm() {
                     id="gender"
                     name="gender"
                     defaultValue=""
+                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
@@ -113,6 +114,7 @@ export default function CollectionForm() {
                     id="phone"
                     placeholder="个人电话"
                     autoComplete="tel"
+                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   />
                 </div>
@@ -128,6 +130,7 @@ export default function CollectionForm() {
                     name="qq"
                     id="qq"
                     placeholder="个人QQ号"
+                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   />
                 </div>
@@ -143,6 +146,7 @@ export default function CollectionForm() {
                     name="guardian-name"
                     id="guardian-name"
                     placeholder="监护人姓名"
+                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   />
                 </div>
@@ -159,6 +163,7 @@ export default function CollectionForm() {
                     id="guardian-phone"
                     placeholder="监护人电话"
                     autoComplete="tel"
+                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   />
                 </div>
@@ -264,6 +269,7 @@ export default function CollectionForm() {
                     id="address"
                     placeholder="详细地址"
                     autoComplete="address"
+                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   />
                 </div>
@@ -284,6 +290,7 @@ export default function CollectionForm() {
                       max={300}
                       step={2}
                       placeholder="身高"
+                      required
                       className="block w-full border-0 bg-transparent py-1.5 pr-1 placeholder:text-gray-400 focus:ring-0 text-sm sm:leading-6"
                     />
                     <span className="grow select-none break-keep pl-2 pr-3 text-gray-500 text-sm">厘米</span>
@@ -303,9 +310,10 @@ export default function CollectionForm() {
                       name="weight"
                       id="weight"
                       min={0}
-                      max={600}
+                      max={500}
                       step={5}
                       placeholder="体重"
+                      required
                       className="block w-full border-0 bg-transparent py-1.5 pr-1 placeholder:text-gray-400 focus:ring-0 text-sm sm:leading-6"
                     />
                     <span className="grow select-none break-keep pl-2 pr-3 text-gray-500 text-sm">千克</span>
@@ -318,13 +326,20 @@ export default function CollectionForm() {
                   血型
                 </label>
                 <div className="mt-2 w-full">
-                  <input
-                    type="text"
-                    name="blood-type"
+                  <select
                     id="blood-type"
-                    placeholder="血型"
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
-                  />
+                    name="blood-type"
+                    defaultValue=""
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs text-sm sm:leading-6"
+                  >
+                    <option value="" disabled hidden></option>
+                    <option>A 型</option>
+                    <option>B 型</option>
+                    <option>O 型</option>
+                    <option>AB 型</option>
+                    <option>其他血型 / 我不知道</option>
+                  </select>
                 </div>
               </div>
 

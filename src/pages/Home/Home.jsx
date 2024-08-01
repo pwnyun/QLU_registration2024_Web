@@ -1,10 +1,11 @@
 import {Link, useNavigate} from "react-router-dom";
 import "./Home.css";
 import Modal from "../../modal.jsx";
-import {forwardRef, useRef, useState} from "react";
+import {forwardRef, useEffect, useRef, useState} from "react";
 import {MdCheck, MdClose} from "react-icons/md";
 import localforage from "localforage";
 import {encryptString, validateIdCard} from "../../utils.js";
+import {VscClose, VscScreenFull} from "react-icons/vsc";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -20,11 +21,11 @@ export default function Home() {
     setModalTitle("新生身份验证")
 
     // 检查是否到系统开放时间
-    // if (new Date().getTime() < 1723219200000) {
+    // if (new Date().getTime() < 1723651440000) {
     //   // TODO use time api
     //   setModalButtonText("关闭")
     //   setModalOptionalButton(null)
-    //   setModalContent("系统将于 8 月 10 日开通。")
+    //   setModalContent("系统将于 8 月 15 日开通。")
     //   return
     // }
 
@@ -48,7 +49,7 @@ export default function Home() {
 
     if (!validateIdCard(formData.get("id_card"))) {
       setShowModal(true)
-      setModalContent("招生信息尚未就绪，8月15日后系统开放。")
+      setModalContent("居民身份证号码校验失败。如您使用其他类型证件，请联系网络信息中心：0531-89631358。")
       setModalButtonText("关闭")
       setModalOptionalButton(null)
       return
@@ -57,13 +58,28 @@ export default function Home() {
     let res = true;
     if (res) {
       localforage.setItem("login_info", {
-        name: encryptString("王宇哲"),
+        name: encryptString("wyz"),
         id_card: encryptString("123456200001011239"),
         token: "TOKEN_FOR_SER VER_VALIDATE"
       }).then(r => {
         navigate('/directions')
       });
     }
+  }
+
+  const showWikiWindow = () => {
+    setShowModal(true)
+    setModalTitle("新生报到指南")
+    setModalContent(<WikiWindow />)
+    setModalButtonText(<><VscClose className="w-6 h-6"/>&ensp;关闭</>)
+    setModalOptionalButton(
+      <a
+        href="https://wlyw.qlu.edu.cn/wiki/help/"
+        type="button"
+        className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+      >
+        <VscScreenFull className="w-6 h-6"/>&ensp;全屏阅读
+      </a>)
   }
 
   return (
@@ -91,22 +107,21 @@ export default function Home() {
         <div
           className="relative flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
           <img
-            className="relative hidden sm:block dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] mr-[-16px] z-10"
-            src="/assets/qlu-logo-space.png"
+            className="relative block dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] z-10"
+            src="/assets/qlu-logo-solid.png"
             alt="齐鲁工大（鲁科院）Logo"
           />
-          <img
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] sm:ml-[-16px]"
-            src="/assets/wlyw-logo-space.png"
-            alt="网络运维 Logo"
-          />
+          {/*<img*/}
+          {/*  className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] sm:ml-[-16px]"*/}
+          {/*  src="/assets/wlyw-logo-space.png"*/}
+          {/*  alt="网络运维 Logo"*/}
+          {/*/>*/}
         </div>
 
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
 
-          {/*<Function title="新生身份核验" content="请跟随流程完成身份核验" url="/login"/>*/}
-          <button
-            className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          <div
+            className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 cursor-pointer select-none"
             onClick={showLoginModal}
           >
             <h2 className="mb-3 text-2xl">
@@ -117,15 +132,16 @@ export default function Home() {
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-50">
-              8月15日后，验证身份开启线上报到流程
+              8 月 15 日后，开启线上报到流程
             </p>
-          </button>
+          </div>
 
-          <Link
-            to="https://wlyw.qlu.edu.cn/wiki/help/"
-            className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          <div
+            // to="https://wlyw.qlu.edu.cn/wiki/help/"
+            className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 cursor-pointer select-none"
             // target="_blank"
             // rel="noopener noreferrer"
+            onClick={showWikiWindow}
           >
             <h2 className="mb-3 text-2xl">
               {`新生报到指南 `}
@@ -137,7 +153,7 @@ export default function Home() {
             <p className="m-0 max-w-[30ch] text-sm opacity-50">
               了解齐鲁工大信息系统
             </p>
-          </Link>
+          </div>
 
         </div>
       </main>
@@ -153,9 +169,9 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
   return(<>
     <form ref={ref}>
       <div className="border-b border-gray-900/10 pt-4 pb-8">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
 
-          <div className="sm:col-span-3">
+          <div className="sm:col-span-1">
             <label htmlFor="name" className="block text-sm font-medium leading-6">
               姓名
             </label>
@@ -171,7 +187,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
             </div>
           </div>
 
-          <div className="sm:col-span-3">
+          <div className="sm:col-span-1">
             <label htmlFor="id_card" className="block text-sm font-medium leading-6">
               身份证号
             </label>
@@ -186,7 +202,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
             </div>
           </div>
 
-          <div className="sm:col-span-3">
+          <div className="sm:col-span-1">
             <label htmlFor="captcha" className="block text-sm font-medium leading-6">
               验证码
             </label>
@@ -211,3 +227,14 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
     </form>
   </>)
 })
+
+function WikiWindow () {
+  return (<>
+    <iframe src="https://wlyw.qlu.edu.cn/wiki/help/"
+            credentialless
+            loading='lazy'
+            className="w-full h-full min-h-96"
+            sandbox="allow-downloads allow-modals allow-popups allow-scripts "
+    ></iframe>
+  </>)
+}
