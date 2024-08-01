@@ -17,27 +17,19 @@ jobs:
       - run: npm install
       - run: npm run build
 
-#      - name: Create Git tag
-#        run: |
-#          git config --local user.name "GitHub Actions"
-#          git config --local user.email "actions@github.com"
-#          git tag v$(date +%Y%m%d%H%M%S)
-#          git push origin --tags
-
       - name: Create Tag
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag: "latest"
-          tag_exists_error: false
-          message: "Latest release"
+        run: |
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          git tag v$TIMESTAMP
+          git push origin v$TIMESTAMP
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "latest"
-          release_name: "latest release"
+          tag_name: v${{ github.run_number }}
+          release_name: "Release ${{ github.run_number }}"
           body: Automatic release created by GitHub Actions
           draft: false
           prerelease: false
