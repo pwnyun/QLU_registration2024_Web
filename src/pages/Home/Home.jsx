@@ -48,7 +48,7 @@ export default function Home() {
 
     if (!validateIdCard(formData.get("id_card"))) {
       setShowModal(true)
-      setModalContent("居民身份证号码校验失败。如您使用其他类型证件，请联系网络信息中心：0531-89631358。")
+      setModalContent("招生信息尚未就绪，8月15日后系统开放。")
       setModalButtonText("关闭")
       setModalOptionalButton(null)
       return
@@ -117,7 +117,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-50">
-              验证身份后开启线上报到流程
+              8月15日后，验证身份后方可开启线上报到流程
             </p>
           </button>
 
