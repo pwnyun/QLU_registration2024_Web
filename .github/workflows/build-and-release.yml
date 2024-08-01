@@ -27,8 +27,9 @@ jobs:
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
-          tag: ${{ github.sha }}
-          commit_sha: ${{ github.sha }}
+          tag: "latest"
+          tag_exists_error: false
+          message: "Latest release"
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
