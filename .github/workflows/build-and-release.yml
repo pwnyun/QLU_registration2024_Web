@@ -3,6 +3,8 @@ name: Build and Release
 on:
   push:
     branches: [main]  # Replace 'main' with your desired branch
+permissions:
+  contents: write
 
 jobs:
   build-and-release:
