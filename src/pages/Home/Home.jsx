@@ -117,7 +117,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-50">
-              8月15日后，验证身份后方可开启线上报到流程
+              8月15日后，验证身份开启线上报到流程
             </p>
           </button>
 
