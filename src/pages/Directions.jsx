@@ -7,43 +7,43 @@ export default function Directions() {
   const features = [
     {
       name: '一号通激活',
-      description: 'text',
+      description: '点击跳转到一号通激活指南',
       icon: FaArrowRight,
       url: 'https://wlyw.qlu.edu.cn/wiki/help/sso/',
       target: '_blank'
     }, {
       name: '信息采集',
-      description: 'text',
+      description: '点击进入新生信息采集表单',
       icon: FaArrowRight,
       url: '/collection-form',
       target: '_blank'
     }, {
       name: '线上缴费',
-      description: 'text',
+      description: '点击跳转至计财处智慧财务系统',
       icon: FaArrowRight,
       url: '',
       target: '_blank'
     }, {
       name: 'OS 平台注册',
-      description: 'text',
+      description: '点击跳转到工大OS激活指南',
       icon: FaArrowRight,
       url: '',
       target: '_blank'
     }, {
       name: '宿舍查询',
-      description: 'text',
+      description: '点击查看宿舍分配信息',
       icon: FaArrowRight,
       url: '',
       target: '_blank'
     }, {
       name: '分班信息查询',
-      description: 'text',
+      description: '点击查看分班信息',
       icon: FaArrowRight,
       url: '',
       target: '_blank'
     }, {
       name: '预报到',
-      description: 'text',
+      description: '点击进入预报道系统',
       icon: FaArrowRight,
       url: '/pre-check-in',
       target: '_blank'
