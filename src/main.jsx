@@ -7,11 +7,13 @@ import Directions from "./pages/Directions.jsx";
 import CollectionForm from "./pages/CollectionForm.jsx";
 import PreCheckIn from "./pages/PreCheckIn.jsx";
 import CollectionFormForOld from "./pages/CollectionFormForOld.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home/>,
+    errorElement: <ErrorPage />,
   }, {
     path: '/directions',
     element: <Directions />,

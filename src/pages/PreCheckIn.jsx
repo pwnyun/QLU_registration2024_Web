@@ -71,9 +71,11 @@ export default function PreCheckIn() {
                   </label>
                   <div className="mt-2 w-full">
                     <input
-                      type="date"
+                      type="datetime-local"
                       name="date"
                       id="date"
+                      min="2024-08-30T04:00"
+                      max="2024-08-30T23:30"
                       className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                     />
                   </div>
