@@ -385,7 +385,7 @@ export default function CollectionForm() {
                 </div>
               </div>
 
-              <div className="sm:col-span-full">
+              {/* <div className="sm:col-span-full">
                 <div className="mt-2 flex flex-col items-start">
                   <div className="flex items-center">
                     <Switch
@@ -408,7 +408,7 @@ export default function CollectionForm() {
                     * <a>校园网资费说明</a>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="sm:col-span-full md:flex">
                 <button
