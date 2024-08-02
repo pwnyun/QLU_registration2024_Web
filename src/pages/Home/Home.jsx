@@ -60,7 +60,7 @@ export default function Home() {
       localforage.setItem("login_info", {
         name: encryptString("wyz"),
         id_card: encryptString("123456200001011239"),
-        token: "TOKEN_FOR_SER VER_VALIDATE"
+        token: "TOKEN_FOR_SERVER_VALIDATE"
       }).then(r => {
         navigate('/directions')
       });
