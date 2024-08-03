@@ -45,7 +45,7 @@ export default function CollectionForm() {
           <div
             className="object-cover translate-x-[-50%] translate-y-[20px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px] text-nowrap text-2xl flex flex-col justify-center items-center text-qlu font-bold">
             <div>齐鲁工业大学</div>
-            <div>信息采集表</div>
+            <div>新生信息采集表</div>
           </div>
         </div>
 
@@ -53,7 +53,7 @@ export default function CollectionForm() {
         <div
           className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
           <div
-            className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">校园网申领须知
+            className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">信息采集须知
           </div>
           <div className="pt-2">
             本表单为齐鲁工业大学官方新生信息采集表单，请详细、准确的填写信息。<b>我们将会妥善的保护您的隐私数据</b>。
