@@ -23,13 +23,13 @@ export default function Home() {
     setModalTitle("新生身份验证")
 
     // 检查是否到系统开放时间
-    if (new Date().getTime() < 1723651440000) {
-      // TODO use time api
-      setModalButtonText("关闭")
-      setModalOptionalButton(null)
-      setModalContent("系统将于 8 月 15 日开通。")
-      return
-    }
+    // if (new Date().getTime() < 1723651440000) {
+    //   // TODO use time api
+    //   setModalButtonText("关闭")
+    //   setModalOptionalButton(null)
+    //   setModalContent("系统将于 8 月 15 日开通。")
+    //   return
+    // }
 
     if (name) {
       // 已核验新生身份
