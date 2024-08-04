@@ -30,7 +30,10 @@ export function decrypt(ciphertext, key = "WLYW, 0531-89631358") {
   return JSON.parse(CryptoJS.AES.decrypt(ciphertext, key))
 }
 
-export function request(url, data, method = 'GET', headers = {}) {
+export function request({url, method, data, headers}) {
+  if (!data) data = {}
+  if (!headers) headers = {}
+
   return new Promise((resolve, reject) => {
     // 添加请求拦截器
     axios.interceptors.request.use(
