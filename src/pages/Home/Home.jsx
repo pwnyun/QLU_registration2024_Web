@@ -105,7 +105,7 @@ export default function Home() {
       console.log(res)
       if (res.status === 'success') {
         localforage.setItem("login_info",
-          encrypt({name, idCard, token: res.token})
+          encrypt({name, idCard, token: res.token}).toString()
         ).then(r => {
           navigate('/directions')
         });
