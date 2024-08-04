@@ -68,9 +68,9 @@ export default function PreCheckIn() {
       data: formData,
     }).then(res => {
       setShowModal(true);
-      setModalContent(res.data.message);
+      setModalContent(res.message);
 
-      if (res.data.status === "success") {
+      if (res.status === "success") {
         // TODO : 成功后显示成功+跳转
         setModalButtonText(<><TfiClose/>&ensp;取消</>);
         setModalOptionalButton(jumpButton);
