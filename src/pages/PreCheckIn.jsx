@@ -66,12 +66,6 @@ export default function PreCheckIn() {
       method: 'POST',
       url: '/api/submit_pre_registration',
       data: formData,
-    }).catch(err => {
-      setShowModal(true);
-      setModalContent(err.message);
-      setModalButtonText("确认");
-      setModalOptionalButton(null);
-
     }).then(res => {
       setShowModal(true);
       setModalContent(res.data.message);

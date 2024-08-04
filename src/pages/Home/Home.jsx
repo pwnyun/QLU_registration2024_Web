@@ -103,7 +103,7 @@ export default function Home() {
       data: formData
     }).then(res => {
       console.log(res)
-      if (res.data.status === 'success') {
+      if (res.status === 'success') {
         localforage.setItem("login_info",
           encrypt({name, idCard, token: res.data.token})
         ).then(r => {
