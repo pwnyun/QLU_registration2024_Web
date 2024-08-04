@@ -151,7 +151,7 @@ export default function CollectionForm() {
           <div
             className="object-cover translate-x-[-50%] translate-y-[20px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px] text-nowrap text-2xl flex flex-col justify-center items-center text-qlu font-bold">
             <div>齐鲁工业大学</div>
-            <div>信息采集表</div>
+            <div>新生信息采集表</div>
           </div>
         </div>
 
@@ -159,14 +159,14 @@ export default function CollectionForm() {
         <div
           className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
           <div
-            className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">校园网申领须知
+            className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">信息采集须知
           </div>
           <div className="pt-2">
-            本表单为齐鲁工业大学校园网官方申领入口，请详细、准确的填写信息。<b>我们将会妥善的保护您的隐私数据</b>。当您提交申请后，我们将于七个工作日内邮寄绑定校园网的校园电话卡。
+            本表单为齐鲁工业大学官方新生信息采集表单，请详细、准确的填写信息。<b>我们将会妥善的保护您的隐私数据</b>。
           </div>
           <div className="py-1 text-center text-gray-400 select-none">·&ensp;·&ensp;·&ensp;·</div>
           <div className="pb-2">
-            除本表单外，任何第三方提供的、以校园网开通为名义的个人信息收集表单均非官方渠道，请各位新生注意保护信息安全，谨防诈骗。有任何疑问请联系齐鲁工业大学网络信息中心
+            除本表单外，任何第三方提供的、以校园网开通或赠送礼品等为名义的个人信息收集表单均非官方渠道，请各位新生注意保护信息安全，谨防电信诈骗。有任何疑问请联系齐鲁工业大学网络信息中心
             <a href="tel:0531-89631358">0531-89631358</a>。
           </div>
         </div>
@@ -468,11 +468,11 @@ export default function CollectionForm() {
                         />
                     </Switch>
                     <label htmlFor="network-apply" className="ml-4 block py-0 text-sm font-medium leading-6">
-                      申领校园手机卡
+                      申请齐鲁工业大学融合校园网
                     </label>
                   </div>
                   <div className="mt-2 text-sm">*
-                    若选择申领，运营商将免费寄送手机校园卡至填写的家庭地址，自行激活校园卡后即可享受校园优惠套餐。
+                    齐鲁工业大学校园网可直接连入校内作业考试、教务管理、图书馆资源、正版化软件等信息化系统。若选择申领，运营商将免费寄送绑定校园网融合套餐的手机卡至填写的家庭地址，自行激活校园卡后即可享受校园优惠套餐。
                   </div>
                 </div>
               </div>
