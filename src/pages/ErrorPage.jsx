@@ -25,10 +25,11 @@ export default function ErrorPage() {
       break;
     }
     case 401:
-    case 403: {
-      message = '403 ';
-      // button = '去 登 录';
-      // url = 'https://sso.qlu.edu.cn/login?service=https://tytc.qlu.edu.cn/';
+    case 403:
+    case 405: {
+      message = '403 Access Denied';
+      button = '返回首页';
+      url = '/';
       break;
     }
   }

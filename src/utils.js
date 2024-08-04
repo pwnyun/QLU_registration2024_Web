@@ -1,3 +1,7 @@
+import axios from "axios";
+import CryptoJS from "crypto-js";
+import localforage from "localforage";
+
 export const validateIdCard = (idCard) => {
   if (typeof idCard !== "string")
     return false;
@@ -18,6 +22,83 @@ export const validateIdCard = (idCard) => {
   return checkDigit === idCard.charAt(17).toUpperCase();
 }
 
-export const decryptString = (encodedData) => atob(encodedData.replaceAll('-', '+').replaceAll('_', '/'));
+export function encrypt(data, key = "WLYW, 0531-89631358") {
+  return CryptoJS.AES.encrypt(JSON.stringify(data), key)
+}
 
-export const encryptString = (stringToEncode) => btoa(encodeURIComponent(stringToEncode)).replaceAll('+','-').replaceAll('/','_').replaceAll('=','');
+export function decrypt(ciphertext, key = "WLYW, 0531-89631358") {
+  return JSON.parse(CryptoJS.AES.decrypt(ciphertext, key))
+}
+
+export function request(url, data, method = 'GET', headers = {}) {
+  return new Promise((resolve, reject) => {
+    // 添加请求拦截器
+    axios.interceptors.request.use(
+      function (config) {
+        // 在发送请求之前做些什么
+        return config;
+      },
+      function (error) {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+      },
+    );
+
+    // 添加响应拦截器
+    axios.interceptors.response.use(
+      function (response) {
+        // 对响应数据做点什么
+        return response;
+      },
+      function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+      },
+    );
+
+    axios({method, url, data, headers})
+      .then(res => {
+        if (res.data.code && res.data.code < 10000) {
+          reject(res.data);
+        } else {
+          resolve(res.data);
+        }
+      })
+      .catch(err => {
+        if (err.response) {
+          // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
+          console.error('axios response error', err);
+          resolve({status: 'fail', message: `服务器响应出错：[${err.code}]: ${err.message}。`, data: err});
+          reject({status: 'fail', message: `服务器响应出错：[${err.code}]: ${err.message}。`, data: err});
+        } else if (err.request) {
+          // 请求已经成功发起，但没有收到响应
+          // `error.request` 在浏览器中是 XMLHttpRequest 的实例，
+          console.error('axios request error', err);
+          resolve({status: 'fail', message: `没有收到服务器响应：[${err.code}]: ${err.message}。`, data: err});
+          reject({status: 'fail', message: `没有收到服务器响应：[${err.code}]: ${err.message}。`, data: err});
+        } else {
+          // 发送请求时出了点问题
+          console.error('axios other error', err);
+          resolve({status: 'fail', message: `其它错误：[${err.code}]: ${err.message}。`, data: err});
+          reject({status: 'fail', message: `其它错误：[${err.code}]: ${err.message}。`, data: err});
+        }
+      });
+  });
+}
+
+export async function getLoginInfo() {
+  try {
+    let info = decrypt(await localforage.getItem('login_info'))
+    console.log("info", info)
+
+    if (!info.name || !info.idCard || !info.token) {
+      return {status: false}
+    }
+
+    return {status: true, ...info}
+
+  } catch (e) {
+    console.error('getLoginInfo error', e);
+    return {status: false}
+  }
+}

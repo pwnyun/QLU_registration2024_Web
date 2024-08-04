@@ -1,11 +1,12 @@
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "./Home.css";
 import Modal from "../../modal.jsx";
 import {forwardRef, useEffect, useRef, useState} from "react";
 import {MdCheck, MdClose} from "react-icons/md";
 import localforage from "localforage";
-import {encryptString, validateIdCard} from "../../utils.js";
+import {encrypt, getLoginInfo, request, validateIdCard} from "../../utils.js";
 import {VscClose, VscScreenFull} from "react-icons/vsc";
+import {TfiShareAlt} from "react-icons/tfi";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function Home() {
   const [modalOptionalButton, setModalOptionalButton] = useState("");
   const [modalContent, setModalContent] = useState(null);
   const formRef = useRef(null);
+  const [name, setName] = useState('')
 
   const showLoginModal = () => {
     setShowModal(true);
@@ -29,48 +31,95 @@ export default function Home() {
       return
     }
 
-    setModalOptionalButton(<button
-      type="button"
-      className={`inline-flex justify-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
-      onClick={() => {
-        setShowModal(false)
-        checkAndLogin()
-      }}
-    >
-      <MdCheck className="w-5 h-5 mr-1"/>验证
-    </button>)
-    setModalButtonText(<><MdClose className="w-5 h-5 mr-1"/>关闭</>)
-    setModalContent(<LoginForm ref={formRef}/>)
+    if (name) {
+      // 已核验新生身份
+      setModalContent(<>
+        <div>当前已核验新生身份：{name}</div>
+        <div
+          className="underline my-2"
+          onClick={localforage.clear().then(window.location.href = '/')}>
+          不是我？点击取消核验
+        </div>
+      </>)
+      setModalOptionalButton(<button
+        type="button"
+        className={`inline-flex justify-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+        onClick={() => {
+          setShowModal(false)
+          checkAndLogin()
+        }}
+      >
+        <MdCheck className="w-5 h-5 mr-1"/>新生预报到
+      </button>)
+      setModalButtonText(<><MdClose className="w-5 h-5 mr-1"/>关闭</>)
+
+    } else {
+      // 未核验新生身份
+      setModalOptionalButton(<button
+        type="button"
+        className={`inline-flex justify-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+        onClick={() => {
+          setShowModal(false)
+          checkAndLogin()
+        }}
+      >
+        <MdCheck className="w-5 h-5 mr-1"/>验证
+      </button>)
+      setModalButtonText(<><MdClose className="w-5 h-5 mr-1"/>关闭</>)
+      setModalContent(<LoginForm ref={formRef}/>)
+    }
   }
 
   const checkAndLogin = () => {
     const formData = new FormData(formRef.current);
-    console.log("登录表单数据", formData)
+    const name = formData.get('name')?.trim();
+    const idCard = formData.get('id_card')?.trim();
 
-    if (!validateIdCard(formData.get("id_card"))) {
+    if (!name) {
+      setShowModal(true)
+      setModalContent("姓名为空")
+      setModalButtonText("关闭")
+      setModalOptionalButton(null)
+      return
+    } else if (!validateIdCard(idCard)) {
       setShowModal(true)
       setModalContent("居民身份证号码校验失败。如您使用其他类型证件，请联系网络信息中心：0531-89631358。")
       setModalButtonText("关闭")
       setModalOptionalButton(null)
       return
+    } else if (!formData.get('captcha')) {
+      setShowModal(true)
+      setModalContent("验证码为空。")
+      setModalButtonText("关闭")
+      setModalOptionalButton(null)
+      return
     }
 
-    let res = true;
-    if (res) {
-      localforage.setItem("login_info", {
-        name: encryptString("wyz"),
-        id_card: encryptString("123456200001011239"),
-        token: "TOKEN_FOR_SERVER_VALIDATE"
-      }).then(r => {
-        navigate('/directions')
-      });
-    }
+    request({
+      url: '/api/login',
+      method: 'POST',
+      data: formData
+    }).then(res => {
+      if (res.data.status === 'success') {
+        localforage.setItem("login_info",
+          encrypt({name, idCard, token: res.data.token})
+        ).then(r => {
+          navigate('/directions')
+        });
+      } else {
+        setShowModal(true)
+        setModalContent(res.data.message)
+        setModalButtonText("关闭")
+        setModalOptionalButton(null)
+      }
+    })
+
   }
 
   const showWikiWindow = () => {
     setShowModal(true)
     setModalTitle("新生报到指南")
-    setModalContent(<WikiWindow />)
+    setModalContent(<WikiWindow/>)
     setModalButtonText(<><VscClose className="w-6 h-6"/>&ensp;关闭</>)
     setModalOptionalButton(
       <a
@@ -81,6 +130,15 @@ export default function Home() {
         <VscScreenFull className="w-6 h-6"/>&ensp;全屏阅读
       </a>)
   }
+
+  // 检查是否已登录
+  useEffect(() => {
+    getLoginInfo().then(res => {
+      if (res.status) {
+        setName(res.name)
+      }
+    })
+  }, []);
 
   return (
     <div id="homepage_main">
@@ -97,7 +155,12 @@ export default function Home() {
               className="pointer-events-none flex flex-col place-items-center p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:py-2 lg:border-2 lg:rounded"
             >
               <div className="font-serif font-bold text-base py-1">反诈提示</div>
-              <div className="indent-8">请广大新生关注<span className="underline lg:decoration-wavy underline-offset-4 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。</div>
+              <div className="indent-8">
+                请广大新生关注
+                <span
+                  className="underline lg:decoration-wavy underline-offset-4 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>
+                ，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。
+              </div>
             </div>
           </div>
         </div>
@@ -156,7 +219,8 @@ export default function Home() {
         </div>
       </main>
 
-      <Modal isOpen={showModal} setIsOpen={setShowModal} title={modalTitle} buttonText={modalButtonText} optionalButton={modalOptionalButton}>
+      <Modal isOpen={showModal} setIsOpen={setShowModal} title={modalTitle} buttonText={modalButtonText}
+             optionalButton={modalOptionalButton}>
         {modalContent}
       </Modal>
     </div>
@@ -164,7 +228,7 @@ export default function Home() {
 }
 
 const LoginForm = forwardRef(function LoginForm(props, ref) {
-  return(<>
+  return (<>
     <form ref={ref}>
       <div className="border-b border-gray-900/10 pt-4 pb-8">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
@@ -206,9 +270,9 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
             </label>
             <div className="mt-2 w-full flex items-center gap-x-2">
               <img src="/api/captcha" className="bg-amber-500 w-auto h-full flex-grow text-nowrap" alt="验证码"
-                onClick={e => {
-                e.target.src = '/api/captcha?' + Math.random()
-                }}
+                   onClick={e => {
+                     e.target.src = '/api/captcha?' + Math.random()
+                   }}
               />
               <input
                 type="text"
@@ -226,7 +290,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
   </>)
 })
 
-function WikiWindow () {
+function WikiWindow() {
   return (<>
     <iframe src="https://wlyw.qlu.edu.cn/wiki/help/"
             credentialless

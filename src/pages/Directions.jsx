@@ -1,7 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import {FaArrowRight} from "react-icons/fa6";
 import {useEffect} from "react";
-import localforage from "localforage";
+import {getLoginInfo} from "../utils.js";
 
 export default function Directions() {
   const features = [
@@ -52,13 +52,10 @@ export default function Directions() {
 
   // 检查是否已登录
   useEffect(() => {
-    localforage.getItem("login_info").then(info => {
-      console.log("login_info", info)
-
-      // TODO 检查token是否和用户信息匹配
-
-      if (!true) {
-        navigate('/')
+    getLoginInfo().then(res => {
+      if (!res.status) {
+        console.error('directions: getLoginInfo fail.')
+        navigate('/');
       }
     })
   }, []);
@@ -100,6 +97,12 @@ export default function Directions() {
 
         </div>
       </div>
+    </div>
+
+    <div
+      className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
+      <div>&copy;2024 齐鲁工业大学 | 网络信息中心</div>
+      <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
     </div>
   </>)
 }
