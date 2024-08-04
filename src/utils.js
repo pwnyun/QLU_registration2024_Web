@@ -61,7 +61,7 @@ export function request({url, method, data, headers}) {
 
     axios({method, url, data, headers})
       .then(res => {
-        if (res.data.code && res.data.code < 10000) {
+        if (!res.status || (res.status && res.status === 'fail')) {
           reject(res.data);
         } else {
           resolve(res.data);
