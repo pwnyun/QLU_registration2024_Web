@@ -102,6 +102,7 @@ export default function Home() {
       method: 'POST',
       data: formData
     }).then(res => {
+      console.log(res)
       if (res.data.status === 'success') {
         localforage.setItem("login_info",
           encrypt({name, idCard, token: res.data.token})
