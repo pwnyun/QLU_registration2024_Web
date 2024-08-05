@@ -8,7 +8,7 @@ import {MdOutlineRemoveCircleOutline} from "react-icons/md";
 
 export default function Directions() {
   const navigate = useNavigate();
-  const [isFocused, setIsFocused] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
   const [loginInfo, setLoginInfo] = useImmer({name: '', idCard: '', token: ''})
 
   const [showModal, setShowModal] = useState(false);
@@ -69,7 +69,7 @@ export default function Directions() {
       url: '/collection-form',
       target: '_blank',
       id: 'collection',
-      event: (e) => {}
+      event: () => {}
     }, {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
@@ -79,7 +79,7 @@ export default function Directions() {
       url: '',
       target: '_blank',
       id: 'bill',
-      event: () => updateReadStatus('bill')
+      event: updateReadStatus
     }, {
       name: 'OS 平台注册',
       description: '点击跳转到工大OS激活指南',
@@ -89,7 +89,7 @@ export default function Directions() {
       url: '',
       target: '_blank',
       id: 'os',
-      event: () => updateReadStatus('os')
+      event: updateReadStatus
     }, {
       name: '宿舍查询',
       description: '点击查看宿舍分配信息',
@@ -97,7 +97,7 @@ export default function Directions() {
       status: 'disable',
       action: "div",
       id: 'dormitory',
-      event: (e) => {
+      event: () => {
         setShowModal(true)
         if (checkForm())
           setModalContent("分班信息尚未确定，请过几日再来查询。")
@@ -111,7 +111,7 @@ export default function Directions() {
       status: 'disable',
       action: "div",
       id: 'allocate_class',
-      event: (e) => {
+      event: () => {
         setShowModal(true)
         if (checkForm())
           setModalContent("分班信息尚未确定，请过几日再来查询。")
@@ -133,12 +133,12 @@ export default function Directions() {
   // 注册显示/离开页面监听函数 & 检查是否已登录
   useEffect(() => {
     const handleFocus = () => {
-      setIsFocused(isFocused + 1);
+      setIsFocused(true);
       console.log('Tab focused');
     };
 
     const handleBlur = () => {
-      setIsFocused(isFocused + 1);
+      setIsFocused(false);
       console.log('Tab blurred');
     };
 
@@ -154,6 +154,7 @@ export default function Directions() {
       }
 
       setLoginInfo(res)
+      setIsFocused(true)
     })
 
     return () => {
@@ -165,7 +166,7 @@ export default function Directions() {
 
   useEffect(() => {
     // 流程状态追踪
-    if (loginInfo.token === '')
+    if (loginInfo.token === '' || !isFocused)
       return;
 
     request({
@@ -188,7 +189,7 @@ export default function Directions() {
       }
 
     })
-  }, [loginInfo])
+  }, [isFocused])
 
   return (<>
     <div className="overflow-hidden bg-white py-24 md:py-32 min-h-screen">
@@ -210,7 +211,7 @@ export default function Directions() {
                     key={feature.name}
                     to={feature.url}
                     target={feature.target}
-                    onClick={() => {feature.event(feature.id, loginInfo)}}
+                    onClick={() => feature.event(feature.id, loginInfo)}
                     className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
                   >
                     <dt className="inline font-semibold text-gray-900">
