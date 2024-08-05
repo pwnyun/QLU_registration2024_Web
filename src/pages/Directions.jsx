@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {FaArrowRight, FaCheck} from "react-icons/fa6";
-import {Fragment, useCallback, useEffect, useState} from "react";
+import {Fragment, useCallback, useEffect, useRef, useState} from "react";
 import {getLoginInfo, request} from "../utils.js";
 import Modal from "../modal.jsx";
 import {useImmer} from "use-immer";
@@ -8,8 +8,8 @@ import {MdOutlineRemoveCircleOutline} from "react-icons/md";
 
 export default function Directions() {
   const navigate = useNavigate();
-  const [isFocused, setIsFocused] = useState(true);
-  const [loginInfo, setLoginInfo] = useState({name: '', idCard: '', token: ''})
+  const [isFocused, setIsFocused] = useState(0);
+  const [loginInfo, setLoginInfo] = useImmer({name: '', idCard: '', token: ''})
 
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
@@ -38,7 +38,7 @@ export default function Directions() {
     return features[index1].status === 'true' && features[index2].status === 'true';
   }, [loginInfo])
 
-  const updateReadStatus = useCallback((name) => {
+  const updateReadStatus = (name, loginInfo) => {
     let data =  {...loginInfo, id_card: loginInfo.idCard}
     data[`${name}_done`] = 1
 
@@ -47,7 +47,7 @@ export default function Directions() {
       method: 'POST',
       data
     })
-  }, [loginInfo])
+  }
 
   const [features, setFeatures] = useImmer([
     {
@@ -58,8 +58,8 @@ export default function Directions() {
       action: Link,
       url: 'https://wlyw.qlu.edu.cn/wiki/help/sso/',
       target: '_blank',
-      id: 'sso_done',
-      event: () => updateReadStatus('sso')
+      id: 'sso',
+      event: updateReadStatus
     }, {
       name: '信息采集',
       description: '点击进入新生信息采集表单',
@@ -68,7 +68,7 @@ export default function Directions() {
       action: Link,
       url: '/collection-form',
       target: '_blank',
-      id: 'collection_done',
+      id: 'collection',
       event: (e) => {}
     }, {
       name: '线上缴费',
@@ -78,7 +78,7 @@ export default function Directions() {
       action: Link,
       url: '',
       target: '_blank',
-      id: 'bill_done',
+      id: 'bill',
       event: () => updateReadStatus('bill')
     }, {
       name: 'OS 平台注册',
@@ -88,7 +88,7 @@ export default function Directions() {
       action: Link,
       url: '',
       target: '_blank',
-      id: 'os_done',
+      id: 'os',
       event: () => updateReadStatus('os')
     }, {
       name: '宿舍查询',
@@ -96,7 +96,7 @@ export default function Directions() {
       finishDescription: '宿舍分配信息尚未确定，请过几日再来查询。',
       status: 'disable',
       action: "div",
-      id: 'dormitory_done',
+      id: 'dormitory',
       event: (e) => {
         setShowModal(true)
         if (checkForm())
@@ -110,7 +110,7 @@ export default function Directions() {
       finishDescription: '分班信息尚未确定，请过几日再来查询。',
       status: 'disable',
       action: "div",
-      id: 'allocate_class_done',
+      id: 'allocate_class',
       event: (e) => {
         setShowModal(true)
         if (checkForm())
@@ -126,19 +126,19 @@ export default function Directions() {
       action: Link,
       url: '/pre-check-in',
       target: '_blank',
-      id: 'pre_registration_done',
+      id: 'pre_registration',
       event: () => {}
     },])
 
   // 注册显示/离开页面监听函数 & 检查是否已登录
   useEffect(() => {
     const handleFocus = () => {
-      setIsFocused(true);
+      setIsFocused(isFocused + 1);
       console.log('Tab focused');
     };
 
     const handleBlur = () => {
-      setIsFocused(false);
+      setIsFocused(isFocused + 1);
       console.log('Tab blurred');
     };
 
@@ -149,11 +149,10 @@ export default function Directions() {
     getLoginInfo().then(res => {
       // 检查登录状态
       if (!res.status) {
-        console.error('directions: getLoginInfo fail.')
+        console.error('directions: getLoginInfo fail.', res.message)
         navigate('/');
       }
 
-      let {token} = res
       setLoginInfo(res)
     })
 
@@ -166,6 +165,9 @@ export default function Directions() {
 
   useEffect(() => {
     // 流程状态追踪
+    if (loginInfo.token === '')
+      return;
+
     request({
       url: `/api/get_process_status?token=${loginInfo.token}`,
       method: 'GET',
@@ -173,11 +175,12 @@ export default function Directions() {
       if (res.status !== 'success') {
         // setShowModal(true)
         // setModalContent(`预报到进度查询失败：${res.message}`)
+        console.error('directions: getProcessStatus fail.', res.message)
         return
       }
 
       for (const [key, value] of Object.entries(res)) {
-        let index = features.findIndex(feature => feature.id === key)
+        let index = features.findIndex(feature => key === `${feature.id}_done`)
 
         if (index !== -1 && value === true) {
           setFeatures(draft => {draft[index].status = "true"})
@@ -185,7 +188,7 @@ export default function Directions() {
       }
 
     })
-  }, [loginInfo, isFocused])
+  }, [loginInfo])
 
   return (<>
     <div className="overflow-hidden bg-white py-24 md:py-32 min-h-screen">
@@ -207,7 +210,7 @@ export default function Directions() {
                     key={feature.name}
                     to={feature.url}
                     target={feature.target}
-                    onClick={(feature.event)}
+                    onClick={() => {feature.event(feature.id, loginInfo)}}
                     className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
                   >
                     <dt className="inline font-semibold text-gray-900">
@@ -245,7 +248,7 @@ export default function Directions() {
 function PageImage({className}) {
   return (<img
     // src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-    src="/assets/banner-raw.png"
+    src="/assets/banner-raw-compressed.png"
     alt="logo"
     // className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
     className={`object-cover object-left-top max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 w-[2432px] h-[1442px] ${className}`}

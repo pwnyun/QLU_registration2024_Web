@@ -253,7 +253,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
                 id="name"
                 placeholder="姓名"
                 autoComplete="name"
-                defaultValue="李京鸿"
+                defaultValue=""
                 className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -269,7 +269,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
                 name="id_card"
                 id="id_card"
                 placeholder="身份证号"
-                defaultValue="370782200207260233"
+                defaultValue=""
                 className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>

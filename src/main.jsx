@@ -31,8 +31,6 @@ const router = createBrowserRouter([
   // {path:'/', element: <CollectionFormForOld/>}
 ]);
 
-console.log('debug ver: 01')
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router}/>
