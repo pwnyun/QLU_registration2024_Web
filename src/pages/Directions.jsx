@@ -98,7 +98,7 @@ export default function Directions() {
       id: 'dormitory_done',
       event: (e) => {
         setShowModal(true)
-        if (checkForm)
+        if (checkForm())
           setModalContent("分班信息尚未确定，请过几日再来查询。")
         else
           setModalContent("请先填写“信息采集”表和“预报到”表。")
@@ -112,7 +112,7 @@ export default function Directions() {
       id: 'allocate_class_done',
       event: (e) => {
         setShowModal(true)
-        if (checkForm)
+        if (checkForm())
           setModalContent("分班信息尚未确定，请过几日再来查询。")
         else
           setModalContent("请先填写“信息采集”表和“预报到”表。")
