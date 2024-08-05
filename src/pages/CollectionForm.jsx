@@ -396,7 +396,7 @@ export default function CollectionForm() {
                       type="number"
                       name="height"
                       id="height"
-                      min={0}
+                      min={10}
                       max={300}
                       placeholder="身高"
                       required
@@ -418,7 +418,7 @@ export default function CollectionForm() {
                       type="number"
                       name="weight"
                       id="weight"
-                      min={0}
+                      min={10}
                       max={500}
                       placeholder="体重"
                       required
