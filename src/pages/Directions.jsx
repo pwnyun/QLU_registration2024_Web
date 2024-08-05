@@ -188,7 +188,7 @@ export default function Directions() {
       }
 
     })
-  }, [loginInfo])
+  }, [isFocused])
 
   return (<>
     <div className="overflow-hidden bg-white py-24 md:py-32 min-h-screen">
