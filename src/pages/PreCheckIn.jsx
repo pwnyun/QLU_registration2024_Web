@@ -62,7 +62,7 @@ export default function PreCheckIn() {
 
     if (errorMessage !== '') {
       setShowModal(true)
-      setModalContent(`${errorMessage}请检查输入。`)
+      setModalContent(`请检查输入：${errorMessage}。`)
       setModalButtonText("确认");
       setModalOptionalButton(null);
       return;
