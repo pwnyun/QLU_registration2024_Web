@@ -25,18 +25,19 @@ export default function Directions() {
       return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true"/>
   }
 
-  const checkForm = useCallback(() => {
-    let index1 = features.findIndex((item) => item.name === '信息采集')
-    let index2 = features.findIndex((item) => item.name === '预报到')
-
-    if (index1 === -1 || index2 === -1) {
-      setShowModal(true)
-      setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
-      return false;
-    }
-
-    return features[index1].status === 'true' && features[index2].status === 'true';
-  }, [loginInfo])
+  // const checkForm = useCallback(() => {
+  //   console.log(features)
+  //   let index1 = features.findIndex((item) => item.name === '信息采集')
+  //   let index2 = features.findIndex((item) => item.name === '预报到')
+  //
+  //   if (index1 === -1 || index2 === -1) {
+  //     setShowModal(true)
+  //     setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
+  //     return false;
+  //   }
+  //
+  //   return features[index1].status === 'true' && features[index2].status === 'true';
+  // }, [isFocused])
 
   const updateReadStatus = (name, loginInfo) => {
     let data =  {...loginInfo, id_card: loginInfo.idCard}
@@ -99,10 +100,7 @@ export default function Directions() {
       id: 'dormitory',
       event: () => {
         setShowModal(true)
-        if (checkForm())
-          setModalContent("分班信息尚未确定，请过几日再来查询。")
-        else
-          setModalContent("请先填写“信息采集”表和“预报到”表。")
+        setModalContent("宿舍信息尚未确定，请过几日再来查询。")
       }
     }, {
       name: '分班信息查询',
@@ -113,10 +111,7 @@ export default function Directions() {
       id: 'allocate_class',
       event: () => {
         setShowModal(true)
-        if (checkForm())
-          setModalContent("分班信息尚未确定，请过几日再来查询。")
-        else
-          setModalContent("请先填写“信息采集”表和“预报到”表。")
+        setModalContent("分班信息尚未确定，请过几日再来查询。")
       }
     }, {
       name: '预报到',
@@ -163,9 +158,8 @@ export default function Directions() {
     };
   }, []);
 
-
+  // 流程状态追踪
   useEffect(() => {
-    // 流程状态追踪
     if (loginInfo.token === '' || !isFocused)
       return;
 
@@ -220,7 +214,7 @@ export default function Directions() {
                       {feature.name}
                     </dt>
                     <br/>
-                    <dd className="inline">{feature.description}</dd>
+                    <dd className="inline">{feature.status === 'true' ? feature.finishDescription : feature.description}</dd>
                   </feature.action>
                 ))}
               </dl>

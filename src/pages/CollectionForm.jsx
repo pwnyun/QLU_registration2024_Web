@@ -50,14 +50,14 @@ export default function CollectionForm() {
         setProvince('山东省')
         setProvinceIndex(level.findIndex(item => item.name === '山东省'))
 
-        console.log('level', level)
+        console.debug('level', level)
       }
     })
   }, []);
 
   const submit = () => {
     let formData = new FormData(formRef.current);
-    console.log(formData)
+    console.debug(formData)
     let errorMessage = ""
 
     if (!validateIdCard(formData.get('id_card'))) {
@@ -113,7 +113,7 @@ export default function CollectionForm() {
 
       if (res.status === "success") {
         request({
-          url: '/update_collection_status',
+          url: '/api/update_collection_status',
           method: 'POST',
           data: {name, id_card: idCard, token: token, collection_done: 1},
         })
@@ -293,7 +293,7 @@ export default function CollectionForm() {
                     name="province"
                     value={province}
                     onChange={(e) => {
-                      console.log(e);
+                      console.debug(e);
                       if (e.target.value !== province) {
                         setProvince(e.target.value);
                         setProvinceIndex(parseInt(e.target.selectedOptions[0].id))

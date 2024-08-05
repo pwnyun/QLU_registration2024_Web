@@ -98,7 +98,7 @@ export function request({url, method, data, headers}) {
 export async function getLoginInfo() {
   try {
     let info = decrypt(await localforage.getItem('login_info'))
-    console.log("info", info)
+    console.debug("info", info)
 
     if (!info.name || !info.idCard || !info.token) {
       return {status: false}

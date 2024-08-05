@@ -33,7 +33,7 @@ export default function PreCheckIn() {
 
   const submit = () => {
     let formData = new FormData(formRef.current);
-    console.log(formData)
+    console.debug(formData)
     let errorMessage = ""
 
     if (!validateIdCard(formData.get('id_card'))) {
@@ -78,7 +78,7 @@ export default function PreCheckIn() {
 
       if (res.status === "success") {
         request({
-          url: '/update_pre_registration_status',
+          url: '/api/update_pre_registration_status',
           method: 'POST',
           data: {name, id_card: idCard, token: token, pre_registration_done: 1},
         })
