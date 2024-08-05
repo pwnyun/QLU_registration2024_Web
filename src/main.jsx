@@ -10,25 +10,25 @@ import CollectionFormForOld from "./pages/CollectionFormForOld.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
-  // {
-  //   path: '/',
-  //   element: <Home/>,
-  //   errorElement: <ErrorPage />,
-  // }, {
-  //   path: '/directions',
-  //   element: <Directions />,
-  // }, {
-  //   path: '/collection-form',
-  //   element: <CollectionForm />,
-  // }, {
-  //   path: '/pre-check-in',
-  //   element: <PreCheckIn />
-  // }, {
-  //   path: '/old-form',
-  //   element: <CollectionFormForOld />
-  // }
+  {
+    path: '/',
+    element: <Home/>,
+    errorElement: <ErrorPage />,
+  }, {
+    path: '/directions',
+    element: <Directions />,
+  }, {
+    path: '/collection-form',
+    element: <CollectionForm />,
+  }, {
+    path: '/pre-check-in',
+    element: <PreCheckIn />
+  }, {
+    path: '/old-form',
+    element: <CollectionFormForOld />
+  }
 
-  {path:'/', element: <CollectionFormForOld/>}
+  // {path:'/', element: <CollectionFormForOld/>}
 ]);
 
 console.log('debug ver: 01')

@@ -20,10 +20,16 @@ export default function PreCheckIn() {
   const [modalButtonText, setModalButtonText] = useState("关闭");
   const [modalOptionalButton, setModalOptionalButton] = useState();
 
-  const [jumpButton] = useState(<button type="button" className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`} onClick={() => {
-    setShowModal(false);
-    navigate('/directions')
-  }} ><TfiShareAlt/>&ensp;跳转</button>)
+  const [jumpButton] = useState(
+    <button type="button"
+            className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+            onClick={() => {
+              setShowModal(false);
+              navigate('/directions')
+            }}>
+      <TfiShareAlt/>&ensp;跳转
+    </button>
+  )
 
   const submit = () => {
     let formData = new FormData(formRef.current);
@@ -71,7 +77,11 @@ export default function PreCheckIn() {
       setModalContent(res.message);
 
       if (res.status === "success") {
-        // TODO : 成功后显示成功+跳转
+        request({
+          url: '/update_pre_registration_status',
+          method: 'POST',
+          data: {name, id_card: idCard, token: token, pre_registration_done: 1},
+        })
         setModalButtonText(<><TfiClose/>&ensp;取消</>);
         setModalOptionalButton(jumpButton);
       } else {
@@ -132,9 +142,9 @@ export default function PreCheckIn() {
           submit();
         }}>
 
-          <input type="text" name="name" hidden disabled value={name}/>
-          <input type="text" name="idCard" hidden disabled value={idCard}/>
-          <input type="text" name="token" hidden disabled value={token}/>
+          <input type="text" name="name" hidden value={name}/>
+          <input type="text" name="id_card" hidden value={idCard}/>
+          <input type="text" name="token" hidden value={token}/>
 
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
@@ -196,11 +206,11 @@ export default function PreCheckIn() {
                             name="arrival_method"
                             id={`transportation-${index}`}
                             className=""
+                            value={plan}
                           />
                           <label htmlFor={`transportation-${index}`} className="py-3 w-full">{plan}</label>
                         </div>)
-                    })
-                    }
+                    })}
 
                   </div>
                 </div>

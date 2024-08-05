@@ -25,10 +25,16 @@ export default function CollectionForm() {
   const [modalButtonText, setModalButtonText] = useState("关闭");
   const [modalOptionalButton, setModalOptionalButton] = useState();
 
-  const [jumpButton] = useState(<button type="button" className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`} onClick={() => {
-    setShowModal(false);
-    navigate('/directions')
-  }} ><TfiShareAlt/>&ensp;跳转</button>)
+  const [jumpButton] = useState(
+    <button type="button"
+            className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+            onClick={() => {
+              setShowModal(false);
+              navigate('/directions')
+            }}>
+      <TfiShareAlt/>&ensp;跳转
+    </button>
+  )
 
   // 检查是否已登录
   useEffect(() => {
@@ -57,8 +63,7 @@ export default function CollectionForm() {
     if (!validateIdCard(formData.get('id_card'))) {
       errorMessage += "居民身份证号码校验有误，请确认新生身份核验通过，如有疑问请联系网络信息中心：0531-89631358；"
     }
-
-    if (!formData.get('性别')) {
+    if (!formData.get('gender')) {
       errorMessage += "请选择性别；"
     }
     if (!formData.get('phone') || formData.get('phone').trim().length !== 11 || isNaN(Number(formData.get('phone').trim()))) {
@@ -87,13 +92,12 @@ export default function CollectionForm() {
     if (!formData.get('address')) {
       errorMessage += "详细地址不能位空；"
     }
-    if (!formData.get('captcha')) {
-      errorMessage += "验证码不能为空；"
-    }
+
+    formData.set('networkApply', networkApply)
 
     if (errorMessage !== '') {
       setShowModal(true)
-      setModalContent(`${errorMessage}请检查输入。`)
+      setModalContent(`请检查输入：${errorMessage}。`)
       setModalButtonText("确认");
       setModalOptionalButton(null);
       return;
@@ -108,7 +112,11 @@ export default function CollectionForm() {
       setModalContent(res.message);
 
       if (res.status === "success") {
-        // TODO : 成功后显示成功+跳转
+        request({
+          url: '/update_collection_status',
+          method: 'POST',
+          data: {name, id_card: idCard, token: token, collection_done: 1},
+        })
         setModalButtonText(<><TfiClose/>&ensp;取消</>);
         setModalOptionalButton(jumpButton);
       } else {
@@ -169,8 +177,8 @@ export default function CollectionForm() {
           e.preventDefault();
           submit();
         }}>
-          <input type="text" name="idCard" hidden disabled value={idCard}/>
-          <input type="text" name="token" hidden disabled value={token}/>
+          <input type="text" name="id_card" hidden value={idCard}/>
+          <input type="text" name="token" hidden value={token}/>
 
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

@@ -18,6 +18,9 @@ export default function Home() {
   const formRef = useRef(null);
   const [name, setName] = useState('')
 
+  // 防止弹窗过渡动画出现时鼠标点击状态触发取消校验
+  const [delay, setDelay] = useState(false)
+
   const showLoginModal = () => {
     setShowModal(true);
     setModalTitle("新生身份验证")
@@ -35,23 +38,26 @@ export default function Home() {
       // 已核验新生身份
       setModalContent(<>
         <div>当前已核验新生身份：{name}</div>
-        <div
+        <button
           className="underline my-2"
-          onClick={localforage.clear().then(window.location.href = '/')}>
+          onClick={delay && localforage.clear().then(window.location.href = '/')}
+        >
           不是我？点击取消核验
-        </div>
+        </button>
       </>)
       setModalOptionalButton(<button
         type="button"
         className={`inline-flex justify-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
         onClick={() => {
           setShowModal(false)
-          checkAndLogin()
+          navigate('/directions')
         }}
       >
         <MdCheck className="w-5 h-5 mr-1"/>新生预报到
       </button>)
       setModalButtonText(<><MdClose className="w-5 h-5 mr-1"/>关闭</>)
+      // 加一个延时，防止弹窗过渡动画出现时鼠标点击状态触发取消校验
+      setTimeout(() => {setDelay(true)}, 1000)
 
     } else {
       // 未核验新生身份
@@ -105,7 +111,7 @@ export default function Home() {
       console.log(res)
       if (res.status === 'success') {
         localforage.setItem("login_info",
-          encrypt({name, idCard, token: res.token}).toString()
+          encrypt({name, idCard, token: res.token})
         ).then(r => {
           navigate('/directions')
         });
@@ -138,7 +144,7 @@ export default function Home() {
   useEffect(() => {
     getLoginInfo().then(res => {
       if (res.status) {
-        setName(res.name)
+        setName(`${res.name}（${res.idCard.substring(0,4)}**********${res.idCard.substring(14, 18)}）`)
       }
     })
   }, []);
@@ -222,7 +228,7 @@ export default function Home() {
         </div>
       </main>
 
-      <Modal isOpen={showModal} setIsOpen={setShowModal} title={modalTitle} buttonText={modalButtonText}
+      <Modal isOpen={showModal} setIsOpen={(status) => {setShowModal(status); setDelay(false);}} title={modalTitle} buttonText={modalButtonText}
              optionalButton={modalOptionalButton}>
         {modalContent}
       </Modal>
@@ -247,6 +253,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
                 id="name"
                 placeholder="姓名"
                 autoComplete="name"
+                defaultValue="李京鸿"
                 className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -262,6 +269,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
                 name="id_card"
                 id="id_card"
                 placeholder="身份证号"
+                defaultValue="370782200207260233"
                 className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>

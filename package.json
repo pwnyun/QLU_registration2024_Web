@@ -18,7 +18,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
-    "react-router-dom": "^6.25.1"
+    "react-router-dom": "^6.25.1",
+    "use-immer": "^0.10.0"
   },
   "devDependencies": {
     "@province-city-china/level": "^8.5.7",

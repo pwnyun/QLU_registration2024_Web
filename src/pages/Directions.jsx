@@ -1,62 +1,167 @@
 import {Link, useNavigate} from "react-router-dom";
-import {FaArrowRight} from "react-icons/fa6";
-import {useEffect} from "react";
-import {getLoginInfo} from "../utils.js";
+import {FaArrowRight, FaCheck} from "react-icons/fa6";
+import {Fragment, useCallback, useEffect, useState} from "react";
+import {getLoginInfo, request} from "../utils.js";
+import Modal from "../modal.jsx";
+import {useImmer} from "use-immer";
+import {MdOutlineRemoveCircleOutline} from "react-icons/md";
 
 export default function Directions() {
-  const features = [
+  const navigate = useNavigate();
+  const [loginInfo, setLoginInfo] = useState({name: '', idCard: '', token: ''})
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState('');
+  const [modalButtonText, setModalButtonText] = useState("关闭");
+  const [modalOptionalButton, setModalOptionalButton] = useState(null);
+
+  const renderIcon = (status) => {
+    if (status === 'false')
+      return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true"/>
+    if (status === 'disable')
+      return <MdOutlineRemoveCircleOutline className="absolute left-3 top-3 h-5 w-5 text-stone-500" aria-hidden="true"/>
+    if (status === 'true')
+      return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true"/>
+  }
+
+  const checkForm = useCallback(() => {
+    let index1 = features.findIndex((item) => item.name === '信息采集')
+    let index2 = features.findIndex((item) => item.name === '预报到')
+
+    if (index1 === -1 || index2 === -1) {
+      setShowModal(true)
+      setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
+      return false;
+    }
+
+    return features[index1].status === 'true' && features[index2].status === 'true';
+  }, [loginInfo])
+
+  const updateReadStatus = useCallback((name) => {
+    let data =  {...loginInfo, id_card: loginInfo.idCard}
+    data[`${name}_done`] = 1
+
+    request({
+      url: `/api/update_${name}_status`,
+      method: 'POST',
+      data
+    })
+  }, [loginInfo])
+
+  const [features, setFeatures] = useImmer([
     {
       name: '一号通激活',
       description: '点击跳转到一号通激活指南',
-      icon: FaArrowRight,
+      finishDescription: '已查看。',
+      status: 'false',
+      action: Link,
       url: 'https://wlyw.qlu.edu.cn/wiki/help/sso/',
-      target: '_blank'
+      target: '_blank',
+      id: 'sso_done',
+      event: () => updateReadStatus('sso')
     }, {
       name: '信息采集',
       description: '点击进入新生信息采集表单',
-      icon: FaArrowRight,
+      finishDescription: '已采集。',
+      status: 'false',
+      action: Link,
       url: '/collection-form',
-      target: '_blank'
+      target: '_blank',
+      id: 'collection_done',
+      event: (e) => {}
     }, {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
-      icon: FaArrowRight,
+      finishDescription: '已查看。',
+      status: 'false',
+      action: Link,
       url: '',
-      target: '_blank'
+      target: '_blank',
+      id: 'bill_done',
+      event: () => updateReadStatus('bill')
     }, {
       name: 'OS 平台注册',
       description: '点击跳转到工大OS激活指南',
-      icon: FaArrowRight,
+      finishDescription: '已查看。',
+      status: 'false',
+      action: Link,
       url: '',
-      target: '_blank'
+      target: '_blank',
+      id: 'os_done',
+      event: () => updateReadStatus('os')
     }, {
       name: '宿舍查询',
       description: '点击查看宿舍分配信息',
-      icon: FaArrowRight,
-      url: '',
-      target: '_blank'
+      finishDescription: '宿舍分配信息尚未确定，请过几日再来查询。',
+      status: 'disable',
+      action: "div",
+      id: 'dormitory_done',
+      event: (e) => {
+        setShowModal(true)
+        if (checkForm)
+          setModalContent("分班信息尚未确定，请过几日再来查询。")
+        else
+          setModalContent("请先填写“信息采集”表和“预报到”表。")
+      }
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
-      icon: FaArrowRight,
-      url: '',
-      target: '_blank'
+      finishDescription: '分班信息尚未确定，请过几日再来查询。',
+      status: 'disable',
+      action: "div",
+      id: 'allocate_class_done',
+      event: (e) => {
+        setShowModal(true)
+        if (checkForm)
+          setModalContent("分班信息尚未确定，请过几日再来查询。")
+        else
+          setModalContent("请先填写“信息采集”表和“预报到”表。")
+      }
     }, {
       name: '预报到',
-      description: '点击进入预报道系统',
-      icon: FaArrowRight,
+      description: '点击进入预报到系统',
+      finishDescription: '已预报到。',
+      status: 'false',
+      action: Link,
       url: '/pre-check-in',
-      target: '_blank'
-    },]
-  const navigate = useNavigate();
+      target: '_blank',
+      id: 'pre_registration_done',
+      event: () => {}
+    },])
+
 
   // 检查是否已登录
   useEffect(() => {
     getLoginInfo().then(res => {
+      // 检查登录状态
       if (!res.status) {
         console.error('directions: getLoginInfo fail.')
         navigate('/');
       }
+
+      let {token} = res
+      setLoginInfo(res)
+
+      // 流程状态追踪
+      request({
+        url: `/api/get_process_status?token=${token}`,
+        method: 'GET',
+      }).then(res => {
+        if (res.status !== 'success') {
+          // setShowModal(true)
+          // setModalContent(`预报到进度查询失败：${res.message}`)
+          return
+        }
+
+        for (const [key, value] of Object.entries(res)) {
+          let index = features.findIndex(feature => feature.id === key)
+
+          if (index !== -1 && value === true) {
+            setFeatures(draft => {draft[index].status = "true"})
+          }
+        }
+
+      })
     })
   }, []);
 
@@ -76,18 +181,21 @@ export default function Directions() {
               <PageImage className="block md:hidden w-full h-[50vw]"/>
               <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (
-                  <Link key={feature.name}
-                        to={feature.url}
-                        target={feature.target}
-                        className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300"
+                  <feature.action
+                    key={feature.name}
+                    to={feature.url}
+                    target={feature.target}
+                    onClick={(feature.event)}
+                    className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
                   >
                     <dt className="inline font-semibold text-gray-900">
-                      <feature.icon className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true"/>
+                      {/*<feature.icon className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true"/>*/}
+                      {renderIcon(feature.status)}
                       {feature.name}
                     </dt>
                     <br/>
                     <dd className="inline">{feature.description}</dd>
-                  </Link>
+                  </feature.action>
                 ))}
               </dl>
             </div>
@@ -104,6 +212,11 @@ export default function Directions() {
       <div>&copy;2024 齐鲁工业大学 | 网络信息中心</div>
       <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
     </div>
+
+    <Modal isOpen={showModal} setIsOpen={setShowModal} buttonText={modalButtonText}
+           optionalButton={modalOptionalButton}>
+      {modalContent}
+    </Modal>
   </>)
 }
 

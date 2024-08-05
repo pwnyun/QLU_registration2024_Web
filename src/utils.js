@@ -23,11 +23,17 @@ export const validateIdCard = (idCard) => {
 }
 
 export function encrypt(data, key = "WLYW, 0531-89631358") {
-  return CryptoJS.AES.encrypt(JSON.stringify(data), key)
+  return CryptoJS.AES.encrypt(encodeURI(JSON.stringify(data)), key).toString()
 }
 
 export function decrypt(ciphertext, key = "WLYW, 0531-89631358") {
-  return JSON.parse(CryptoJS.AES.decrypt(ciphertext, key))
+  let hex = CryptoJS.AES.decrypt(ciphertext, key).toString()
+  let str = '';
+  for (let i = 0; i < hex.length; i += 2) {
+    str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  }
+
+  return JSON.parse(decodeURI(str));
 }
 
 export function request({url, method, data, headers}) {
@@ -101,7 +107,8 @@ export async function getLoginInfo() {
     return {status: true, ...info}
 
   } catch (e) {
-    console.error('getLoginInfo error', e);
-    return {status: false}
+    console.error('catch getLoginInfo error: ', e);
+    await localforage.clear()
+    return {status: false, message: "检查身份核验状态失败，请尝试重新进行身份核验。"}
   }
 }
