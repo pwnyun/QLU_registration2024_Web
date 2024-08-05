@@ -8,6 +8,7 @@ import {MdOutlineRemoveCircleOutline} from "react-icons/md";
 
 export default function Directions() {
   const navigate = useNavigate();
+  const [isFocused, setIsFocused] = useState(true);
   const [loginInfo, setLoginInfo] = useState({name: '', idCard: '', token: ''})
 
   const [showModal, setShowModal] = useState(false);
@@ -129,9 +130,22 @@ export default function Directions() {
       event: () => {}
     },])
 
-
-  // 检查是否已登录
+  // 注册显示/离开页面监听函数 & 检查是否已登录
   useEffect(() => {
+    const handleFocus = () => {
+      setIsFocused(true);
+      console.log('Tab focused');
+    };
+
+    const handleBlur = () => {
+      setIsFocused(false);
+      console.log('Tab blurred');
+    };
+
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleBlur)
+
+    // 检查是否已登录
     getLoginInfo().then(res => {
       // 检查登录状态
       if (!res.status) {
@@ -141,29 +155,37 @@ export default function Directions() {
 
       let {token} = res
       setLoginInfo(res)
-
-      // 流程状态追踪
-      request({
-        url: `/api/get_process_status?token=${token}`,
-        method: 'GET',
-      }).then(res => {
-        if (res.status !== 'success') {
-          // setShowModal(true)
-          // setModalContent(`预报到进度查询失败：${res.message}`)
-          return
-        }
-
-        for (const [key, value] of Object.entries(res)) {
-          let index = features.findIndex(feature => feature.id === key)
-
-          if (index !== -1 && value === true) {
-            setFeatures(draft => {draft[index].status = "true"})
-          }
-        }
-
-      })
     })
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
+    };
   }, []);
+
+
+  useEffect(() => {
+    // 流程状态追踪
+    request({
+      url: `/api/get_process_status?token=${loginInfo.token}`,
+      method: 'GET',
+    }).then(res => {
+      if (res.status !== 'success') {
+        // setShowModal(true)
+        // setModalContent(`预报到进度查询失败：${res.message}`)
+        return
+      }
+
+      for (const [key, value] of Object.entries(res)) {
+        let index = features.findIndex(feature => feature.id === key)
+
+        if (index !== -1 && value === true) {
+          setFeatures(draft => {draft[index].status = "true"})
+        }
+      }
+
+    })
+  }, [loginInfo, isFocused])
 
   return (<>
     <div className="overflow-hidden bg-white py-24 md:py-32 min-h-screen">
