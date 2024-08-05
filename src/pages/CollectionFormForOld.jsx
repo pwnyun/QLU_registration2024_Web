@@ -4,9 +4,12 @@ import {validateIdCard} from "../utils.js";
 import Modal from "../modal.jsx";
 import axios from "axios";
 import {TfiClose, TfiShareAlt} from "react-icons/tfi";
+import {useSearchParams} from "react-router-dom";
 
 export default function CollectionFormForOld() {
   const formRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [province, setProvince] = useState("");
   const [provinceIndex, setProvinceIndex] = useState(-1);
   const [prefecture, setPrefecture] = useState("");
@@ -17,6 +20,8 @@ export default function CollectionFormForOld() {
   const [modalContent, setModalContent] = useState('');
   const [modalButtonText, setModalButtonText] = useState("关闭");
   const [modalOptionalButton, setModalOptionalButton] = useState();
+
+  const [refCode, setRefCode] = useState('');
 
   const [jumpButton] = useState(<button
     type="button"
@@ -67,6 +72,7 @@ export default function CollectionFormForOld() {
       return;
     }
 
+    formData.set('ref_code', refCode)
     formData.set('address', `${province}+${prefecture}+${county}+${formData.get('address')}`);
     formData.delete('prefecture');
     formData.delete('county');
@@ -100,6 +106,15 @@ export default function CollectionFormForOld() {
     setProvinceIndex(level.findIndex(item => item.name === '山东省'))
 
     console.log('level', level)
+
+    // ref_code
+    const refCode = searchParams.get('ref_code');
+    console.log('refCode', refCode)
+    if (refCode) {
+      setRefCode(refCode)
+      searchParams.set('ref_code', '')
+    }
+
   }, []);
 
   return (<>
