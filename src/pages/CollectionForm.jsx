@@ -399,7 +399,6 @@ export default function CollectionForm() {
                       id="height"
                       min={0}
                       max={300}
-                      step={2}
                       placeholder="身高"
                       required
                       className="block w-full border-0 bg-transparent py-1.5 pr-1 placeholder:text-gray-400 focus:ring-0 text-sm sm:leading-6"
@@ -422,7 +421,6 @@ export default function CollectionForm() {
                       id="weight"
                       min={0}
                       max={500}
-                      step={5}
                       placeholder="体重"
                       required
                       className="block w-full border-0 bg-transparent py-1.5 pr-1 placeholder:text-gray-400 focus:ring-0 text-sm sm:leading-6"
