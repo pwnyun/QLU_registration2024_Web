@@ -18,9 +18,6 @@ export default function Home() {
   const formRef = useRef(null);
   const [name, setName] = useState('')
 
-  // 防止弹窗过渡动画出现时鼠标点击状态触发取消校验
-  const [delay, setDelay] = useState(false)
-
   const showLoginModal = () => {
     setShowModal(true);
     setModalTitle("新生身份验证")
@@ -40,7 +37,7 @@ export default function Home() {
         <div>当前已核验新生身份：{name}</div>
         <button
           className="underline my-2"
-          onClick={delay && localforage.clear().then(window.location.href = '/')}
+          onClick={() => localforage.clear().then(window.location.href = '/')}
         >
           不是我？点击取消核验
         </button>
@@ -56,8 +53,6 @@ export default function Home() {
         <MdCheck className="w-5 h-5 mr-1"/>新生预报到
       </button>)
       setModalButtonText(<><MdClose className="w-5 h-5 mr-1"/>关闭</>)
-      // 加一个延时，防止弹窗过渡动画出现时鼠标点击状态触发取消校验
-      setTimeout(() => {setDelay(true)}, 1000)
 
     } else {
       // 未核验新生身份
@@ -112,7 +107,7 @@ export default function Home() {
       if (res.status === 'success') {
         localforage.setItem("login_info",
           encrypt({name, idCard, token: res.token})
-        ).then(r => {
+        ).then(() => {
           navigate('/directions')
         });
       } else {
@@ -228,7 +223,7 @@ export default function Home() {
         </div>
       </main>
 
-      <Modal isOpen={showModal} setIsOpen={(status) => {setShowModal(status); setDelay(false);}} title={modalTitle} buttonText={modalButtonText}
+      <Modal isOpen={showModal} setIsOpen={(status) => setShowModal(status)} title={modalTitle} buttonText={modalButtonText}
              optionalButton={modalOptionalButton}>
         {modalContent}
       </Modal>
