@@ -479,7 +479,8 @@ export default function CollectionForm() {
                         className="m-2"
                         value='是（国家开发银行）'
                       />
-                      <label htmlFor="loan-china-development-bank" className="py-3 w-full inline-block">是（国家开发银行）</label>
+                      <label htmlFor="loan-china-development-bank"
+                             className="py-3 w-full inline-block">是（国家开发银行）</label>
                     </div>
                     <div className="grow text-nowrap whitespace-nowrap">
                       <input
@@ -524,7 +525,7 @@ export default function CollectionForm() {
                 </div>
               </div>
 
-              <div className="sm:col-span-4">
+              <div className="sm:col-span-2">
                 <label htmlFor="military-intention" className="block text-sm font-medium leading-6">
                   是否有参军入伍意向
                 </label>
@@ -533,17 +534,33 @@ export default function CollectionForm() {
                     id="military-intention"
                     name="militaryIntention"
                     defaultValue=""
-                    required
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
-                    <option>是（更倾向于新生入学报到前入伍）</option>
-                    <option>是（更倾向于大一入伍）</option>
-                    <option>是（更倾向于大二入伍）</option>
-                    <option>是（更倾向于大三入伍）</option>
-                    <option>是（更倾向于大四入伍）</option>
-                    <option>是（更倾向于大学毕业后入伍）</option>
+                    <option>是</option>
                     <option>否</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="military-time" className="block text-sm font-medium leading-6">
+                  若有参军意向，你志愿在何时入伍
+                </label>
+                <div className="mt-2 w-full">
+                  <select
+                    id="military-time"
+                    name="militaryTime"
+                    defaultValue=""
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                  >
+                    <option value=""></option>
+                    <option>新生入学报到前</option>
+                    <option>大一</option>
+                    <option>大二</option>
+                    <option>大三</option>
+                    <option>大四</option>
+                    <option>大学毕业后</option>
                   </select>
                 </div>
               </div>
