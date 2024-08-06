@@ -77,7 +77,7 @@ export default function Directions() {
       finishDescription: '已查看。',
       status: 'false',
       action: Link,
-      url: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd1fc22e78b42a792&redirect_uri=https%3A%2F%2Fpay.sinojy.cn%2Fsltf-outside%2Finter%2FwxPayRedirectInfo?data=DATA&response_type=code&scope=snsapi_base&state=20240806212455259113635162162104&component_appid=wx3e673afeaf4a3e51&connect_redirect=1#wechat_redirect',
+      url: 'https://qlgydx.mp.sinojy.cn',
       target: '_blank',
       id: 'bill',
       event: updateReadStatus
