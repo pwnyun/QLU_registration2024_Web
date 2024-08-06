@@ -199,7 +199,7 @@ export default function PreCheckIn() {
                     {plans.map((plan, index) => {
                       return (
                         <div key={plan}
-                             className="flex items-center justify-start gap-x-2 shadow-sm"
+                             className="flex items-center justify-start gap-x-2"
                         >
                           <input
                             type="radio"

@@ -5,6 +5,8 @@ import {useNavigate} from "react-router-dom";
 import {getLoginInfo, request, validateIdCard} from "../utils.js";
 import {TfiClose, TfiShareAlt} from "react-icons/tfi";
 import Modal from "../modal.jsx";
+import {names as ethnicList} from "gb3304";
+import ComboBox from "../combo-box.jsx";
 
 export default function CollectionForm() {
   const navigate = useNavigate();
@@ -65,6 +67,9 @@ export default function CollectionForm() {
     }
     if (!formData.get('gender')) {
       errorMessage += "请选择性别；"
+    }
+    if (!formData.get('ethnic')) {
+      errorMessage += "请选择民族；"
     }
     if (!formData.get('phone') || formData.get('phone').trim().length !== 11 || isNaN(Number(formData.get('phone').trim()))) {
       errorMessage += "个人联系电话输入有误（可能不为 11 位或输入了非数字字符）；"
@@ -182,7 +187,7 @@ export default function CollectionForm() {
 
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-3">
+              <div className="sm:col-span-2">
                 <label htmlFor="name" className="block text-sm font-medium leading-6">
                   姓名
                 </label>
@@ -197,7 +202,7 @@ export default function CollectionForm() {
                 </div>
               </div>
 
-              <div className="sm:col-span-3">
+              <div className="sm:col-span-2">
                 <label htmlFor="gender" className="block text-sm font-medium leading-6">
                   性别
                 </label>
@@ -213,6 +218,15 @@ export default function CollectionForm() {
                     <option>男</option>
                     <option>女</option>
                   </select>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="ethnic" className="block text-sm font-medium leading-6">
+                  民族
+                </label>
+                <div className="mt-2 w-full">
+                  <ComboBox list={ethnicList} name="ethnic"></ComboBox>
                 </div>
               </div>
 
@@ -302,7 +316,7 @@ export default function CollectionForm() {
                         setCounty("")
                       }
                     }}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     {level
@@ -332,7 +346,7 @@ export default function CollectionForm() {
                         setCounty("")
                       }
                     }}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     {provinceIndex !== -1 && level[provinceIndex]?.children?.map((prefecture, index) =>
@@ -358,7 +372,7 @@ export default function CollectionForm() {
                         setCounty(e.target.value)
                       }
                     }}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     {prefectureIndex !== -1 && level[provinceIndex]?.children[prefectureIndex]?.children?.map((county, index) =>
@@ -439,14 +453,97 @@ export default function CollectionForm() {
                     name="blood"
                     defaultValue=""
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     <option>A 型</option>
                     <option>B 型</option>
                     <option>O 型</option>
                     <option>AB 型</option>
-                    <option>其他血型 / 我不知道</option>
+                    <option value="unknown">其他血型 / 我不知道</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="sm:col-span-6">
+                <label htmlFor="studentLoan" className="block text-sm font-medium leading-6">
+                  是否已经或者正在办理生源地信用助学贷款
+                </label>
+                <div className="mt-2 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 items-center justify-start gap-x-2 text-sm">
+                    <div className="grow text-nowrap whitespace-nowrap">
+                      <input
+                        type="radio"
+                        name="studentLoan"
+                        id="loan-china-development-bank"
+                        className="m-2"
+                        value='是（国家开发银行）'
+                      />
+                      <label htmlFor="loan-china-development-bank" className="py-3 w-full inline-block">是（国家开发银行）</label>
+                    </div>
+                    <div className="grow text-nowrap whitespace-nowrap">
+                      <input
+                        type="radio"
+                        name="studentLoan"
+                        id="loan-other-bank"
+                        className="m-2"
+                        value='是（其他银行）'
+                      />
+                      <label htmlFor="loan-other-bank" className="py-3 w-full inline-block">是（其他银行）</label>
+                    </div>
+                    <div className="grow text-nowrap whitespace-nowrap">
+                      <input
+                        type="radio"
+                        name="studentLoan"
+                        id="loan-none"
+                        className="m-2"
+                        value='否'
+                      />
+                      <label htmlFor="loan-none" className="py-3 w-full inline-block">否</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="military-discharged" className="block text-sm font-medium leading-6">
+                  是否为退役大学生
+                </label>
+                <div className="mt-2 w-full">
+                  <select
+                    id="military-discharged"
+                    name="militaryDischarged"
+                    defaultValue=""
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                  >
+                    <option value="" disabled hidden></option>
+                    <option>是</option>
+                    <option>否</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="sm:col-span-4">
+                <label htmlFor="military-intention" className="block text-sm font-medium leading-6">
+                  是否有参军入伍意向
+                </label>
+                <div className="mt-2 w-full">
+                  <select
+                    id="military-intention"
+                    name="militaryIntention"
+                    defaultValue=""
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                  >
+                    <option value="" disabled hidden></option>
+                    <option>是（更倾向于新生入学报到前入伍）</option>
+                    <option>是（更倾向于大一入伍）</option>
+                    <option>是（更倾向于大二入伍）</option>
+                    <option>是（更倾向于大三入伍）</option>
+                    <option>是（更倾向于大四入伍）</option>
+                    <option>是（更倾向于大学毕业后入伍）</option>
+                    <option>否</option>
                   </select>
                 </div>
               </div>
