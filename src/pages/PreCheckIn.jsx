@@ -12,16 +12,15 @@ const plans = ['私家车', '出租车', '公共交通']
 export default function PreCheckIn() {
   const navigate = useNavigate();
 
-  const [isp, setIsp] = useImmer([{checked: false, name: '移动', abbr: 'cmcc'}, {
-    checked: false,
-    name: '联通',
-    abbr: 'cu'
-  }, {checked: false, name: '电信', abbr: 'ct'}])
-  const [advertising, setAdvertising] = useImmer([{checked: false, name: 'QQ 群', abbr: 'qq'}, {
-    checked: false,
-    name: '微信群',
-    abbr: 'wx'
-  }, {checked: false, name: '电话推销', abbr: 'tel'}, {checked: false, name: '公众号等', abbr: 'gzh'},]);
+  const [isp, setIsp] = useImmer([
+    {checked: false, name: '移动', abbr: 'cmcc'},
+    {checked: false, name: '联通', abbr: 'cu'},
+    {checked: false, name: '电信', abbr: 'ct'}])
+  const [advertising, setAdvertising] = useImmer([
+    {checked: false, name: 'QQ 群', abbr: 'qq'},
+    {checked: false, name: '微信群', abbr: 'wx'},
+    {checked: false, name: '电话推销', abbr: 'tel'},
+    {checked: false, name: '公众号等', abbr: 'gzh'},]);
 
   const formRef = useRef(null)
   const [name, setName] = useState("")
@@ -332,6 +331,10 @@ export default function PreCheckIn() {
                                 draft[index].checked = e.target.checked
                               })
                               setReceivedAdvertising(true)
+
+                              let filtered = isp.filter(isp => isp.checked === true)
+                              if (filtered.length === 1 && filtered[0].abbr === item.abbr)
+                                setReceivedAdvertising(false)
                             }}
                           />
                           <label htmlFor={`received_advertising-${item.abbr}`}
@@ -339,6 +342,7 @@ export default function PreCheckIn() {
                         </div>)
                     })}
                   </div>
+
                   <div className="mt-2 text-sm rounded border-2 p-3 flex flex-col">
                     <div className="flex items-center">
                       <PiSealWarning className="w-8 h-8 text-red-600 flex-shrink-0 mr-2"/>
@@ -346,7 +350,9 @@ export default function PreCheckIn() {
                     </div>
                     <div className="mt-2">
                       <div className="indent-8 md:indent-0">以上推销涉嫌侵犯用户隐私，学校将查处相关组织与人员。</div>
-                      <div className="indent-8 md:indent-0">我们会给予每条线索的首位提供者一定奖励。请勿在非官方平台提供个人隐私信息，谨防电信诈骗。</div>
+                      <div
+                        className="indent-8 md:indent-0">我们会给予每条线索的首位提供者一定奖励。请勿在非官方平台提供个人隐私信息，谨防电信诈骗。
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -392,6 +398,10 @@ export default function PreCheckIn() {
                                   draft[index].checked = e.target.checked
                                 })
                                 setSourceOfAdvertising(true)
+
+                                let filtered = advertising.filter(ad => ad.checked === true);
+                                if (filtered.length === 1 && filtered[0].abbr === item.abbr)
+                                  setSourceOfAdvertising(false)
                               }}
                             />
                             <label htmlFor={`source_of_advertising-${item.abbr}`}
