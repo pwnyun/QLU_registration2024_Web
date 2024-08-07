@@ -164,7 +164,7 @@ export default function Home() {
                 请广大新生关注
                 <span
                   className="underline lg:decoration-wavy underline-offset-4 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>
-                ，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。
+                ，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。预报道过程中遇到问题，可加入线上预报道服务QQ群：725386079
               </div>
             </div>
           </div>
