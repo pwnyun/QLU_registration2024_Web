@@ -79,7 +79,7 @@ export default function Directions() {
       status: 'false',
       action: Link,
       url: '/collection-form',
-      target: '_blank',
+      target: '_self',
       id: 'collection',
       event: () => {}
     }, {
@@ -89,7 +89,7 @@ export default function Directions() {
       status: 'false',
       action: Link,
       url: 'https://wlyw.qlu.edu.cn/wiki/help/sso/',
-      target: '_blank',
+      target: '_self',
       id: 'sso',
       event: updateReadStatus
     }, {
@@ -99,7 +99,7 @@ export default function Directions() {
       status: 'false',
       action: Link,
       url: 'https://qlgydx.mp.sinojy.cn',
-      target: '_blank',
+      target: '_self',
       id: 'bill',
       event: updateReadStatus
     }, {
@@ -109,7 +109,7 @@ export default function Directions() {
       status: 'false',
       action: Link,
       url: '',
-      target: '_blank',
+      target: '_self',
       id: 'os',
       event: updateReadStatus
     }, {
@@ -120,15 +120,6 @@ export default function Directions() {
       action: "div",
       id: 'dormitory',
       event: lookupDormitory
-      // ({features}) => {
-      //   if (checkForm(features)) {
-      //     setShowModal(true)
-      //     setModalContent("宿舍信息尚未确定，请过几日再来查询。")
-      //   } else {
-      //     setShowModal(true)
-      //     setModalContent("请先填写“信息采集”表和“预报到”表。")
-      //   }
-      // }
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
@@ -137,15 +128,6 @@ export default function Directions() {
       action: "div",
       id: 'allocate_class',
       event: lookupClass
-      // ({features}) => {
-      //   if (checkForm(features)) {
-      //     setShowModal(true)
-      //     setModalContent("分班信息尚未确定，请过几日再来查询。")
-      //   } else {
-      //     setShowModal(true)
-      //     setModalContent("请先填写“信息采集”表和“预报到”表。")
-      //   }
-      // }
     }, {
       name: '预报到',
       description: '点击进入预报到系统',
@@ -153,10 +135,9 @@ export default function Directions() {
       status: 'false',
       action: Link,
       url: '/pre-check-in',
-      target: '_blank',
+      target: '_self',
       id: 'pre_registration',
-      event: () => {
-      }
+      event: () => {}
     },])
 
   // 注册显示/离开页面监听函数 & 检查是否已登录
