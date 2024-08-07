@@ -3,17 +3,36 @@ import {getLoginInfo, request, validateIdCard} from "../utils.js";
 import {useNavigate} from "react-router-dom";
 import {TfiClose, TfiShareAlt} from "react-icons/tfi";
 import Modal from "../modal.jsx";
+import {useImmer} from "use-immer";
+import FileUploaderZone from "../file-uploader-zone.jsx";
 
 const plans = ['私家车', '出租车', '公共交通']
 
 export default function PreCheckIn() {
   const navigate = useNavigate();
 
+  const [isp, setIsp] = useImmer([{checked: false, name: '移动', abbr: 'cmcc'}, {
+    checked: false,
+    name: '联通',
+    abbr: 'cu'
+  }, {checked: false, name: '电信', abbr: 'ct'}])
+  const [advertising, setAdvertising] = useImmer([{checked: false, name: 'QQ 群', abbr: 'qq'}, {
+    checked: false,
+    name: '微信群',
+    abbr: 'wx'
+  }, {checked: false, name: '电话推销', abbr: 'tel'}, {checked: false, name: '公众号等', abbr: 'gzh'},]);
+
   const formRef = useRef(null)
   const [name, setName] = useState("")
   const [idCard, setIdCard] = useState("")
   const [token, setToken] = useState("")
   const [arriveOnTime, setArriveOnTime] = useState("");
+
+  // 两个 bool 选项，控制营销调查中多选表单是否选无
+  const [receivedAdvertising, setReceivedAdvertising] = useState(false)
+  const [sourceOfAdvertising, setSourceOfAdvertising] = useState(false)
+
+  const [file, setFile] = useState(null)
 
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
@@ -60,35 +79,81 @@ export default function PreCheckIn() {
       errorMessage += "请选择能否按通知书规定的时间报到；"
     }
 
+    if (formData.get('received_advertising').toString() === "true") {
+      console.log('line 83')
+      if (!formData.get("source_of_advertising")) {
+        console.log('line 85')
+        errorMessage += "请完成运营商营销调查；"
+      }
+    }
+    console.log('line 89')
+
     if (errorMessage !== '') {
       setShowModal(true)
-      setModalContent(`请检查输入：${errorMessage}。`)
+      setModalContent(`${errorMessage}请检查输入。`)
       setModalButtonText("确认");
       setModalOptionalButton(null);
       return;
     }
 
-    request({
-      method: 'POST',
-      url: '/api/submit_pre_registration',
-      data: formData,
-    }).then(res => {
-      setShowModal(true);
-      setModalContent(res.message);
+    if (file) {
+      // 需要上传图片
+      const fileForm = new FormData();
+      fileForm.append('file', file)
+      // 0.0
+      fileForm.append('name',token)
+      fileForm.append('filename',token)
+      fileForm.append('fileName',token)
+      fileForm.append('file_name',token)
+      fileForm.append('token',token)
+      request({
+        url: '/api/upload_image',
+        method: 'PUT',
+        data: fileForm
+      }).then(res => {
+        if (res.status === "not-upload")
+          return;
 
-      if (res.status === "success") {
-        request({
-          url: '/api/update_pre_registration_status',
-          method: 'POST',
-          data: {name, id_card: idCard, token: token, pre_registration_done: 1},
-        })
-        setModalButtonText(<><TfiClose/>&ensp;取消</>);
-        setModalOptionalButton(jumpButton);
-      } else {
-        setModalButtonText("确认");
-        setModalOptionalButton(null);
-      }
-    })
+        if (res.status !== "success") {
+          setShowModal(true);
+          setModalContent(`上传图片失败：${res.message}`);
+          setModalButtonText("确认");
+          setModalOptionalButton(null);
+          return;
+        }
+
+        submitRequest()
+      })
+    } else {
+      // 不需要上传图片：直接提交表单
+      submitRequest()
+    }
+
+
+    function submitRequest() {
+      request({
+        method: 'POST',
+        url: '/api/submit_pre_registration',
+        data: formData,
+      }).then(res => {
+        setShowModal(true);
+        setModalContent(res.message);
+
+        if (res.status === "success") {
+          request({
+            url: '/api/update_pre_registration_status',
+            method: 'POST',
+            data: {name, id_card: idCard, token: token, pre_registration_done: 1},
+          })
+          setModalButtonText(<><TfiClose/>&ensp;取消</>);
+          setModalOptionalButton(jumpButton);
+        } else {
+          setModalButtonText("确认");
+          setModalOptionalButton(null);
+        }
+      })
+    }
+
   }
 
   // 检查是否已登录
@@ -142,9 +207,9 @@ export default function PreCheckIn() {
           submit();
         }}>
 
-          <input type="text" name="name" hidden value={name}/>
-          <input type="text" name="id_card" hidden value={idCard}/>
-          <input type="text" name="token" hidden value={token}/>
+          <input type="text" name="name" hidden readOnly value={name}/>
+          <input type="text" name="id_card" hidden readOnly value={idCard}/>
+          <input type="text" name="token" hidden readOnly value={token}/>
 
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
@@ -208,7 +273,7 @@ export default function PreCheckIn() {
                             className=""
                             value={plan}
                           />
-                          <label htmlFor={`transportation-${index}`} className="py-3 w-full">{plan}</label>
+                          <label htmlFor={`transportation-${index}`} className="py-3 w-full text-sm">{plan}</label>
                         </div>)
                     })}
 
@@ -228,6 +293,115 @@ export default function PreCheckIn() {
                       rows={3}
                       className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                     />
+                  </div>
+                </div>
+              </>}
+
+              <div className="sm:col-span-12">
+                <label htmlFor="received_advertising" className="block text-sm font-medium leading-6">
+                  是否曾收到运营商校园卡电话卡推销
+                </label>
+                <div className="mt-2 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-5 items-center justify-start gap-x-2 text-sm">
+                    <div className="grow text-nowrap whitespace-nowrap">
+                      <input
+                        type="checkbox"
+                        name="received_advertising"
+                        id="received_advertising-none"
+                        className="m-2"
+                        value='无'
+                        checked={!receivedAdvertising}
+                        onChange={(e) => {
+                          setIsp(isp.map(item => {
+                            return {...item, checked: false}
+                          }))
+                          setReceivedAdvertising(!e.target.checked)
+                        }}
+                      />
+                      <label htmlFor="received_advertising-none"
+                             className="py-3 w-full inline-block">无</label>
+                    </div>
+                    {isp.map((item, index) => {
+                      return (
+                        <div className="grow text-nowrap whitespace-nowrap" key={index}>
+                          <input
+                            type="checkbox"
+                            name="received_advertising"
+                            id={`received_advertising-${item.abbr}`}
+                            className="m-2"
+                            value={`收到${item.name}`}
+                            checked={item.checked}
+                            onChange={(e) => {
+                              setIsp(draft => {
+                                draft[index].checked = e.target.checked
+                              })
+                              setReceivedAdvertising(true)
+                            }}
+                          />
+                          <label htmlFor={`received_advertising-${item.abbr}`}
+                                 className="py-3 w-full inline-block">收到{item.name}</label>
+                        </div>)
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {receivedAdvertising && <>
+                <div className="sm:col-span-12">
+                  <label htmlFor="source_of_advertising" className="block text-sm font-medium leading-6">
+                    推销方式
+                  </label>
+                  <div className="mt-2 w-full">
+                    <div className="grid grid-cols-1 sm:grid-cols-5 items-center justify-start gap-x-2 text-sm">
+                      <div className="grow text-nowrap whitespace-nowrap">
+                        <input
+                          type="checkbox"
+                          name="source_of_advertising"
+                          id="source_of_advertising-none"
+                          className="m-2"
+                          value='无'
+                          checked={!sourceOfAdvertising}
+                          onChange={(e) => {
+                            setAdvertising(advertising.map(item => {
+                              return {...item, checked: false}
+                            }))
+                            setSourceOfAdvertising(!e.target.checked)
+                          }}
+                        />
+                        <label htmlFor="source_of_advertising-none"
+                               className="py-3 w-full inline-block">无</label>
+                      </div>
+                      {advertising.map((item, index) => {
+                        return (
+                          <div className="grow text-nowrap whitespace-nowrap" key={index}>
+                            <input
+                              type="checkbox"
+                              name="source_of_advertising"
+                              id={`source_of_advertising-${item.abbr}`}
+                              className="m-2"
+                              value={item.name}
+                              checked={item.checked}
+                              onChange={(e) => {
+                                setAdvertising(draft => {
+                                  draft[index].checked = e.target.checked
+                                })
+                                setSourceOfAdvertising(true)
+                              }}
+                            />
+                            <label htmlFor={`source_of_advertising-${item.abbr}`}
+                                   className="py-3 w-full inline-block">{item.name}</label>
+                          </div>)
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-12">
+                  <label htmlFor="source_of_advertising" className="block text-sm font-medium leading-6">
+                    上传推销页面截图
+                  </label>
+                  <div className="mx-auto mt-2 w-full max-w-screen-md px-2 sm:px-0">
+                    <FileUploaderZone file={file} setFile={setFile}/>
                   </div>
                 </div>
               </>}

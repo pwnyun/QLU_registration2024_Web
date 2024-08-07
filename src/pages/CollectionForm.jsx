@@ -102,7 +102,7 @@ export default function CollectionForm() {
 
     if (errorMessage !== '') {
       setShowModal(true)
-      setModalContent(`请检查输入：${errorMessage}。`)
+      setModalContent(`${errorMessage}请检查输入。`)
       setModalButtonText("确认");
       setModalOptionalButton(null);
       return;
@@ -182,8 +182,8 @@ export default function CollectionForm() {
           e.preventDefault();
           submit();
         }}>
-          <input type="text" name="id_card" hidden value={idCard}/>
-          <input type="text" name="token" hidden value={token}/>
+          <input type="text" name="id_card" hidden readOnly value={idCard}/>
+          <input type="text" name="token" hidden readOnly value={token}/>
 
           <div className="border-b border-gray-900/10 p-4 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
