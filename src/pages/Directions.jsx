@@ -25,7 +25,7 @@ export default function Directions() {
       return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true"/>
   }
 
-  const checkForm = useCallback(() => {
+  const checkForm = useCallback(({features}) => {
     console.log(features)
     let index1 = features.findIndex((item) => item.name === '信息采集')
     let index2 = features.findIndex((item) => item.name === '预报到')
@@ -36,18 +36,39 @@ export default function Directions() {
       return false;
     }
 
+    console.log(features, features[index1].status === 'true', features[index2].status === 'true')
     return features[index1].status === 'true' && features[index2].status === 'true';
   }, [isFocused])
 
-  const updateReadStatus = (name, loginInfo) => {
-    let data =  {...loginInfo, id_card: loginInfo.idCard}
-    data[`${name}_done`] = 1
+  const updateReadStatus = ({id, loginInfo}) => {
+    let data = {...loginInfo, id_card: loginInfo.idCard}
+    data[`${id}_done`] = 1
 
     request({
-      url: `/api/update_${name}_status`,
+      url: `/api/update_${id}_status`,
       method: 'POST',
       data
     })
+  }
+
+  const lookupDormitory = ({features}) => {
+    if (checkForm({features})) {
+      setShowModal(true)
+      setModalContent("宿舍信息尚未确定，请过几日再来查询。")
+    } else {
+      setShowModal(true)
+      setModalContent("请先填写“信息采集”表和“预报到”表。")
+    }
+  }
+
+  const lookupClass = ({features}) => {
+    if (checkForm({features})) {
+      setShowModal(true)
+      setModalContent("分班信息尚未确定，请过几日再来查询。")
+    } else {
+      setShowModal(true)
+      setModalContent("请先填写“信息采集”表和“预报到”表。")
+    }
   }
 
   const [features, setFeatures] = useImmer([
@@ -70,7 +91,8 @@ export default function Directions() {
       url: '/collection-form',
       target: '_blank',
       id: 'collection',
-      event: () => {}
+      event: () => {
+      }
     }, {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
@@ -98,15 +120,16 @@ export default function Directions() {
       status: 'disable',
       action: "div",
       id: 'dormitory',
-      event: () => {
-        if (checkForm) {
-          setShowModal(true)
-          setModalContent("宿舍信息尚未确定，请过几日再来查询。")
-        } else {
-          setShowModal(true)
-          setModalContent("请先填写“信息采集”表和“预报到”表。")
-        }
-      }
+      event: lookupDormitory
+      // ({features}) => {
+      //   if (checkForm(features)) {
+      //     setShowModal(true)
+      //     setModalContent("宿舍信息尚未确定，请过几日再来查询。")
+      //   } else {
+      //     setShowModal(true)
+      //     setModalContent("请先填写“信息采集”表和“预报到”表。")
+      //   }
+      // }
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
@@ -114,15 +137,16 @@ export default function Directions() {
       status: 'disable',
       action: "div",
       id: 'allocate_class',
-      event: () => {
-        if (checkForm) {
-          setShowModal(true)
-          setModalContent("分班信息尚未确定，请过几日再来查询。")
-        } else {
-          setShowModal(true)
-          setModalContent("请先填写“信息采集”表和“预报到”表。")
-        }
-      }
+      event: lookupClass
+      // ({features}) => {
+      //   if (checkForm(features)) {
+      //     setShowModal(true)
+      //     setModalContent("分班信息尚未确定，请过几日再来查询。")
+      //   } else {
+      //     setShowModal(true)
+      //     setModalContent("请先填写“信息采集”表和“预报到”表。")
+      //   }
+      // }
     }, {
       name: '预报到',
       description: '点击进入预报到系统',
@@ -132,7 +156,8 @@ export default function Directions() {
       url: '/pre-check-in',
       target: '_blank',
       id: 'pre_registration',
-      event: () => {}
+      event: () => {
+      }
     },])
 
   // 注册显示/离开页面监听函数 & 检查是否已登录
@@ -188,11 +213,14 @@ export default function Directions() {
         let index = features.findIndex(feature => key === `${feature.id}_done`)
 
         if (index !== -1 && value === true) {
-          setFeatures(draft => {draft[index].status = "true"})
+          setFeatures(draft => {
+            draft[index].status = "true"
+          })
         }
       }
 
     })
+
   }, [isFocused])
 
   return (<>
@@ -215,7 +243,12 @@ export default function Directions() {
                     key={feature.name}
                     to={feature.url}
                     target={feature.target}
-                    onClick={() => feature.event(feature.id, loginInfo)}
+                    onClick={() => feature.event({
+                      id: feature.id,
+                      loginInfo,
+                      features: JSON.parse(JSON.stringify(features)),
+                      feature
+                    })}
                     className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
                   >
                     <dt className="inline font-semibold text-gray-900">
@@ -224,7 +257,8 @@ export default function Directions() {
                       {feature.name}
                     </dt>
                     <br/>
-                    <dd className="inline">{feature.status === 'true' ? feature.finishDescription : feature.description}</dd>
+                    <dd
+                      className="inline">{feature.status === 'true' ? feature.finishDescription : feature.description}</dd>
                   </feature.action>
                 ))}
               </dl>
