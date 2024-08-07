@@ -54,7 +54,7 @@ export default function Directions() {
   const lookupDormitory = ({features}) => {
     if (checkForm({features})) {
       setShowModal(true)
-      setModalContent("宿舍信息尚未确定，请过几日再来查询。")
+      setModalContent("您的宿舍信息尚未确定，请过几日再来查询。")
     } else {
       setShowModal(true)
       setModalContent("请先填写“信息采集”表。")
@@ -64,7 +64,7 @@ export default function Directions() {
   const lookupClass = ({features}) => {
     if (checkForm({features})) {
       setShowModal(true)
-      setModalContent("分班信息尚未确定，请过几日再来查询。")
+      setModalContent("您的分班信息尚未确定，请过几日再来查询。")
     } else {
       setShowModal(true)
       setModalContent("请先填写“信息采集”表。")
