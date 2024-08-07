@@ -16,6 +16,7 @@ export default function Home() {
   const [modalContent, setModalContent] = useState(null);
   const formRef = useRef(null);
   const [name, setName] = useState('')
+  const [captcha, setCaptcha] = useState('/api/captcha?r=' + Math.random())
 
   const showLoginModal = () => {
     setShowModal(true);
@@ -66,14 +67,15 @@ export default function Home() {
         <MdCheck className="w-5 h-5 mr-1"/>验证
       </button>)
       setModalButtonText(<><MdClose className="w-5 h-5 mr-1"/>关闭</>)
-      setModalContent(<LoginForm ref={formRef}/>)
+      setModalContent(<LoginForm ref={formRef} captcha={captcha} setCaptcha={setCaptcha}/>)
+      setCaptcha('/api/captcha?r=' + Math.random())
     }
   }
 
   const checkAndLogin = () => {
     const formData = new FormData(formRef.current);
     const name = formData.get('name')?.trim();
-    const idCard = formData.get('id_card')?.trim();
+    const idCard = formData.get('id_card')?.trim().toUpperCase();
 
     if (!name) {
       setShowModal(true)
@@ -111,7 +113,7 @@ export default function Home() {
         });
       } else {
         setShowModal(true)
-        setModalContent(res.data.message)
+        setModalContent(res.message)
         setModalButtonText("关闭")
         setModalOptionalButton(null)
       }
@@ -138,7 +140,7 @@ export default function Home() {
   useEffect(() => {
     getLoginInfo().then(res => {
       if (res.status) {
-        setName(`${res.name}（${res.idCard.substring(0,4)}**********${res.idCard.substring(14, 18)}）`)
+        setName(`${res.name}（${res.idCard.substring(0, 4)}**********${res.idCard.substring(14, 18)}）`)
       }
     })
   }, []);
@@ -222,7 +224,8 @@ export default function Home() {
         </div>
       </main>
 
-      <Modal isOpen={showModal} setIsOpen={(status) => setShowModal(status)} title={modalTitle} buttonText={modalButtonText}
+      <Modal isOpen={showModal} setIsOpen={(status) => setShowModal(status)} title={modalTitle}
+             buttonText={modalButtonText}
              optionalButton={modalOptionalButton}>
         {modalContent}
       </Modal>
@@ -231,6 +234,7 @@ export default function Home() {
 }
 
 const LoginForm = forwardRef(function LoginForm(props, ref) {
+  let {captcha, refreshCaptcha} = props
   return (<>
     <form ref={ref}>
       <div className="border-b border-gray-900/10 pt-4 pb-8">
@@ -274,11 +278,8 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
               验证码
             </label>
             <div className="mt-2 w-full flex items-center gap-x-2">
-              <img src="/api/captcha" className="bg-amber-500 w-auto h-full flex-grow text-nowrap" alt="验证码"
-                   onClick={e => {
-                     e.target.src = '/api/captcha?' + Math.random()
-                   }}
-              />
+              <img src={captcha} className="bg-amber-500 w-auto h-full flex-grow text-nowrap" alt="验证码"
+                   onClick={() => setCaptcha}/>
               <input
                 type="text"
                 name="captcha"
