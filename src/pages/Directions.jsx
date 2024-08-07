@@ -26,7 +26,6 @@ export default function Directions() {
   }
 
   const checkForm = useCallback(({features}) => {
-    console.log(features)
     let index1 = features.findIndex((item) => item.name === '信息采集')
     let index2 = features.findIndex((item) => item.name === '预报到')
 
@@ -36,7 +35,6 @@ export default function Directions() {
       return false;
     }
 
-    console.log(features, features[index1].status === 'true', features[index2].status === 'true')
     return features[index1].status === 'true' && features[index2].status === 'true';
   }, [isFocused])
 
@@ -164,12 +162,12 @@ export default function Directions() {
   useEffect(() => {
     const handleFocus = () => {
       setIsFocused(true);
-      console.log('Tab focused');
+      console.debug('Tab focused');
     };
 
     const handleBlur = () => {
       setIsFocused(false);
-      console.log('Tab blurred');
+      console.debug('Tab blurred');
     };
 
     window.addEventListener('focus', handleFocus);

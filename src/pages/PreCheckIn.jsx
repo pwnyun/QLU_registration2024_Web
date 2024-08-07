@@ -80,13 +80,13 @@ export default function PreCheckIn() {
     }
 
     if (formData.get('received_advertising').toString() === "true") {
-      console.log('line 83')
+      console.debug('line 83')
       if (!formData.get("source_of_advertising")) {
-        console.log('line 85')
+        console.debug('line 85')
         errorMessage += "请完成运营商营销调查；"
       }
     }
-    console.log('line 89')
+    console.debug('line 89')
 
     if (errorMessage !== '') {
       setShowModal(true)
