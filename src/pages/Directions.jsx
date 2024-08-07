@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {FaArrowRight, FaCheck} from "react-icons/fa6";
-import {Fragment, useCallback, useEffect, useRef, useState} from "react";
+import {Fragment, useCallback, useEffect, useState} from "react";
 import {getLoginInfo, request} from "../utils.js";
 import Modal from "../modal.jsx";
 import {useImmer} from "use-immer";
@@ -25,19 +25,19 @@ export default function Directions() {
       return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true"/>
   }
 
-  // const checkForm = useCallback(() => {
-  //   console.log(features)
-  //   let index1 = features.findIndex((item) => item.name === '信息采集')
-  //   let index2 = features.findIndex((item) => item.name === '预报到')
-  //
-  //   if (index1 === -1 || index2 === -1) {
-  //     setShowModal(true)
-  //     setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
-  //     return false;
-  //   }
-  //
-  //   return features[index1].status === 'true' && features[index2].status === 'true';
-  // }, [isFocused])
+  const checkForm = useCallback(() => {
+    console.log(features)
+    let index1 = features.findIndex((item) => item.name === '信息采集')
+    let index2 = features.findIndex((item) => item.name === '预报到')
+
+    if (index1 === -1 || index2 === -1) {
+      setShowModal(true)
+      setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
+      return false;
+    }
+
+    return features[index1].status === 'true' && features[index2].status === 'true';
+  }, [isFocused])
 
   const updateReadStatus = (name, loginInfo) => {
     let data =  {...loginInfo, id_card: loginInfo.idCard}

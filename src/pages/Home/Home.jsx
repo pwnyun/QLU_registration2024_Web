@@ -6,7 +6,6 @@ import {MdCheck, MdClose} from "react-icons/md";
 import localforage from "localforage";
 import {encrypt, getLoginInfo, request, validateIdCard} from "../../utils.js";
 import {VscClose, VscScreenFull} from "react-icons/vsc";
-import {TfiShareAlt} from "react-icons/tfi";
 
 export default function Home() {
   const navigate = useNavigate();
