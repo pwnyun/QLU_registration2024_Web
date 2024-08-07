@@ -18,6 +18,9 @@ export default function Home() {
   const [name, setName] = useState('')
   const [captcha, setCaptcha] = useState('/api/captcha?r=' + Math.random())
 
+  // innerWidth < 400 && innerHeight < 700 &&
+  const [isIPhone] = useState(/Safari/.test(navigator.userAgent) && /iPhone/.test(navigator.userAgent));
+
   const showLoginModal = () => {
     setShowModal(true);
     setModalTitle("新生身份验证")
@@ -145,34 +148,39 @@ export default function Home() {
     })
   }, []);
 
+  const antiCheatTips = <>
+    <div
+      className={`${!isIPhone ? 'fixed bottom-0 left-0 h-48' : 'order-last'} flex w-full lg:max-w-72 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none`}>
+      <div
+        className="pointer-events-none flex flex-col place-items-center p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:py-2 lg:border-2 lg:rounded"
+      >
+        <div className="font-serif font-bold text-base py-1">反诈提示</div>
+        <div className="w-full indent-8">
+          请广大新生关注
+          <span
+            className="underline lg:decoration-wavy underline-offset-3 lg:underline-offset-3 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>
+          ，请勿自行搜索、加入或关注其他任何非官方建立的“QQ 群”，不要在群内提交任何个人信息，谨防电信诈骗。
+        </div>
+        <div className="w-full indent-8">预报到过程中遇到问题，可加入线上预报到服务 QQ 群：725386079</div>
+      </div>
+    </div>
+  </>
+
   return (
     <div id="homepage_main">
-      <main className="font-sans flex min-h-screen flex-col items-center justify-between px-8 md:px-24 py-24">
-        <div className="z-10 w-full max-w-5xl items-start justify-between text-sm lg:flex">
+      <main
+        className={`font-sans flex min-h-screen flex-col items-center ${!isIPhone ? 'justify-between' : 'justify-start gap-y-4'}  px-8 md:px-24 py-24`}>
+        <div className="z-20 w-full max-w-5xl items-start justify-between text-sm lg:flex">
           <div
             className="fixed text-lg text-center lg:text-base left-0 top-0 flex w-full flex-col justify-center items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
             <div>齐鲁工业大学<br/></div>
             <div><span className="font-mono px-1">2024</span>新生线上预报到</div>
           </div>
-          <div
-            className="fixed bottom-0 left-0 flex h-48 w-full lg:max-w-64 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-            <div
-              className="pointer-events-none flex flex-col place-items-center p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:py-2 lg:border-2 lg:rounded"
-            >
-              <div className="font-serif font-bold text-base py-1">反诈提示</div>
-              <div className="w-full indent-8">
-                请广大新生关注
-                <span
-                  className="underline lg:decoration-wavy underline-offset-3 lg:underline-offset-3 decoration-sky-500 dark:decoration-rose-400">录取通知书内指定的官方“公众号”“QQ群”</span>
-                ，请勿自行搜索、加入或关注其他任何非官方建立的“QQ群”，不要在群内提交任何个人信息，谨防电信诈骗。
-              </div>
-              <div className="w-full indent-8">预报到过程中遇到问题，可加入线上预报到服务 QQ 群：725386079</div>
-            </div>
-          </div>
+          {!isIPhone && antiCheatTips}
         </div>
 
         <div
-          className="relative flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
+          className={`${isIPhone && 'mt-8'} relative flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]`}>
           <img
             className="relative block dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] z-10"
             src="/assets/qlu-logo-solid-compressed.png"
@@ -185,7 +193,7 @@ export default function Home() {
           {/*/>*/}
         </div>
 
-        <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
+        <div className={`${!isIPhone && 'mb-32'} grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left`}>
 
           <div
             className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 cursor-pointer select-none"
@@ -223,6 +231,8 @@ export default function Home() {
           </div>
 
         </div>
+
+        {isIPhone && antiCheatTips}
       </main>
 
       <Modal isOpen={showModal} setIsOpen={(status) => setShowModal(status)} title={modalTitle}
