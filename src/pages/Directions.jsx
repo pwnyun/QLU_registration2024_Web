@@ -77,7 +77,7 @@ export default function Directions() {
       finishDescription: '已查看。',
       status: 'false',
       action: Link,
-      url: '',
+      url: 'https://qlgydx.mp.sinojy.cn',
       target: '_blank',
       id: 'bill',
       event: updateReadStatus
