@@ -147,10 +147,10 @@ export default function Home() {
 
   return (
     <div id="homepage_main">
-      <main className="font-sans flex min-h-screen flex-col items-center justify-between px-8 md:px-24 py-12">
+      <main className="font-sans flex min-h-screen flex-col items-center justify-between px-8 md:px-24 pt-28 pb-12 lg:py-24">
         <div className="z-10 w-full max-w-5xl items-start justify-between text-sm lg:flex">
           <div
-            className="fixed text-lg text-center lg:text-base left-0 top-0 flex w-full flex-col justify-center items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-5 pt-7 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+            className="fixed text-lg text-center lg:text-base left-0 top-0 flex w-full flex-col justify-center items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-5 pt-7 lg:pb-6 lg:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
             <div>齐鲁工业大学<br/></div>
             <div><span className="font-mono px-1">2024</span>新生线上预报到</div>
           </div>
@@ -185,7 +185,7 @@ export default function Home() {
           {/*/>*/}
         </div>
 
-        <div className="mb-48 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
+        <div className="mb-32 mt-0 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
 
           <div
             className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 cursor-pointer select-none"
