@@ -25,18 +25,20 @@ export default function Directions() {
       return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true"/>
   }
 
-  const checkForm = useCallback(({features}) => {
+  const checkForm = ({features}) => {
     let index1 = features.findIndex((item) => item.name === '信息采集')
     let index2 = features.findIndex((item) => item.name === '预报到')
 
     if (index1 === -1 || index2 === -1) {
-      setShowModal(true)
-      setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
+      // setShowModal(true)
+      // setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
+      console.error("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
       return false;
     }
 
-    return features[index1].status === 'true' && features[index2].status === 'true';
-  }, [isFocused])
+    // return features[index1].status === 'true' && features[index2].status === 'true';
+    return features[index1].status === 'true';
+  }
 
   const updateReadStatus = ({id, loginInfo}) => {
     let data = {...loginInfo, id_card: loginInfo.idCard}
@@ -55,7 +57,7 @@ export default function Directions() {
       setModalContent("宿舍信息尚未确定，请过几日再来查询。")
     } else {
       setShowModal(true)
-      setModalContent("请先填写“信息采集”表和“预报到”表。")
+      setModalContent("请先填写“信息采集”表。")
     }
   }
 
@@ -65,7 +67,7 @@ export default function Directions() {
       setModalContent("分班信息尚未确定，请过几日再来查询。")
     } else {
       setShowModal(true)
-      setModalContent("请先填写“信息采集”表和“预报到”表。")
+      setModalContent("请先填写“信息采集”表。")
     }
   }
 
