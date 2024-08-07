@@ -5,6 +5,7 @@ import {TfiClose, TfiShareAlt} from "react-icons/tfi";
 import Modal from "../modal.jsx";
 import {useImmer} from "use-immer";
 import FileUploaderZone from "../file-uploader-zone.jsx";
+import {PiSealWarning} from "react-icons/pi";
 
 const plans = ['私家车', '出租车', '公共交通']
 
@@ -100,7 +101,7 @@ export default function PreCheckIn() {
       // 需要上传图片
       const fileForm = new FormData();
       fileForm.append('file', file)
-      fileForm.append('token',token)
+      fileForm.append('token', token)
       request({
         url: '/api/upload_image',
         method: 'PUT',
@@ -337,6 +338,16 @@ export default function PreCheckIn() {
                                  className="py-3 w-full inline-block">收到{item.name}</label>
                         </div>)
                     })}
+                  </div>
+                  <div className="mt-2 text-sm rounded border-2 p-3 flex flex-col">
+                    <div className="flex items-center">
+                      <PiSealWarning className="w-8 h-8 text-red-600 flex-shrink-0 mr-2"/>
+                      <div className="flex items-center font-bold">重要提示</div>
+                    </div>
+                    <div className="mt-2">
+                      <div className="indent-8 md:indent-0">以上推销涉嫌侵犯用户隐私，学校将查处相关组织与人员。</div>
+                      <div className="indent-8 md:indent-0">我们会给予每条线索的首位提供者一定奖励。请勿在非官方平台提供个人隐私信息，谨防电信诈骗。</div>
+                    </div>
                   </div>
                 </div>
               </div>
