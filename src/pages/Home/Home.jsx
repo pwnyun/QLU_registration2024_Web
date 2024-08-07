@@ -150,7 +150,7 @@ export default function Home() {
       <main className="font-sans flex min-h-screen flex-col items-center justify-between px-8 md:px-24 pt-28 pb-12 lg:py-24">
         <div className="z-10 w-full max-w-5xl items-start justify-between text-sm lg:flex">
           <div
-            className="fixed text-lg text-center lg:text-base left-0 top-0 flex w-full flex-col justify-center items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-5 pt-7 lg:pb-6 lg:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+            className="fixed text-lg text-center lg:text-base left-0 top-0 z-0 flex w-full flex-col justify-center items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-4 pt-6 lg:pb-6 lg:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
             <div>齐鲁工业大学<br/></div>
             <div><span className="font-mono px-1">2024</span>新生线上预报到</div>
           </div>
@@ -174,7 +174,7 @@ export default function Home() {
         <div
           className="relative flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
           <img
-            className="relative block dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] z-10"
+            className="relative block dark:drop-shadow-[0_0_0.3rem_#ffffff70] w-[160px] z-10"
             src="/assets/qlu-logo-solid-compressed.png"
             alt="齐鲁工大（鲁科院）Logo"
           />
