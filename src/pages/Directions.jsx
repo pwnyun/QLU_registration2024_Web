@@ -99,8 +99,13 @@ export default function Directions() {
       action: "div",
       id: 'dormitory',
       event: () => {
-        setShowModal(true)
-        setModalContent("宿舍信息尚未确定，请过几日再来查询。")
+        if (checkForm) {
+          setShowModal(true)
+          setModalContent("宿舍信息尚未确定，请过几日再来查询。")
+        } else {
+          setShowModal(true)
+          setModalContent("请先填写“信息采集”表和“预报到”表。")
+        }
       }
     }, {
       name: '分班信息查询',
@@ -110,8 +115,13 @@ export default function Directions() {
       action: "div",
       id: 'allocate_class',
       event: () => {
-        setShowModal(true)
-        setModalContent("分班信息尚未确定，请过几日再来查询。")
+        if (checkForm) {
+          setShowModal(true)
+          setModalContent("分班信息尚未确定，请过几日再来查询。")
+        } else {
+          setShowModal(true)
+          setModalContent("请先填写“信息采集”表和“预报到”表。")
+        }
       }
     }, {
       name: '预报到',

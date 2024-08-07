@@ -100,11 +100,6 @@ export default function PreCheckIn() {
       // 需要上传图片
       const fileForm = new FormData();
       fileForm.append('file', file)
-      // 0.0
-      fileForm.append('name',token)
-      fileForm.append('filename',token)
-      fileForm.append('fileName',token)
-      fileForm.append('file_name',token)
       fileForm.append('token',token)
       request({
         url: '/api/upload_image',
