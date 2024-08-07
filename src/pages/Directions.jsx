@@ -73,6 +73,16 @@ export default function Directions() {
 
   const [features, setFeatures] = useImmer([
     {
+      name: '信息采集',
+      description: '点击进入新生信息采集表单',
+      finishDescription: '已采集。',
+      status: 'false',
+      action: Link,
+      url: '/collection-form',
+      target: '_blank',
+      id: 'collection',
+      event: () => {}
+    }, {
       name: '一号通激活',
       description: '点击跳转到一号通激活指南',
       finishDescription: '已查看。',
@@ -82,17 +92,6 @@ export default function Directions() {
       target: '_blank',
       id: 'sso',
       event: updateReadStatus
-    }, {
-      name: '信息采集',
-      description: '点击进入新生信息采集表单',
-      finishDescription: '已采集。',
-      status: 'false',
-      action: Link,
-      url: '/collection-form',
-      target: '_blank',
-      id: 'collection',
-      event: () => {
-      }
     }, {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
