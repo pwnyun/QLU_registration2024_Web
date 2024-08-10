@@ -245,7 +245,7 @@ const LoginForm = forwardRef(function LoginForm(props, ref) {
   let {captcha, refreshCaptcha} = props
   return (<>
     <form ref={ref}>
-      <div className="border-b border-gray-900/10 pt-4 pb-8">
+      <div className="border-b border-gray-900/10 pt-4 pb-8 z-20">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
 
           <div className="sm:col-span-1">
