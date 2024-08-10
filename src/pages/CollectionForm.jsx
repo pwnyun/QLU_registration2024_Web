@@ -466,6 +466,12 @@ export default function CollectionForm() {
               </div>
 
               <div className="sm:col-span-6">
+                <div className="text-sm">
+                  * 身体数据仅用于校医院健康档案与军训服装订购，
+                </div>
+              </div>
+
+              <div className="sm:col-span-6">
                 <label htmlFor="studentLoan" className="block text-sm font-medium leading-6">
                   是否已经或者正在办理生源地信用助学贷款
                 </label>

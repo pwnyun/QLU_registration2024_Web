@@ -66,11 +66,15 @@ export default function PreCheckIn() {
 
     if (status === "true") {
       if (!formData.get("arrival_date")) {
+        errorMessage += "请选择拟到校日期；"
+      }
+      if (!formData.get("arrival_time")) {
         errorMessage += "请选择拟到校时间；"
       }
       if (!formData.get("arrival_method")) {
         errorMessage += "请选择到校交通方式；"
       }
+
     } else if (status === "false") {
       if (!formData.get("not_arrival_reason")) {
         errorMessage += "请填写无法按时报到原因；"
@@ -80,13 +84,10 @@ export default function PreCheckIn() {
     }
 
     if (formData.get('received_advertising').toString() === "true") {
-      console.debug('line 83')
       if (!formData.get("source_of_advertising")) {
-        console.debug('line 85')
         errorMessage += "请完成运营商营销调查；"
       }
     }
-    console.debug('line 89')
 
     if (errorMessage !== '') {
       setShowModal(true)
@@ -95,6 +96,8 @@ export default function PreCheckIn() {
       setModalOptionalButton(null);
       return;
     }
+
+    formData.set('arrival_date', formData.get('arrival_date') + formData.get('arrival_time'));
 
     if (file) {
       // 需要上传图片
@@ -233,23 +236,37 @@ export default function PreCheckIn() {
 
               {arriveOnTime === "true" && <>
                 <div className="sm:col-span-6">
-                  <label htmlFor="date" className="block text-sm font-medium leading-6">
+                  <label htmlFor="arrive-date" className="block text-sm font-medium leading-6">
                     拟到校时间
                   </label>
                   <div className="mt-2 w-full">
-                    <input
-                      type="datetime-local"
+                    <select
+                      id="arrive-date"
                       name="arrival_date"
-                      id="date"
-                      min="2024-08-30T04:00"
-                      max="2024-08-30T23:30"
+                      className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    >
+                      <option value="" disabled hidden></option>
+                      <option value="2024-08-30T">8 月 30 日</option>
+                      <option value="2024-09-01T">9 月 1 日（仅菏泽校区）</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-6">
+                  <label htmlFor="arrive_time" className="block text-sm font-medium leading-6">
+                    &emsp;
+                  </label>
+                  <div className="mt-2 w-full">
+                    <input
+                      type="time"
+                      name="arrival_time"
+                      id="arrive_time"
+                      min="04:00"
+                      max="23:30"
                       className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                     />
                   </div>
                 </div>
-
-                {/*占位*/}
-                <div className="hidden sm:block sm:col-span-3"></div>
 
                 <div className="sm:col-span-6">
                   <label htmlFor="transportation" className="block text-sm font-medium leading-6">
