@@ -247,7 +247,7 @@ export default function PreCheckIn() {
                       className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                     >
                       <option value="" disabled hidden></option>
-                      <option value="2024-08-30T">8 月 30 日</option>
+                      <option value="2024-08-31T">8 月 31 日</option>
                       <option value="2024-09-01T">9 月 1 日（仅菏泽校区）</option>
                     </select>
                   </div>
