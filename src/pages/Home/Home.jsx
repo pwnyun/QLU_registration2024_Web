@@ -150,7 +150,7 @@ export default function Home() {
 
   const antiCheatTips = <>
     <div
-      className={`${!isIPhone ? 'fixed bottom-0 left-0 h-48' : 'order-last'} ${showModal ? 'hidden': 'flex'} w-full lg:max-w-72 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none`}>
+      className={`${!isIPhone ? 'fixed bottom-0 left-0 h-48' : 'order-last'} ${showModal ? 'hidden' : 'flex'} w-full lg:max-w-72 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none`}>
       <div
         className="pointer-events-none flex flex-col place-items-center p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:py-2 lg:border-2 lg:rounded"
       >
