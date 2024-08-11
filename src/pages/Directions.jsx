@@ -108,7 +108,7 @@ export default function Directions() {
       finishDescription: '已查看。',
       status: 'false',
       action: Link,
-      url: '',
+      url: 'https://wlyw.qlu.edu.cn/wiki/help/os/',
       target: '_self',
       id: 'os',
       event: updateReadStatus
