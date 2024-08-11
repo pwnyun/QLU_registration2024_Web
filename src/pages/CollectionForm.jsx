@@ -89,7 +89,7 @@ export default function CollectionForm() {
     if (province !== '台湾省' && (!prefecture || prefectureIndex < 0)) {
       errorMessage += "请选择地级市；"
     }
-    if (['台湾省', '香港特别行政区', '澳门特别行政区', '北京市', '天津市', '上海市', '重庆市'].filter(item => item === province).length === 0
+    if (['台湾省', '香港特别行政区', '澳门特别行政区', '北京市', '天津市', '上海市', '重庆市' , '广东省'].filter(item => item === province).length === 0
       && (!county)
     ) {
       errorMessage += "请选择县级市；"
