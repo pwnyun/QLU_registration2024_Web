@@ -71,7 +71,7 @@ export default function Directions() {
     }
   }
 
-  const showDsableTip = () => {
+  const showDisableTip = () => {
     setShowModal(true)
     setModalContent("正在升级维护中，请过几日再试。")
   }
@@ -106,7 +106,7 @@ export default function Directions() {
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'bill',
-      event: showDsableTip, //updateReadStatus
+      event: showDisableTip, //updateReadStatus
     }, {
       name: 'OS 平台注册',
       description: '点击跳转到工大OS激活指南',
@@ -116,7 +116,7 @@ export default function Directions() {
       url: 'https://wlyw.qlu.edu.cn/wiki/help/os/',
       target: '_self',
       id: 'os',
-      event: showDsableTip, //updateReadStatus
+      event: showDisableTip, //updateReadStatus
     }, {
       name: '宿舍查询',
       description: '点击查看宿舍分配信息',
