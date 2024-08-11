@@ -71,6 +71,11 @@ export default function Directions() {
     }
   }
 
+  const showDsableTip = () => {
+    setShowModal(true)
+    setModalContent("正在升级维护中，请过几日再试。")
+  }
+
   const [features, setFeatures] = useImmer([
     {
       name: '信息采集',
@@ -96,22 +101,22 @@ export default function Directions() {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
       finishDescription: '已查看。',
-      status: 'false',
-      action: Link,
+      status: 'disable', //'false',
+      action: 'div', // Link,
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'bill',
-      event: updateReadStatus
+      event: showDsableTip, //updateReadStatus
     }, {
       name: 'OS 平台注册',
       description: '点击跳转到工大OS激活指南',
       finishDescription: '已查看。',
-      status: 'false',
-      action: Link,
+      status: 'disable',
+      action: 'div',
       url: 'https://wlyw.qlu.edu.cn/wiki/help/os/',
       target: '_self',
       id: 'os',
-      event: updateReadStatus
+      event: showDsableTip, //updateReadStatus
     }, {
       name: '宿舍查询',
       description: '点击查看宿舍分配信息',
@@ -192,7 +197,7 @@ export default function Directions() {
       for (const [key, value] of Object.entries(res)) {
         let index = features.findIndex(feature => key === `${feature.id}_done`)
 
-        if (index !== -1 && value === true) {
+        if (index !== -1 && value === true && features[index].status !== 'disable') {
           setFeatures(draft => {
             draft[index].status = "true"
           })
