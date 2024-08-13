@@ -8,6 +8,7 @@ import CollectionForm from "./pages/CollectionForm.jsx";
 import PreCheckIn from "./pages/PreCheckIn.jsx";
 import CollectionFormForOld from "./pages/CollectionFormForOld.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import AllocateClass from "./pages/AllocateClass.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,9 @@ const router = createBrowserRouter([
   }, {
     path: '/old-form',
     element: <CollectionFormForOld />
+  }, {
+    path: '/allocate-class',
+    element: <AllocateClass />
   }
 
   // {path:'/', element: <CollectionFormForOld/>}

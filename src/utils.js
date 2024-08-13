@@ -36,8 +36,9 @@ export function decrypt(ciphertext, key = "WLYW, 0531-89631358") {
   return JSON.parse(decodeURI(str));
 }
 
-export function request({url, method, data, headers}) {
+export function request({url, method, data, params, headers}) {
   if (!data) data = {}
+  if (!params) params = {}
   if (!headers) headers = {}
 
   return new Promise((resolve, reject) => {
@@ -65,7 +66,7 @@ export function request({url, method, data, headers}) {
       },
     );
 
-    axios({method, url, data, headers})
+    axios({method, url, data, params, headers})
       .then(res => {
         if (!res.status || (res.status && res.status === 'fail')) {
           reject(res.data);

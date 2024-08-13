@@ -101,12 +101,12 @@ export default function Directions() {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
       finishDescription: '已查看。',
-      status: 'disable', //'false',
-      action: 'div', // Link,
+      status: 'false',
+      action: Link,
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'bill',
-      event: showDisableTip, //updateReadStatus
+      event: updateReadStatus
     }, {
       name: 'OS 平台注册',
       description: '点击跳转到工大OS激活指南',
@@ -128,11 +128,12 @@ export default function Directions() {
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
-      finishDescription: '分班信息尚未确定，请过几日再来查询。',
-      status: 'disable',
-      action: "div",
+      finishDescription: '已查看。',
+      status: 'false',
+      action: Link,
+      url: '/allocate-class',
       id: 'allocate_class',
-      event: lookupClass
+      event: () => {}
     }, {
       name: '预报到',
       description: '点击进入预报到系统',
