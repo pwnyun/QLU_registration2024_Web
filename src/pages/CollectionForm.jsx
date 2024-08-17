@@ -20,7 +20,7 @@ export default function CollectionForm() {
   const [prefecture, setPrefecture] = useState("");
   const [prefectureIndex, setPrefectureIndex] = useState(-1);
   const [county, setCounty] = useState("");
-  const [networkApply, setNetworkApply] = useState(true);
+  const [networkApply, setNetworkApply] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
