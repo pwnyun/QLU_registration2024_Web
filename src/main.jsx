@@ -34,9 +34,17 @@ const router = createBrowserRouter([
   }, {
     path: '/sam-bind',
     element: <SAMBind/>
-  }
+  },
 
-  // {path:'/', element: <CollectionFormForOld/>}
+  // xyw.qlu.edu.cn 使用：
+  // {
+  //   path: '/',
+  //   element: <CollectionFormForOld/>,
+  //   errorElement: <ErrorPage/>,
+  // }, {
+  //   path: '/sam-bind',
+  //   element: <SAMBind/>
+  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

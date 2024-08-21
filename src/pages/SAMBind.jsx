@@ -3,7 +3,7 @@ import {request} from "../utils.js";
 import {useNavigate} from "react-router-dom";
 import Modal from "../modal.jsx";
 
-const carrier = ['山东移动', '山东联通']
+const carriers = ['山东移动', '山东联通']
 
 export default function SAMBind() {
   const navigate = useNavigate();
@@ -79,10 +79,8 @@ export default function SAMBind() {
     if (!studentNumber || isNaN(Number(studentNumber.trim())) || studentNumber.trim().length < 6 || studentNumber.trim().length > 12)
       error += '请检查输入的学/工号；'
 
-
-    if (!carrier || carrier.findIndex(carrier) === -1)
+    if (!carrier || carriers.findIndex(carrier) === -1)
       error += '请选择运营商；'
-
 
     if (!phone || isNaN(Number(phone.trim())) || phone.trim().length !== 11 || !phone.trim().startsWith('1'))
       error += '输入的手机号码无效；'
@@ -174,8 +172,7 @@ export default function SAMBind() {
                     className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
-                    <option>山东移动</option>
-                    <option>山东联通</option>
+                    {carriers.map(item => <option key={item}>{item}</option>)}
                   </select>
                 </div>
               </div>
