@@ -9,27 +9,31 @@ import PreCheckIn from "./pages/PreCheckIn.jsx";
 import CollectionFormForOld from "./pages/CollectionFormForOld.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import AllocateClass from "./pages/AllocateClass.jsx";
+import SAMBind from "./pages/SAMBind.jsx";
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home/>,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorPage/>,
   }, {
     path: '/directions',
-    element: <Directions />,
+    element: <Directions/>,
   }, {
     path: '/collection-form',
-    element: <CollectionForm />,
+    element: <CollectionForm/>,
   }, {
     path: '/pre-check-in',
-    element: <PreCheckIn />
+    element: <PreCheckIn/>
   }, {
     path: '/old-form',
-    element: <CollectionFormForOld />
+    element: <CollectionFormForOld/>
   }, {
     path: '/allocate-class',
-    element: <AllocateClass />
+    element: <AllocateClass/>
+  }, {
+    path: '/sam-bind',
+    element: <SAMBind/>
   }
 
   // {path:'/', element: <CollectionFormForOld/>}
