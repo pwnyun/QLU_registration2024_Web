@@ -60,7 +60,7 @@ export default function AllocateClass() {
 
       <div className="image-container relative mb-[20px] bg-no-repeat w-full">
         <img className="object-cover object-bottom w-full h-[calc(100%-2px)] absolute left-0 top-0 z-[-10]"
-             src="/assets/banner.png"/>
+             src="/assets/banner-compressed.png"/>
         <img className="object-cover w-full h-[calc(100%-4px)]"
              src="/assets/index-bg-mask.svg"/>
         <img className="object-cover translate-x-[-50%] h-[41.58%] absolute left-[50%] bottom-[12.3%] z-10"
