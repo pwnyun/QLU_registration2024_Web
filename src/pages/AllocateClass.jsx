@@ -65,7 +65,7 @@ export default function AllocateClass() {
              src="/assets/index-bg-mask.svg"/>
         <img className="object-cover translate-x-[-50%] h-[41.58%] absolute left-[50%] bottom-[12.3%] z-10"
              src="/assets/index-avatar-circle.svg"/>
-        <img className="object-cover translate-x-[-50%] h-[36.82%] absolute left-[50%] bottom-[15.3%] z-20"
+        <img className="object-cover translate-x-[-50%] h-[36.82%] absolute left-[50%] bottom-[15.5%] z-20"
              src="/assets/qlu-logo-space.png"/>
         {/*<img*/}
         {/*  className="object-cover translate-x-[-50%] translate-y-[3px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px]"*/}

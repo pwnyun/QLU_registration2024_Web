@@ -18,7 +18,6 @@ export default function SAMBind() {
 
   // 倒计时逻辑
   useEffect(() => {
-    console.log("effect.")
     if (countdown <= 0)
       return
 
@@ -32,7 +31,7 @@ export default function SAMBind() {
       return
 
     let formData = new FormData(formRef.current);
-    console.log(formData)
+    console.debug(formData)
     let studentNumber = formData.get('student_id');
     let phone = formData.get('phone_number')
 
@@ -68,7 +67,7 @@ export default function SAMBind() {
 
   const submit = () => {
     let formData = new FormData(formRef.current);
-    console.log(formData)
+    console.debug(formData)
     let studentNumber = formData.get('student_id');
     let carrier = formData.get('carrier');
     let phone = formData.get('phone_number')
@@ -123,7 +122,7 @@ export default function SAMBind() {
                src="/assets/index-bg-mask.svg"/>
           <img className="object-cover translate-x-[-50%] h-[41.58%] absolute left-[50%] bottom-[12.3%] z-10"
                src="/assets/index-avatar-circle.svg"/>
-          <img className="object-cover translate-x-[-50%] h-[36.82%] absolute left-[50%] bottom-[15.3%] z-20"
+          <img className="object-cover translate-x-[-50%] h-[36.82%] absolute left-[50%] bottom-[15.5%] z-20"
                src="/assets/qlu-logo-space.png"/>
           {/*<img*/}
           {/*  className="object-cover translate-x-[-50%] translate-y-[3px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px]"*/}
