@@ -230,8 +230,9 @@ export default function SAMBind() {
 
       <div
         className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
-        <div>&copy;2024 齐鲁工业大学 | 网络信息中心</div>
-        <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
+        <div className="mb-1">&copy;2024 齐鲁工业大学 | 网络信息中心</div>
+        <div className="leading-4">故障上报：关注“齐鲁工业大学网络运维”微信公众号</div>
+        <div className="leading-4">选择“网络运维”-“网络报修”</div>
       </div>
 
       <Modal isOpen={showModal} setIsOpen={setShowModal} buttonText={modalButtonText}

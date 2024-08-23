@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {FaArrowRight, FaCheck} from "react-icons/fa6";
-import {Fragment, useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {getLoginInfo, request} from "../utils.js";
 import Modal from "../modal.jsx";
 import {useImmer} from "use-immer";
@@ -51,29 +51,46 @@ export default function Directions() {
     })
   }
 
-  const lookupDormitory = ({features}) => {
-    if (checkForm({features})) {
-      setShowModal(true)
-      setModalContent("您的宿舍信息尚未确定，请过几日再来查询。")
-    } else {
-      setShowModal(true)
-      setModalContent("请先填写“信息采集”表。")
-    }
-  }
+  // const lookupDormitory = ({features}) => {
+  //   if (checkForm({features})) {
+  //     setShowModal(true)
+  //     setModalContent("您的宿舍信息尚未确定，请过几日再来查询。")
+  //   } else {
+  //     setShowModal(true)
+  //     setModalContent("请先填写“信息采集”表。")
+  //   }
+  // }
 
-  const lookupClass = ({features}) => {
-    if (checkForm({features})) {
-      setShowModal(true)
-      setModalContent("您的分班信息尚未确定，请过几日再来查询。")
-    } else {
-      setShowModal(true)
-      setModalContent("请先填写“信息采集”表。")
-    }
-  }
+  // const lookupClass = ({features}) => {
+  //   if (checkForm({features})) {
+  //     setShowModal(true)
+  //     setModalContent("您的分班信息尚未确定，请过几日再来查询。")
+  //   } else {
+  //     setShowModal(true)
+  //     setModalContent("请先填写“信息采集”表。")
+  //   }
+  // }
 
   const showDisableTip = () => {
     setShowModal(true)
     setModalContent("正在升级维护中，请过几日再试。")
+  }
+
+  const lookupDormitory = ({loginInfo}) => {
+    request({
+      url: '/api/room_information',
+      method: 'GET',
+      params: {name: loginInfo.name, id_card: loginInfo.idCard, token: loginInfo.token},
+    }).then(res => {
+      console.log(res)
+      if (res.status !== 'success') {
+        setShowModal(true)
+        setModalContent(`查询失败：${res.message}`)
+      } else {
+        setShowModal(true)
+        setModalContent(`您的宿舍为：${res.room}`)
+      }
+    })
   }
 
   const [features, setFeatures] = useImmer([
@@ -86,7 +103,8 @@ export default function Directions() {
       url: '/collection-form',
       target: '_self',
       id: 'collection',
-      event: () => {}
+      event: () => {
+      }
     }, {
       name: '一号通激活',
       description: '点击跳转到一号通激活指南',
@@ -120,9 +138,9 @@ export default function Directions() {
     }, {
       name: '宿舍查询',
       description: '点击查看宿舍分配信息',
-      finishDescription: '宿舍分配信息尚未确定，请过几日再来查询。',
-      status: 'disable',
-      action: "div",
+      finishDescription: '已查询。',
+      status: 'false',
+      action: 'div',
       id: 'dormitory',
       event: lookupDormitory
     }, {
@@ -133,7 +151,8 @@ export default function Directions() {
       action: Link,
       url: '/allocate-class',
       id: 'allocate_class',
-      event: () => {}
+      event: () => {
+      }
     }, {
       name: '预报到',
       description: '点击进入预报到系统',
@@ -143,7 +162,8 @@ export default function Directions() {
       url: '/pre-check-in',
       target: '_self',
       id: 'pre_registration',
-      event: () => {}
+      event: () => {
+      }
     },])
 
   // 注册显示/离开页面监听函数 & 检查是否已登录
