@@ -134,6 +134,16 @@ export default function SAMBind() {
           </div>
         </div>
 
+        <div
+          className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
+          <div className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">
+            绑定提示
+          </div>
+          <div className="pt-2">
+            本页面仅供移动融套餐用户进行校园网账号绑定，其他用户绑定后将导致无法连接校园网！
+          </div>
+        </div>
+
         <form ref={formRef} onSubmit={(e) => e.preventDefault()}>
 
           <div className="border-b border-gray-900/10 p-4 pb-12">
