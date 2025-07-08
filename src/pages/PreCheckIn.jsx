@@ -247,8 +247,8 @@ export default function PreCheckIn() {
                       className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
                     >
                       <option value="" disabled hidden></option>
-                      <option value="2024-08-31T">8 月 31 日</option>
-                      <option value="2024-09-01T">9 月 1 日（仅菏泽校区）</option>
+                      <option value="2025-08-31T">8 月 31 日</option>
+                      <option value="2025-09-01T">9 月 1 日（仅菏泽校区）</option>
                     </select>
                   </div>
                 </div>
@@ -457,7 +457,7 @@ export default function PreCheckIn() {
 
       <div
         className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
-        <div>&copy;2024 齐鲁工业大学 | 网络信息中心</div>
+        <div>&copy;2025 齐鲁工业大学 | 网络信息中心</div>
         <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
       </div>
 

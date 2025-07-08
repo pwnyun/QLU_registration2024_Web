@@ -230,7 +230,7 @@ export default function Directions() {
   }, [isFocused])
 
   return (<>
-    <div className="overflow-hidden bg-white py-24 md:py-32 min-h-screen">
+    <div className="overflow-hidden bg-white pt-12 pb-24 md:pt-16 md:pb-32 min-h-screen">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div
           className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
@@ -263,8 +263,9 @@ export default function Directions() {
                       {feature.name}
                     </dt>
                     <br/>
-                    <dd
-                      className="inline">{feature.status === 'true' ? feature.finishDescription : feature.description}</dd>
+                    <dd className="inline">
+                      {feature.status === 'true' ? feature.finishDescription : feature.description}
+                    </dd>
                   </feature.action>
                 ))}
               </dl>
@@ -279,7 +280,7 @@ export default function Directions() {
 
     <div
       className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
-      <div>&copy;2024 齐鲁工业大学 | 网络信息中心</div>
+      <div>&copy;2025 齐鲁工业大学 | 网络信息中心</div>
       <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
     </div>
 

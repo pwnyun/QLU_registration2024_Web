@@ -114,7 +114,7 @@ export default function AllocateClass() {
 
     <div
       className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
-      <div>&copy;2024 齐鲁工业大学 | 网络信息中心</div>
+      <div>&copy;2025 齐鲁工业大学 | 网络信息中心</div>
       <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
     </div>
 

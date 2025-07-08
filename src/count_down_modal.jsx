@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
-export default function Modal({
+export default function CountDownModal({
   isOpen,
   setIsOpen,
   title = '提示',

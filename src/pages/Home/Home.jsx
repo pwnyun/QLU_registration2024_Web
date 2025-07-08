@@ -125,18 +125,19 @@ export default function Home() {
   }
 
   const showWikiWindow = () => {
-    setShowModal(true)
-    setModalTitle("新生报到指南")
-    setModalContent(<WikiWindow/>)
-    setModalButtonText(<><VscClose className="w-6 h-6"/>&ensp;关闭</>)
-    setModalOptionalButton(
-      <a
-        href="https://wlyw.qlu.edu.cn/wiki/help/"
-        type="button"
-        className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
-      >
-        <VscScreenFull className="w-6 h-6"/>&ensp;全屏阅读
-      </a>)
+    window.location.href = 'https://wlyw.qlu.edu.cn/wiki/help'
+    // setShowModal(true)
+    // setModalTitle("新生报到指南")
+    // setModalContent(<WikiWindow/>)
+    // setModalButtonText(<><VscClose className="w-6 h-6"/>&ensp;关闭</>)
+    // setModalOptionalButton(
+    //   <a
+    //     href="https://wlyw.qlu.edu.cn/wiki/help/"
+    //     type="button"
+    //     className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+    //   >
+    //     <VscScreenFull className="w-6 h-6"/>&ensp;全屏阅读
+    //   </a>)
   }
 
   // 检查是否已登录
@@ -150,7 +151,7 @@ export default function Home() {
 
   const antiCheatTips = <>
     <div
-      className={`${!isIPhone ? 'fixed bottom-0 left-0 h-48' : 'order-last'} ${showModal ? 'hidden' : 'flex'} w-full lg:max-w-72 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none`}>
+      className={`${!isIPhone ? 'fixed bottom-0 left-0 h-48' : 'order-last'} ${showModal ? 'hidden' : 'flex'} w-full lg:max-w-72 items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none`}>
       <div
         className="pointer-events-none flex flex-col place-items-center p-8 border-neutral-500 lg:pointer-events-auto lg:px-4 lg:py-2 lg:border-2 lg:rounded"
       >
@@ -171,7 +172,7 @@ export default function Home() {
           <div
             className="fixed text-lg text-center lg:text-base left-0 top-0 flex w-full flex-col justify-center items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
             <div>齐鲁工业大学<br/></div>
-            <div><span className="font-mono px-1">2024</span>新生线上预报到</div>
+            <div><span className="font-mono px-1">2025</span>新生线上预报到</div>
           </div>
           {!isIPhone && antiCheatTips}
         </div>
@@ -190,7 +191,8 @@ export default function Home() {
           {/*/>*/}
         </div>
 
-        <div className={`${!isIPhone && 'mb-32'} grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left`}>
+        <div
+          className={`${!isIPhone && 'mb-32'} grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left`}>
 
           <div
             className="group rounded-lg border border-transparent px-2 md:px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 cursor-pointer select-none"
@@ -198,9 +200,8 @@ export default function Home() {
           >
             <h2 className="mb-3 text-2xl">
               {`新生身份核验 `}
-              <span
-                className="font-mono inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                {"->"}
+              <span className="font-mono inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                &rarr;
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-50">
@@ -217,9 +218,8 @@ export default function Home() {
           >
             <h2 className="mb-3 text-2xl">
               {`新生报到指南 `}
-              <span
-                className="font-mono inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                {"->"}
+              <span className="font-mono inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                &rarr;
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-50">
