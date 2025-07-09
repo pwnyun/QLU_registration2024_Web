@@ -29,7 +29,7 @@ export default function CollectionForm() {
 
   const [jumpButton] = useState(
     <button type="button"
-            className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+            className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2`}
             onClick={() => {
               setShowModal(false);
               navigate('/directions')
@@ -89,13 +89,16 @@ export default function CollectionForm() {
     if (province !== '台湾省' && (!prefecture || prefectureIndex < 0)) {
       errorMessage += "请选择地级市；"
     }
-    if (['台湾省', '香港特别行政区', '澳门特别行政区', '北京市', '天津市', '上海市', '重庆市' , '广东省'].filter(item => item === province).length === 0
+    if (['台湾省', '香港特别行政区', '澳门特别行政区', '北京市', '天津市', '上海市', '重庆市', '广东省'].filter(item => item === province).length === 0
       && (!county)
     ) {
       errorMessage += "请选择县级市；"
     }
     if (!formData.get('address')) {
       errorMessage += "详细地址不能位空；"
+    }
+    if (networkApply && !formData.get('networkApply')) {
+      errorMessage += "请选择运营商；";
     }
 
     formData.set('networkApply', networkApply)
@@ -587,12 +590,49 @@ export default function CollectionForm() {
                         />
                     </Switch>
                     <label htmlFor="network-apply" className="ml-4 block py-0 text-sm font-medium leading-6">
-                      申请齐鲁工业大学融合校园网
+                      开通齐鲁工业大学融合校园网
                     </label>
                   </div>
                   <div className="mt-2 text-sm">*
-                    齐鲁工业大学校园网可直接连入校内作业考试、教务管理、图书馆资源、正版化软件等信息化系统。若选择申领，运营商将免费寄送绑定校园网融合套餐的手机卡至填写的家庭地址，自行激活校园卡后即可享受校园优惠套餐。
+                    齐鲁工业大学校园网可直接连入校内作业考试、教务管理、图书馆资源、正版化软件等信息化系统。若选择开通，运营商将免费寄送绑定校园网融合套餐的手机卡至填写的家庭地址，自行激活校园卡后即可享受校园优惠套餐。
                   </div>
+                  {networkApply && (
+                    <div className="mt-2 text-sm">
+                      <div className="grow text-nowrap whitespace-nowrap">
+                        <input
+                          type="radio"
+                          name="campusNetwork"
+                          id="campus-network-cmcc"
+                          className="m-2"
+                          value='济南移动'
+                        />
+                        <label htmlFor="campus-network-cmcc"
+                               className="py-3 w-full inline-block">济南移动</label>
+                      </div>
+                      <div className="grow text-nowrap whitespace-nowrap">
+                        <input
+                          type="radio"
+                          name="campusNetwork"
+                          id="campus-network-cu"
+                          className="m-2"
+                          value='济南联通'
+                        />
+                        <label htmlFor="campus-network-cu"
+                               className="py-3 w-full inline-block">济南联通</label>
+                      </div>
+                      <div className="grow text-nowrap whitespace-nowrap">
+                        <input
+                          type="radio"
+                          name="campusNetwork"
+                          id="campus-network-ct"
+                          className="m-2"
+                          value='济南电信'
+                        />
+                        <label htmlFor="campus-network-ct"
+                               className="py-3 w-full inline-block">济南电信</label>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

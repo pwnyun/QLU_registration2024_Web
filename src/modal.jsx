@@ -37,12 +37,12 @@ export default function Modal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel
-                  className="min-w-96 w-full max-w-fit transform rounded-2xl bg-white/90 p-6 text-left align-middle shadow-xl backdrop-blur transition-all dark:bg-slate-800/80"
+                  className="min-w-96 w-full max-w-fit transform rounded-2xl bg-white/90 p-6 text-left align-middle shadow-xl backdrop-blur transition-all"
                 >{/*max-h-[1/3vh] */}
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
+                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     {title}
                   </Dialog.Title>
-                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  <div className="mt-2 text-sm text-gray-600">
                     <div className=" ">{children}</div>{/*max-h-96*/}
                   </div>
 
@@ -51,9 +51,9 @@ export default function Modal({
 
                     <button
                       type="button"
-                      className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 dark:bg-sky-900 ${
+                      className={`inline-flex justify-center items-center rounded-md border border-transparent bg-blue-100 ${
                         optionalButton && 'ml-4'
-                      } px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-sky-950`}
+                      } px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2`}
                       onClick={() => setIsOpen(false)}
                     >
                       {buttonText}
