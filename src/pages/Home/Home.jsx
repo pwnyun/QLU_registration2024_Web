@@ -180,8 +180,8 @@ export default function Home() {
               alt="齐鲁工大（鲁科院）Logo"
             />
             <div className="flex flex-col items-start font-sans">
-              <div>齐鲁工业大学<br/></div>
-              <div><span className="font-mono pr-1">2025</span>新生线上预报到</div>
+              <div>齐鲁工业大学（山东省科学院）<br/></div>
+              <div><span className="font-mono pr-1">2025</span>新生线上报到</div>
             </div>
           </div>
           {!isIPhone && antiCheatTips}
@@ -218,7 +218,8 @@ export default function Home() {
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-80">
-              8 月 8 日后，开启线上报到流程
+              点击完成线上报道流程
+              {/* 8 月 8 日后，开启线上报到流程 */}
             </p>
           </div>
 

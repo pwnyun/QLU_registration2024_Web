@@ -584,10 +584,10 @@ export default function CollectionForm() {
                       onChange={setNetworkApply}
                       className={`${networkApply ? 'bg-sky-600 dark:bg-sky-700' : 'bg-gray-600'} relative inline-flex h-[26px] w-[50px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75`}
                     >
-                        <span
-                          aria-hidden="true"
-                          className={`${networkApply ? 'translate-x-6' : 'translate-x-0'} pointer-events-none inline-block h-[22px] w-[22px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                        />
+                      <span
+                        aria-hidden="true"
+                        className={`${networkApply ? 'translate-x-6' : 'translate-x-0'} pointer-events-none inline-block h-[22px] w-[22px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                      />
                     </Switch>
                     <label htmlFor="network-apply" className="ml-4 block py-0 text-sm font-medium leading-6">
                       开通齐鲁工业大学融合校园网
