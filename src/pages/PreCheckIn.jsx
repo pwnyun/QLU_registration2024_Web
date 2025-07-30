@@ -1,11 +1,13 @@
 import {useEffect, useRef, useState} from "react";
-import {getLoginInfo, request, validateIdCard} from "../utils.js";
+import {validateIdCard} from "../libs/utils.js";
 import {useNavigate} from "react-router-dom";
 import {TfiClose, TfiShareAlt} from "react-icons/tfi";
-import Modal from "../modal.jsx";
+import Modal from "../components/modal.jsx";
 import {useImmer} from "use-immer";
-import FileUploaderZone from "../file-uploader-zone.jsx";
+import FileUploaderZone from "../components/file-uploader-zone.jsx";
 import {PiSealWarning} from "react-icons/pi";
+import { request } from '../libs/request.js'
+import { getLoginInfo } from '../libs/getLoginInfo.js'
 
 const plans = ['私家车', '出租车', '公共交通']
 
@@ -114,7 +116,7 @@ export default function PreCheckIn() {
 
         if (res.status !== "success") {
           setShowModal(true);
-          setModalContent(`上传图片失败：${res.message}`);
+          setModalContent(`上传图片失败：${res.msg}`);
           setModalButtonText("确认");
           setModalOptionalButton(null);
           return;
@@ -135,7 +137,7 @@ export default function PreCheckIn() {
         data: formData,
       }).then(res => {
         setShowModal(true);
-        setModalContent(res.message);
+        setModalContent(res.msg);
 
         if (res.status === "success") {
           request({

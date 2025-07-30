@@ -1,31 +1,36 @@
-import {Link, useNavigate} from "react-router-dom";
-import {FaArrowRight, FaCheck} from "react-icons/fa6";
-import {useEffect, useState} from "react";
-import {getLoginInfo, request} from "../utils.js";
-import Modal from "../modal.jsx";
-import {useImmer} from "use-immer";
-import {MdOutlineRemoveCircleOutline} from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
+import { FaArrowRight, FaCheck } from "react-icons/fa6";
+import { useEffect, useState } from "react";
+import Modal from "../components/modal.jsx";
+import { useImmer } from "use-immer";
+import { MdOutlineRemoveCircleOutline } from "react-icons/md";
+
+import useStatusStore from '../libs/statusStore.js';
+import { request } from '../libs/request.js'
+import { getLoginInfo } from '../libs/getLoginInfo.js'
+import localforage from "localforage";
 
 export default function Directions() {
   const navigate = useNavigate();
-  const [isFocused, setIsFocused] = useState(false);
-  const [loginInfo, setLoginInfo] = useImmer({name: '', idCard: '', token: ''})
+  const [loginInfo, setLoginInfo] = useImmer({ name: '', idCard: '', token: '' })
 
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
   const [modalButtonText, setModalButtonText] = useState("关闭");
   const [modalOptionalButton, setModalOptionalButton] = useState(null);
 
+  const { statuses, fetchStatus } = useStatusStore();
+
   const renderIcon = (status) => {
     if (status === 'false')
-      return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true"/>
+      return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true" />
     if (status === 'disable')
-      return <MdOutlineRemoveCircleOutline className="absolute left-3 top-3 h-5 w-5 text-stone-500" aria-hidden="true"/>
+      return <MdOutlineRemoveCircleOutline className="absolute left-3 top-3 h-5 w-5 text-stone-500" aria-hidden="true" />
     if (status === 'true')
-      return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true"/>
+      return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true" />
   }
 
-  const checkForm = ({features}) => {
+  const checkForm = ({ features }) => {
     let index1 = features.findIndex((item) => item.name === '信息采集')
     let index2 = features.findIndex((item) => item.name === '预报到')
 
@@ -40,15 +45,17 @@ export default function Directions() {
     return features[index1].status === 'true';
   }
 
-  const updateReadStatus = ({id, loginInfo}) => {
-    let data = {...loginInfo, id_card: loginInfo.idCard}
-    data[`${id}_done`] = 1
-
-    request({
-      url: `/api/update_${id}_status`,
+  const updateReadStatus = async ({ id }) => {
+    const response = await request({
+      url: `/api/set_status`,
       method: 'POST',
-      data
+      data: { [`${id}_status`]: true }
     })
+
+    if (response.code !== 200) {
+      setShowModal(true);
+      setModalContent(`更新状态失败：${response.msg}`);
+    }
   }
 
   // const lookupDormitory = ({features}) => {
@@ -76,16 +83,16 @@ export default function Directions() {
     setModalContent("正在升级维护中，请过几日再试。")
   }
 
-  const lookupDormitory = ({loginInfo}) => {
+  const lookupDormitory = ({ loginInfo }) => {
     request({
       url: '/api/room_information',
       method: 'GET',
-      params: {name: loginInfo.name, id_card: loginInfo.idCard, token: loginInfo.token},
+      params: { name: loginInfo.name, id_card: loginInfo.idCard, token: loginInfo.token },
     }).then(res => {
       console.log(res)
       if (res.status !== 'success') {
         setShowModal(true)
-        setModalContent(`查询失败：${res.message}`)
+        setModalContent(`查询失败：${res.msg}`)
       } else {
         setShowModal(true)
         setModalContent(`您的宿舍为：${res.room}`)
@@ -97,23 +104,22 @@ export default function Directions() {
     {
       name: '信息采集',
       description: '点击进入新生信息采集表单',
-      finishDescription: '已采集。',
+      finishDescription: '已采集，点击查看。',
       status: 'false',
       action: Link,
       url: '/collection-form',
       target: '_self',
-      id: 'collection',
-      event: () => {
-      }
+      id: 'information_submit',
+      event: () => { }
     }, {
       name: '一号通激活',
       description: '点击跳转到一号通激活指南',
       finishDescription: '已查看。',
       status: 'false',
       action: Link,
-      url: 'https://wlyw.qlu.edu.cn/wiki/help/sso/',
+      url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/',
       target: '_self',
-      id: 'sso',
+      id: 'sso_registration',
       event: updateReadStatus
     }, {
       name: '线上缴费',
@@ -123,7 +129,7 @@ export default function Directions() {
       action: Link,
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
-      id: 'bill',
+      id: 'read_bill',
       event: updateReadStatus
     }, {
       name: 'OS 平台注册',
@@ -140,9 +146,10 @@ export default function Directions() {
       description: '点击查看宿舍分配信息',
       finishDescription: '已查询。',
       status: 'false',
-      action: 'div',
+      action: Link,
+      url: '/allocate-dormitory',
       id: 'dormitory',
-      event: lookupDormitory
+      event: () => {}
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
@@ -151,8 +158,7 @@ export default function Directions() {
       action: Link,
       url: '/allocate-class',
       id: 'allocate_class',
-      event: () => {
-      }
+      event: () => { }
     }, {
       name: '预报到',
       description: '点击进入预报到系统',
@@ -161,73 +167,77 @@ export default function Directions() {
       action: Link,
       url: '/pre-check-in',
       target: '_self',
-      id: 'pre_registration',
-      event: () => {
-      }
-    },])
+      id: 'pre_arrival',
+      event: () => { }
+    },
+  ])
 
-  // 注册显示/离开页面监听函数 & 检查是否已登录
+  // 注册页面可见性监听 & 检查登录 & 获取状态
   useEffect(() => {
-    const handleFocus = () => {
-      setIsFocused(true);
-      console.debug('Tab focused');
+    const refreshStatus = () => {
+      getLoginInfo().then(res => {
+        if (res.code !== 200) {
+          console.error('directions: getLoginInfo fail.', res.msg);
+          if (res.code === 401) {
+            localforage.clear().then(() => navigate('/'));
+          }
+          return;
+        }
+        setLoginInfo(res);
+
+        fetchStatus().catch(async err => {
+          console.error('directions: fetchStatus failed.', err);
+          if (err.code === 401) {
+            await localforage.clear();
+            navigate('/');
+          } else {
+            setShowModal(true);
+            setModalContent(`获取已完成流程失败：${err.message || '未知错误'}`);
+          }
+        });
+      }).catch(err => {
+        console.error('directions: getLoginInfo failed during refresh.', err);
+        localforage.clear().then(() => navigate('/'));
+      });
     };
 
-    const handleBlur = () => {
-      setIsFocused(false);
-      console.debug('Tab blurred');
-    };
-
-    window.addEventListener('focus', handleFocus);
-    window.addEventListener('blur', handleBlur)
-
-    // 检查是否已登录
-    getLoginInfo().then(res => {
-      // 检查登录状态
-      if (!res.status) {
-        console.error('directions: getLoginInfo fail.', res.message)
-        navigate('/');
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.debug('Page became visible, refreshing status.');
+        refreshStatus();
       }
+    };
 
-      setLoginInfo(res)
-      setIsFocused(true)
-    })
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        console.debug('Page restored from bfcache, refreshing status.');
+        refreshStatus();
+      }
+    };
+
+    // Initial fetch
+    refreshStatus();
+
+    window.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pageshow', handlePageShow);
 
     return () => {
-      window.removeEventListener('focus', handleFocus);
-      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pageshow', handlePageShow);
     };
-  }, []);
+  }, [fetchStatus, navigate, setLoginInfo]);
 
-  // 流程状态追踪
+  // 当全局状态更新时，同步到本地的 features 状态
   useEffect(() => {
-    if (loginInfo.token === '' || !isFocused)
-      return;
-
-    request({
-      url: `/api/get_process_status?token=${loginInfo.token}`,
-      method: 'GET',
-    }).then(res => {
-      if (res.status !== 'success') {
-        // setShowModal(true)
-        // setModalContent(`预报到进度查询失败：${res.message}`)
-        console.error('directions: getProcessStatus fail.', res.message)
-        return
-      }
-
-      for (const [key, value] of Object.entries(res)) {
-        let index = features.findIndex(feature => key === `${feature.id}_done`)
-
-        if (index !== -1 && value === true && features[index].status !== 'disable') {
-          setFeatures(draft => {
-            draft[index].status = "true"
-          })
+    setFeatures(draft => {
+      for (const [key, value] of Object.entries(statuses)) {
+        const index = draft.findIndex(feature => key === `${feature.id}_status`);
+        if (index !== -1 && value === true && draft[index].status !== 'disable') {
+          draft[index].status = "true";
         }
       }
-
-    })
-
-  }, [isFocused])
+    });
+  }, [statuses, setFeatures]);
 
   return (<>
     <div className="overflow-hidden bg-white pt-12 pb-24 md:pt-16 md:pb-32 min-h-screen">
@@ -242,7 +252,7 @@ export default function Directions() {
               <p className="mt-6 text-lg leading-8 text-gray-600">
                 各位同学，请遵循以下流程完成线上报到。
               </p>
-              <PageImage className="block md:hidden w-full h-[50vw]"/>
+              <PageImage className="block md:hidden w-full h-[50vw]" />
               <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (
                   <feature.action
@@ -262,7 +272,7 @@ export default function Directions() {
                       {renderIcon(feature.status)}
                       {feature.name}
                     </dt>
-                    <br/>
+                    <br />
                     <dd className="inline">
                       {feature.status === 'true' ? feature.finishDescription : feature.description}
                     </dd>
@@ -272,7 +282,7 @@ export default function Directions() {
             </div>
           </div>
 
-          <PageImage className="w-[48rem] h-[28.46rem] hidden md:block sm:w-[57rem] md:-ml-4 lg:-ml-0"/>
+          <PageImage className="w-[48rem] h-[28.46rem] hidden md:block sm:w-[57rem] md:-ml-4 lg:-ml-0" />
 
         </div>
       </div>
@@ -285,13 +295,13 @@ export default function Directions() {
     </div>
 
     <Modal isOpen={showModal} setIsOpen={setShowModal} buttonText={modalButtonText}
-           optionalButton={modalOptionalButton}>
+      optionalButton={modalOptionalButton}>
       {modalContent}
     </Modal>
   </>)
 }
 
-function PageImage({className}) {
+function PageImage({ className, ...props }) {
   return (<img
     // src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
     src="/assets/banner-raw-compressed.png"

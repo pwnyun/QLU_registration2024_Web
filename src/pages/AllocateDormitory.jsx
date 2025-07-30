@@ -5,68 +5,72 @@ import { request } from '../libs/request.js'
 import { getLoginInfo } from '../libs/getLoginInfo.js'
 import localforage from 'localforage'
 
-export default function AllocateClass() {
+export default function AllocateDormitory() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
+  const [idCard, setIdCard] = useState('')
+  const [token, setToken] = useState('')
 
   const [showModal, setShowModal] = useState(false)
   const [modalContent, setModalContent] = useState('')
   const [modalButtonText, setModalButtonText] = useState('关闭')
   const [modalOptionalButton, setModalOptionalButton] = useState()
 
-  const [classInformation, setClassInformation] = useState({})
+  const [dormitoryInformation, setDormitoryInformation] = useState({})
 
-  const [enableContractSharing, setEnableContractSharing] = useState(false)
-  const [classmateInformation, setClassmateInformation] = useState([])
+  const [enableRoommateSharing, setEnableRoommateSharing] = useState(false)
+  const [roommatesInformation, setRoommatesInformation] = useState([])
 
   // 检查是否已登录
   useEffect(() => {
     const fn = async () => {
       const userInfoRes = await getLoginInfo()
       if (userInfoRes.code !== 200) {
-        console.error('allocate-class: getLoginInfo fail.')
+        console.error('allocate-dormitory: getLoginInfo fail.')
         navigate('/')
         return
       }
 
-      let { name } = userInfoRes
+      let { name, idCard, token } = userInfoRes
       setName(name)
+      setIdCard(idCard)
+      setToken(token)
 
-      // 获取分班信息
-      const classInfoRes = await request({
-        url: '/api/class/get_class_info',
+      // 获取宿舍信息
+      const dormitoryInfoRes = await request({
+        url: '/api/dormitory/get_dormitory_info',
         method: 'GET',
       })
 
-      console.log(classInfoRes)
-      if (classInfoRes.code === 401) {
-        localforage.clear()
+      console.log(dormitoryInfoRes)
+      if (dormitoryInfoRes.code === 401) {
+        await localforage.clear()
         navigate('/login')
         return
       }
 
-      if (classInfoRes.code !== 200) {
+      if (dormitoryInfoRes.code !== 200) {
         setShowModal(true)
-        setModalContent(`查询失败：${classInfoRes.msg}`)
+        setModalContent(`查询失败：${dormitoryInfoRes.msg}`)
         return
       }
 
-      setClassInformation(classInfoRes.data)
+      setDormitoryInformation(dormitoryInfoRes.data)
 
-      // 获取同班同学信息
-      const classmatesRes = await request({
-        url: '/api/class/get_classmates',
+      // 获取舍友信息
+      const roommatesRes = await request({
+        url: '/api/dormitory/get_roommates',
         method: 'GET',
       })
 
-      if (classmatesRes.code === 200) {
-        setEnableContractSharing(true)
-        setClassmateInformation(classmatesRes.data)
+      if (roommatesRes.code === 200) {
+        setEnableRoommateSharing(true)
+        setRoommatesInformation(roommatesRes.data)
       }
 
     }
     fn()
-  }, [])
+  }, [navigate])
 
   return (<>
     <div className="container mx-auto max-w-[750px]">
@@ -92,66 +96,63 @@ export default function AllocateClass() {
         <img
           className="object-cover translate-x-[-50%] h-[36.82%] absolute left-[50%] bottom-[15.5%] z-20"
           src="/assets/qlu-logo-space.png" />
-        {/*<img*/}
-        {/*  className="object-cover translate-x-[-50%] translate-y-[3px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px]"*/}
-        {/*  src="images/index-title.svg"/>*/}
         <div
           className="object-cover translate-x-[-50%] translate-y-[20px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px] text-nowrap text-2xl flex flex-col justify-center items-center text-qlu font-bold">
           <div className="font-serif">齐鲁工业大学</div>
-          <div className="font-serif">新生分班信息表</div>
+          <div className="font-serif">新生宿舍信息表</div>
         </div>
       </div>
 
-      <div className={`p-4 ${enableContractSharing ? '' : 'pb-12 mb-12'}`}>
+      <div className={`p-4 ${!enableRoommateSharing ? 'pb-12 mb-12' : ''}`}>
         <table className="mt-10 w-full">
           <tbody className="w-full">
             <tr className="w-full">
               <th
                 className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">姓名
+                scope="row">校区
               </th>
               <td
-                className="border-y border-gray-300 w-full">{name}</td>
+                className="border-y border-gray-300 w-full">{dormitoryInformation.eara}</td>
             </tr>
             <tr className="w-full">
               <th
                 className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">学号
+                scope="row">宿舍楼号
               </th>
               <td
-                className="border-b border-gray-300 w-full"></td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation.build}</td>
             </tr>
             <tr className="w-full">
               <th
                 className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">学部（院）
+                scope="row">楼层号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{classInformation.department}</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation.floor}</td>
             </tr>
             <tr className="w-full">
               <th
                 className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">专业
+                scope="row">房间号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{classInformation.major}</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation.dormitory}</td>
             </tr>
             <tr className="w-full">
               <th
                 className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">班级
+                scope="row">床号
               </th>
               <td
-                className="border-y border-gray-300 w-full">{classInformation.class_name}</td>
+                className="border-y border-gray-300 w-full">{dormitoryInformation.bed_number}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      {enableContractSharing ? (
+      {enableRoommateSharing ? (
         <div className="p-4 w-full">
-          <div>您已选择共享联系方式，下面是您同班同学的联系方式：</div>
+          <div>您已选择共享联系方式，下面是您舍友的联系方式：</div>
           <table className="mt-4 w-full">
             <thead className="w-full">
               <tr className="w-full">
@@ -174,13 +175,12 @@ export default function AllocateClass() {
               </tr>
             </thead>
             <tbody className="w-full">
-              {classmateInformation.map(classmate => (
-                // todo: 使用学号
-                <tr className="w-full" key={classmate.name}>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.name}</td>
+              {roommatesInformation.map(roommate => (
+                <tr className="w-full" key={roommate.id_card}>
+                  <td className="border-b border-gray-300 text-center py-2 px-3">{roommate.name}</td>
                   <td className="border-b border-gray-300 text-center py-2 px-3"></td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.phone}</td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.qq}</td>
+                  <td className="border-b border-gray-300 text-center py-2 px-3">{roommate.phone || <span className="text-gray-400">未共享</span>}</td>
+                  <td className="border-b border-gray-300 text-center py-2 px-3">{roommate.qq || <span className="text-gray-400">未共享</span>}</td>
                 </tr>
               ))}
             </tbody>
@@ -188,7 +188,7 @@ export default function AllocateClass() {
         </div>
       ) : (
         <div className="p-4 flex">
-          <div>您未选择向同班同学共享联系方式，同理您也无法看到同班同学的联系方式。</div>
+          <div>您未选择向舍友共享联系方式，同理您也无法看到舍友的联系方式。</div>
         </div>
       )}
 

@@ -6,10 +6,10 @@ import Home from './pages/Home/Home.jsx'
 import Directions from "./pages/Directions.jsx";
 import CollectionForm from "./pages/CollectionForm.jsx";
 import PreCheckIn from "./pages/PreCheckIn.jsx";
-import CollectionFormForOld from "./pages/CollectionFormForOld.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import AllocateClass from "./pages/AllocateClass.jsx";
 import SAMBind from "./pages/SAMBind.jsx";
+import AllocateDormitory from './pages/AllocateDormitory.jsx'
 
 const router = createBrowserRouter([
   {
@@ -26,8 +26,8 @@ const router = createBrowserRouter([
     path: '/pre-check-in',
     element: <PreCheckIn/>
   }, {
-    path: '/old-form',
-    element: <CollectionFormForOld/>
+    path: '/allocate-dormitory',
+    element: <AllocateDormitory/>
   }, {
     path: '/allocate-class',
     element: <AllocateClass/>

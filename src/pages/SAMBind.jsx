@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import {request} from "../utils.js";
 import {useNavigate} from "react-router-dom";
-import Modal from "../modal.jsx";
+import Modal from "../components/modal.jsx";
+import { request } from '../libs/request.js'
 
 const carriers = ['济南移动']
 
@@ -57,7 +57,7 @@ export default function SAMBind() {
     }).then(res => {
       if (res.status !== 'success') {
         setShowModal(true)
-        setModalContent(res.message);
+        setModalContent(res.msg);
       } else {
         setCountdown(60)
       }
@@ -99,7 +99,7 @@ export default function SAMBind() {
       data: formData
     }).then(res => {
       setShowModal(true)
-      setModalContent(res.message);
+      setModalContent(res.msg);
     })
   }
 

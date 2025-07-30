@@ -2,26 +2,19 @@ import { Fragment, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import { HiCheck, HiChevronUpDown } from 'react-icons/hi2';
 
-export default function ComboBox({ list, onSelectionChange, name }) {
-  const [selected, setSelected] = useState(list[0]);
+export default function ComboBox({ list, onChange: onSelectionChange, name, value }) {
   const [query, setQuery] = useState('');
 
   const filteredPeople =
     query === ''
       ? list.filter(item => !!item)
       : list.filter((item) =>
-        item && item.toLowerCase().replaceAll(/\s+/g, '').includes(query.toLowerCase().replaceAll(/\s+/g, ''))
+          item && item.toLowerCase().replaceAll(/\s+/g, '').includes(query.toLowerCase().replaceAll(/\s+/g, ''))
       );
-
-
-  function setChange(selection) {
-    setSelected(selection);
-    onSelectionChange(list.findIndex((item) => item === selection));
-  }
 
   return (
     <div className="w-full bg-transparent">
-      <Combobox selected={selected} onChange={setSelected} name={name}>
+      <Combobox value={value} onChange={onSelectionChange} name={name}>
         <div className="relative bg-white/30">
           <div
             className="relative w-full cursor-default overflow-hidden rounded-lg bg-transparent text-left shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
