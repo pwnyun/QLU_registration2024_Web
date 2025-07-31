@@ -127,7 +127,7 @@ export default function AllocateClass() {
                 scope="row">学部（院）
               </th>
               <td
-                className="border-b border-gray-300 w-full">{classInformation.department}</td>
+                className="border-b border-gray-300 w-full">{classInformation?.department || <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
             <tr className="w-full">
               <th
@@ -135,7 +135,7 @@ export default function AllocateClass() {
                 scope="row">专业
               </th>
               <td
-                className="border-b border-gray-300 w-full">{classInformation.major}</td>
+                className="border-b border-gray-300 w-full">{classInformation?.major || <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
             <tr className="w-full">
               <th
@@ -143,7 +143,7 @@ export default function AllocateClass() {
                 scope="row">班级
               </th>
               <td
-                className="border-y border-gray-300 w-full">{classInformation.class_name}</td>
+                className="border-y border-gray-300 w-full">{classInformation?.class_name || <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
           </tbody>
         </table>
@@ -175,12 +175,12 @@ export default function AllocateClass() {
             </thead>
             <tbody className="w-full">
               {classmateInformation.map(classmate => (
-                // todo: 使用学号
+                // todo: key 使用学号
                 <tr className="w-full" key={classmate.name}>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.name}</td>
+                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.name || <span className="text-gray-400">未共享</span>}</td>
                   <td className="border-b border-gray-300 text-center py-2 px-3"></td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.phone}</td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.qq}</td>
+                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.phone || <span className="text-gray-400">未共享</span>}</td>
+                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.qq || <span className="text-gray-400">未共享</span>}</td>
                 </tr>
               ))}
             </tbody>

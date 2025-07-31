@@ -120,7 +120,7 @@ export default function AllocateDormitory() {
                 scope="row">校区
               </th>
               <td
-                className="border-y border-gray-300 w-full">{dormitoryInformation.eara}</td>
+                className="border-y border-gray-300 w-full">{dormitoryInformation?.area || <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
             <tr className="w-full">
               <th
@@ -128,7 +128,7 @@ export default function AllocateDormitory() {
                 scope="row">宿舍楼号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{dormitoryInformation.build}# 学生公寓</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation?.build ? dormitoryInformation.build + '# 学生公寓' : <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
             <tr className="w-full">
               <th
@@ -136,7 +136,7 @@ export default function AllocateDormitory() {
                 scope="row">楼层号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{dormitoryInformation.floor}层</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation?.floor ? dormitoryInformation.floor + '层' : <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
             <tr className="w-full">
               <th
@@ -144,7 +144,7 @@ export default function AllocateDormitory() {
                 scope="row">房间号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{dormitoryInformation.dormitory}</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation?.dormitory || <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
             <tr className="w-full">
               <th
@@ -152,7 +152,7 @@ export default function AllocateDormitory() {
                 scope="row">床号
               </th>
               <td
-                className="border-y border-gray-300 w-full">{dormitoryInformation.bed_number}</td>
+                className="border-y border-gray-300 w-full">{dormitoryInformation?.bed_number || <span className="text-gray-600">（暂无信息）</span>}</td>
             </tr>
           </tbody>
         </table>
@@ -184,6 +184,7 @@ export default function AllocateDormitory() {
             </thead>
             <tbody className="w-full">
               {roommatesInformation.map(roommate => (
+                // todo: key 使用学号
                 <tr className="w-full" key={roommate.id_card}>
                   <td className="border-b border-gray-300 text-center py-2 px-3">{roommate.name}</td>
                   <td className="border-b border-gray-300 text-center py-2 px-3"></td>

@@ -242,7 +242,7 @@ export default function CollectionForm () {
       errorMessage += '详细地址不能位空；'
     }
     if (networkApply && !formData.campusNetwork) {
-      errorMessage += '请选择运营商；'
+      errorMessage += '您选择了开通融合校园网，请选择运营商；'
     }
 
     if (errorMessage !== '') {
