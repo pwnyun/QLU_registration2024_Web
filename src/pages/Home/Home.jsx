@@ -209,7 +209,7 @@ export default function Home() {
             'mt-8'} relative flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]`}>
           <div
             className="text-orange-100/90 font-serif text-4xl sm:text-5xl lg:text-6xl lg:text-orange-50 text-shadow-lg/30 font-bold">
-            欢迎新同学114514
+            欢迎新同学
           </div>
           {/*<img*/}
           {/*  className="relative block drop-shadow-[0_0_0.3rem_#ffffff70] w-[180px] z-10"*/}

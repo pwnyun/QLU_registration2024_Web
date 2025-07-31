@@ -109,6 +109,14 @@ export default function AllocateDormitory() {
             <tr className="w-full">
               <th
                 className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+                scope="row">姓名
+              </th>
+              <td
+                className="border-y border-gray-300 w-full">{name}</td>
+            </tr>
+            <tr className="w-full">
+              <th
+                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
                 scope="row">校区
               </th>
               <td
@@ -120,7 +128,7 @@ export default function AllocateDormitory() {
                 scope="row">宿舍楼号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{dormitoryInformation.build}</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation.build}# 学生公寓</td>
             </tr>
             <tr className="w-full">
               <th
@@ -128,7 +136,7 @@ export default function AllocateDormitory() {
                 scope="row">楼层号
               </th>
               <td
-                className="border-b border-gray-300 w-full">{dormitoryInformation.floor}</td>
+                className="border-b border-gray-300 w-full">{dormitoryInformation.floor}层</td>
             </tr>
             <tr className="w-full">
               <th

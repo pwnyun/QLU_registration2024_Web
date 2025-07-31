@@ -22,27 +22,14 @@ export default function Directions() {
   const { statuses, fetchStatus } = useStatusStore();
 
   const renderIcon = (status) => {
-    if (status === 'false')
-      return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true" />
-    if (status === 'disable')
-      return <MdOutlineRemoveCircleOutline className="absolute left-3 top-3 h-5 w-5 text-stone-500" aria-hidden="true" />
-    if (status === 'true')
-      return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true" />
-  }
-
-  const checkForm = ({ features }) => {
-    let index1 = features.findIndex((item) => item.name === '信息采集')
-    let index2 = features.findIndex((item) => item.name === '预报到')
-
-    if (index1 === -1 || index2 === -1) {
-      // setShowModal(true)
-      // setModalContent("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
-      console.error("DEBUG: 检查 信息采集 和 预报到 的函数需要更新！")
-      return false;
+    switch (status) {
+      case 'false':
+        return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true" />
+      case 'disable':
+        return <MdOutlineRemoveCircleOutline className="absolute left-3 top-3 h-5 w-5 text-stone-500" aria-hidden="true" />
+      case 'true':
+        return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true" />
     }
-
-    // return features[index1].status === 'true' && features[index2].status === 'true';
-    return features[index1].status === 'true';
   }
 
   const updateReadStatus = async ({ id }) => {
@@ -58,46 +45,9 @@ export default function Directions() {
     }
   }
 
-  // const lookupDormitory = ({features}) => {
-  //   if (checkForm({features})) {
-  //     setShowModal(true)
-  //     setModalContent("您的宿舍信息尚未确定，请过几日再来查询。")
-  //   } else {
-  //     setShowModal(true)
-  //     setModalContent("请先填写“信息采集”表。")
-  //   }
-  // }
-
-  // const lookupClass = ({features}) => {
-  //   if (checkForm({features})) {
-  //     setShowModal(true)
-  //     setModalContent("您的分班信息尚未确定，请过几日再来查询。")
-  //   } else {
-  //     setShowModal(true)
-  //     setModalContent("请先填写“信息采集”表。")
-  //   }
-  // }
-
   const showDisableTip = () => {
     setShowModal(true)
     setModalContent("正在升级维护中，请过几日再试。")
-  }
-
-  const lookupDormitory = ({ loginInfo }) => {
-    request({
-      url: '/api/room_information',
-      method: 'GET',
-      params: { name: loginInfo.name, id_card: loginInfo.idCard, token: loginInfo.token },
-    }).then(res => {
-      console.log(res)
-      if (res.status !== 'success') {
-        setShowModal(true)
-        setModalContent(`查询失败：${res.msg}`)
-      } else {
-        setShowModal(true)
-        setModalContent(`您的宿舍为：${res.room}`)
-      }
-    })
   }
 
   const [features, setFeatures] = useImmer([
@@ -112,7 +62,7 @@ export default function Directions() {
       id: 'information_submit',
       event: () => { }
     }, {
-      name: '一号通激活',
+      name: '一号通激活 & 人脸识别图片上传',
       description: '点击跳转到一号通激活指南',
       finishDescription: '已查看。',
       status: 'false',
@@ -137,7 +87,7 @@ export default function Directions() {
       finishDescription: '已查看。',
       status: 'disable',
       action: 'div',
-      url: 'https://wlyw.qlu.edu.cn/wiki/help/os/',
+      url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/os/',
       target: '_self',
       id: 'os',
       event: showDisableTip, //updateReadStatus
@@ -175,56 +125,55 @@ export default function Directions() {
   // 注册页面可见性监听 & 检查登录 & 获取状态
   useEffect(() => {
     const refreshStatus = () => {
-      getLoginInfo().then(res => {
-        if (res.code !== 200) {
-          console.error('directions: getLoginInfo fail.', res.msg);
-          if (res.code === 401) {
-            localforage.clear().then(() => navigate('/'));
-          }
-          return;
+      fetchStatus().catch(async (err) => {
+        console.error('directions: fetchStatus failed.', err)
+        if (err.code === 401) {
+          await localforage.clear()
+          navigate('/')
+        } else {
+          setShowModal(true)
+          setModalContent(`获取已完成流程失败：${err.message || '未知错误'}`)
         }
-        setLoginInfo(res);
-
-        fetchStatus().catch(async err => {
-          console.error('directions: fetchStatus failed.', err);
-          if (err.code === 401) {
-            await localforage.clear();
-            navigate('/');
-          } else {
-            setShowModal(true);
-            setModalContent(`获取已完成流程失败：${err.message || '未知错误'}`);
-          }
-        });
-      }).catch(err => {
-        console.error('directions: getLoginInfo failed during refresh.', err);
-        localforage.clear().then(() => navigate('/'));
-      });
-    };
+      })
+    }
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        console.debug('Page became visible, refreshing status.');
-        refreshStatus();
+        console.debug('Page became visible, refreshing status.')
+        refreshStatus()
       }
-    };
+    }
 
     const handlePageShow = (event) => {
       if (event.persisted) {
-        console.debug('Page restored from bfcache, refreshing status.');
-        refreshStatus();
+        console.debug('Page restored from bfcache, refreshing status.')
+        refreshStatus()
       }
-    };
+    }
 
-    // Initial fetch
-    refreshStatus();
+    // 首次加载时检查登录状态
+    getLoginInfo().then(res => {
+      if (res.code !== 200) {
+        console.error('directions: getLoginInfo fail.', res.msg)
+        if (res.code === 401) {
+          localforage.clear().then(() => navigate('/'))
+        }
+        return
+      }
+      setLoginInfo(res)
+      refreshStatus() // 获取状态
+    }).catch(err => {
+      console.error('directions: getLoginInfo failed during refresh.', err)
+      localforage.clear().then(() => navigate('/'))
+    })
 
-    window.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('pageshow', handlePageShow);
+    window.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('pageshow', handlePageShow)
 
     return () => {
-      window.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('pageshow', handlePageShow);
-    };
+      window.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pageshow', handlePageShow)
+    }
   }, [fetchStatus, navigate, setLoginInfo]);
 
   // 当全局状态更新时，同步到本地的 features 状态
@@ -237,6 +186,18 @@ export default function Directions() {
         }
       }
     });
+
+    // 如果人脸已上传，但 SSO 未阅读，则修正 SSO 阅读状态
+    if (statuses.user_face_exists && !statuses.sso_registration_status) {
+      setFeatures(draft => {
+        const index = draft.findIndex(feature => feature.id === 'sso_registration');
+        if (index !== -1) {
+          draft[index].status = 'true';
+          updateReadStatus({id: "sso_registration"});
+        }
+      });
+    }
+
   }, [statuses, setFeatures]);
 
   return (<>
