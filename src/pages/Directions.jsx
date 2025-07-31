@@ -1,34 +1,39 @@
-import { Link, useNavigate } from "react-router-dom";
-import { FaArrowRight, FaCheck } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import Modal from "../components/modal.jsx";
-import { useImmer } from "use-immer";
-import { MdOutlineRemoveCircleOutline } from "react-icons/md";
+import { Link, useNavigate } from 'react-router-dom'
+import { FaArrowRight, FaCheck } from 'react-icons/fa6'
+import { useEffect, useState } from 'react'
+import Modal from '../components/modal.jsx'
+import { useImmer } from 'use-immer'
+import { MdOutlineRemoveCircleOutline } from 'react-icons/md'
 
-import useStatusStore from '../libs/statusStore.js';
+import useStatusStore from '../libs/statusStore.js'
 import { request } from '../libs/request.js'
 import { getLoginInfo } from '../libs/getLoginInfo.js'
-import localforage from "localforage";
+import localforage from 'localforage'
 
-export default function Directions() {
-  const navigate = useNavigate();
-  const [loginInfo, setLoginInfo] = useImmer({ name: '', idCard: '', token: '' })
+export default function Directions () {
+  const navigate = useNavigate()
+  const [loginInfo, setLoginInfo] = useImmer(
+    { name: '', idCard: '', token: '' })
 
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState('');
-  const [modalButtonText, setModalButtonText] = useState("关闭");
-  const [modalOptionalButton, setModalOptionalButton] = useState(null);
+  const [showModal, setShowModal] = useState(false)
+  const [modalContent, setModalContent] = useState('')
+  const [modalButtonText, setModalButtonText] = useState('关闭')
+  const [modalOptionalButton, setModalOptionalButton] = useState(null)
 
-  const { statuses, fetchStatus } = useStatusStore();
+  const { statuses, fetchStatus } = useStatusStore()
 
   const renderIcon = (status) => {
     switch (status) {
       case 'false':
-        return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true" />
+        return <FaArrowRight className="absolute left-3 top-3 h-5 w-5 text-qlu"
+                             aria-hidden="true"/>
       case 'disable':
-        return <MdOutlineRemoveCircleOutline className="absolute left-3 top-3 h-5 w-5 text-stone-500" aria-hidden="true" />
+        return <MdOutlineRemoveCircleOutline
+          className="absolute left-3 top-3 h-5 w-5 text-stone-500"
+          aria-hidden="true"/>
       case 'true':
-        return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600" aria-hidden="true" />
+        return <FaCheck className="absolute left-3 top-3 h-5 w-5 text-green-600"
+                        aria-hidden="true"/>
     }
   }
 
@@ -36,18 +41,18 @@ export default function Directions() {
     const response = await request({
       url: `/api/set_status`,
       method: 'POST',
-      data: { [`${id}_status`]: true }
+      data: { [`${id}_status`]: true },
     })
 
     if (response.code !== 200) {
-      setShowModal(true);
-      setModalContent(`更新状态失败：${response.msg}`);
+      setShowModal(true)
+      setModalContent(`更新状态失败：${response.msg}`)
     }
   }
 
   const showDisableTip = () => {
     setShowModal(true)
-    setModalContent("正在升级维护中，请过几日再试。")
+    setModalContent('正在升级维护中，请过几日再试。')
   }
 
   const [features, setFeatures] = useImmer([
@@ -60,17 +65,21 @@ export default function Directions() {
       url: '/collection-form',
       target: '_self',
       id: 'information_submit',
-      event: () => { }
+      event: () => { },
     }, {
       name: '一号通激活 & 人脸识别图片上传',
       description: '点击跳转到一号通激活指南',
       finishDescription: '已查看。',
       status: 'false',
-      action: Link,
+      action: 'div',
       url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/',
       target: '_self',
       id: 'sso_registration',
-      event: updateReadStatus
+      event: (e) => {
+        updateReadStatus({ id: 'sso_registration' }).then(() => {
+          window.location.href = 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/'
+        })
+      },
     }, {
       name: '线上缴费',
       description: '点击跳转至计财处智慧财务系统',
@@ -80,7 +89,11 @@ export default function Directions() {
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'read_bill',
-      event: updateReadStatus
+      event: (e) => {
+        updateReadStatus({ id: 'read_bill' }).then(() => {
+          window.location.href = 'https://qlgydx.mp.sinojy.cn'
+        })
+      },
     }, {
       name: 'OS 平台注册',
       description: '点击跳转到工大OS激活指南',
@@ -99,7 +112,7 @@ export default function Directions() {
       action: Link,
       url: '/allocate-dormitory',
       id: 'dormitory',
-      event: () => {}
+      event: () => {},
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
@@ -108,7 +121,7 @@ export default function Directions() {
       action: Link,
       url: '/allocate-class',
       id: 'allocate_class',
-      event: () => { }
+      event: () => { },
     }, {
       name: '预报到',
       description: '点击进入预报到系统',
@@ -118,7 +131,7 @@ export default function Directions() {
       url: '/pre-check-in',
       target: '_self',
       id: 'pre_arrival',
-      event: () => { }
+      event: () => { },
     },
   ])
 
@@ -174,47 +187,54 @@ export default function Directions() {
       window.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('pageshow', handlePageShow)
     }
-  }, [fetchStatus, navigate, setLoginInfo]);
+  }, [fetchStatus, navigate, setLoginInfo])
 
   // 当全局状态更新时，同步到本地的 features 状态
   useEffect(() => {
     setFeatures(draft => {
       for (const [key, value] of Object.entries(statuses)) {
-        const index = draft.findIndex(feature => key === `${feature.id}_status`);
-        if (index !== -1 && value === true && draft[index].status !== 'disable') {
-          draft[index].status = "true";
+        const index = draft.findIndex(
+          feature => key === `${feature.id}_status`)
+        if (index !== -1 && value === true && draft[index].status !==
+          'disable') {
+          draft[index].status = 'true'
         }
       }
-    });
+    })
 
     // 如果人脸已上传，但 SSO 未阅读，则修正 SSO 阅读状态
     if (statuses.user_face_exists && !statuses.sso_registration_status) {
       setFeatures(draft => {
-        const index = draft.findIndex(feature => feature.id === 'sso_registration');
+        const index = draft.findIndex(
+          feature => feature.id === 'sso_registration')
         if (index !== -1) {
-          draft[index].status = 'true';
-          updateReadStatus({id: "sso_registration"});
+          draft[index].status = 'true'
+          updateReadStatus({ id: 'sso_registration' })
         }
-      });
+      })
     }
 
-  }, [statuses, setFeatures]);
+  }, [statuses, setFeatures])
 
   return (<>
-    <div className="overflow-hidden bg-white pt-12 pb-24 md:pt-16 md:pb-32 min-h-screen">
+    <div
+      className="overflow-hidden bg-white pt-12 pb-24 md:pt-16 md:pb-32 min-h-screen">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div
           className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
 
           <div className="lg:pr-8 lg:pt-4">
             <div className="lg:max-w-lg">
-              <h2 className="text-base font-semibold leading-7 text-qlu">齐鲁工业大学</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">线上报到流程</p>
+              <h2
+                className="text-base font-semibold leading-7 text-qlu">齐鲁工业大学</h2>
+              <p
+                className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">线上报到流程</p>
               <p className="mt-6 text-lg leading-8 text-gray-600">
                 各位同学，请遵循以下流程完成线上报到。
               </p>
-              <PageImage className="block md:hidden w-full h-[50vw]" />
-              <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
+              <PageImage className="block md:hidden w-full h-[50vw]"/>
+              <dl
+                className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (
                   <feature.action
                     key={feature.name}
@@ -224,7 +244,7 @@ export default function Directions() {
                       id: feature.id,
                       loginInfo,
                       features: JSON.parse(JSON.stringify(features)),
-                      feature
+                      feature,
                     })}
                     className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
                   >
@@ -233,17 +253,35 @@ export default function Directions() {
                       {renderIcon(feature.status)}
                       {feature.name}
                     </dt>
-                    <br />
+                    <br/>
                     <dd className="inline">
-                      {feature.status === 'true' ? feature.finishDescription : feature.description}
+                      {feature.status === 'true'
+                        ? feature.finishDescription
+                        : feature.description}
                     </dd>
                   </feature.action>
                 ))}
+
+                <div
+                  onClick={() => {
+                    window.location.href = 'https://wlyw.qlu.edu.cn/wiki/wlyw/join/'
+                  }}
+                  className="block relative py-2 pl-2 border rounded border-gray-300 select-none cursor-pointer shadow-[0_0_20px_5px_rgba(212,212,212,0.7)] animate-pulse"
+                >
+                  <div className="flex items-center space-x-2">
+                    <img src="/assets/logo.png" alt="" className="w-12"/>
+                    <div className="flex flex-col">
+                      <div className="font-semibold text-gray-900 ">本系统由 齐鲁工业大学网络运维 强力驱动</div>
+                      <div>点击了解并加入我们</div>
+                    </div>
+                  </div>
+                </div>
               </dl>
             </div>
           </div>
 
-          <PageImage className="w-[48rem] h-[28.46rem] hidden md:block sm:w-[57rem] md:-ml-4 lg:-ml-0" />
+          <PageImage
+            className="w-[48rem] h-[28.46rem] hidden md:block sm:w-[57rem] md:-ml-4 lg:-ml-0"/>
 
         </div>
       </div>
@@ -255,14 +293,15 @@ export default function Directions() {
       <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
     </div>
 
-    <Modal isOpen={showModal} setIsOpen={setShowModal} buttonText={modalButtonText}
-      optionalButton={modalOptionalButton}>
+    <Modal isOpen={showModal} setIsOpen={setShowModal}
+           buttonText={modalButtonText}
+           optionalButton={modalOptionalButton}>
       {modalContent}
     </Modal>
   </>)
 }
 
-function PageImage({ className, ...props }) {
+function PageImage ({ className, ...props }) {
   return (<img
     // src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
     src="/assets/banner-raw-compressed.png"
