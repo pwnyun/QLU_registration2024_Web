@@ -126,6 +126,15 @@ export default function CollectionForm () {
           militaryTime: data.militaryTime || '',
           campusNetwork: data.campusNetwork || '',
         })
+        // 新增：初始化多选状态
+        if (data.campusNetwork) {
+          const arr = data.campusNetwork.split(',')
+          setCampusNetworkSelections([
+            arr[0] || null,
+            arr[1] || null,
+            arr[2] || null,
+          ])
+        }
 
         // 2. 填充特殊状态
         setNetworkApply([true, 1, '1', 'true'].includes(data.networkApply))
@@ -155,6 +164,9 @@ export default function CollectionForm () {
       } else if (historyResponse.code === 413) {
         await localforage.clear()
         navigate('/')
+      } else if (historyResponse.code === 401 &&
+                 historyResponse.msg === '未找到学生信息') {
+        // ignored
       } else {
         setShowModal(true)
         setModalContent(`读取历史填写表单失败：` + historyResponse.msg)
@@ -191,6 +203,17 @@ export default function CollectionForm () {
 
     fn()
   }, [])
+
+  const [campusNetworkSelections, setCampusNetworkSelections] = useState(
+    [null, null, null])
+
+  const handleCampusNetworkChange = (index, checked, value) => {
+    setCampusNetworkSelections(prev => {
+      const newArr = [...prev]
+      newArr[index] = checked ? value : null
+      return newArr
+    })
+  }
 
   const submit = () => {
     let errorMessage = ''
@@ -243,8 +266,14 @@ export default function CollectionForm () {
       errorMessage += '详细地址不能位空；'
     }
     if (networkApply && !formData.campusNetwork) {
-      // todo))
+      // todo))formData.campusNetwork =
       errorMessage += '您选择了开通融合校园网，请选择运营商；'
+    }
+    if (networkApply) {
+      // 校验至少选一个
+      if (!campusNetworkSelections.some(v => v)) {
+        errorMessage += '您选择了开通融合校园网，请至少选择一个运营商；'
+      }
     }
 
     if (errorMessage !== '') {
@@ -254,9 +283,12 @@ export default function CollectionForm () {
       setModalOptionalButton(null)
       return
     }
-
+    // 新增：提交前将多选转为字符串
+    const campusNetworkStr = campusNetworkSelections.map(v => v || 'null').
+      join(',')
     const submissionData = {
       ...formData,
+      campusNetwork: campusNetworkStr,
       province,
       prefecture,
       county,
@@ -286,7 +318,8 @@ export default function CollectionForm () {
           },
         }).then(sharingRes => {
           if (sharingRes.code !== 200) {
-            console.error('Failed to update contact sharing preferences:', sharingRes.msg)
+            console.error('Failed to update contact sharing preferences:',
+              sharingRes.msg)
             setShowModal(true)
             setModalContent(
               prev => prev + `\n（但更新联系方式共享设置失败：${sharingRes.msg}）`)
@@ -337,8 +370,10 @@ export default function CollectionForm () {
           </div>
         </div>
 
-        <div className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
-          <div className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">
+        <div
+          className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
+          <div
+            className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">
             信息采集须知
           </div>
           <div className="pt-2 indent-8">
@@ -931,36 +966,42 @@ export default function CollectionForm () {
                     齐鲁工业大学校园网可直接连入校内作业考试、教务管理、图书馆资源、正版化软件等信息化系统。若选择开通，运营商将免费寄送绑定校园网融合套餐的手机卡至填写的家庭地址，自行激活校园卡后即可享受校园优惠套餐。
                   </div>
                   {networkApply && (
-                    <div className="mt-2 text-sm">
-                      <div className="grow text-nowrap whitespace-nowrap">
+                    <div className="mt-2 text-sm flex flex-col">
+                      <div className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
-                          type="radio"
-                          name="campusNetwork"
+                          type="checkbox"
+                          name="campusNetworkCmcc"
                           id="campus-network-cmcc"
                           className="m-2"
-                          value="济南移动"
+                          checked={campusNetworkSelections[0] === '济南移动'}
+                          onChange={e => handleCampusNetworkChange(0,
+                            e.target.checked, '济南移动')}
                         />
                         <label htmlFor="campus-network-cmcc"
                                className="py-3 w-full inline-block">济南移动</label>
                       </div>
-                      <div className="grow text-nowrap whitespace-nowrap">
+                      <div className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
-                          type="radio"
-                          name="campusNetwork"
+                          type="checkbox"
+                          name="campusNetworkCu"
                           id="campus-network-cu"
                           className="m-2"
-                          value="济南联通"
+                          checked={campusNetworkSelections[1] === '济南联通'}
+                          onChange={e => handleCampusNetworkChange(1,
+                            e.target.checked, '济南联通')}
                         />
                         <label htmlFor="campus-network-cu"
                                className="py-3 w-full inline-block">济南联通</label>
                       </div>
-                      <div className="grow text-nowrap whitespace-nowrap">
+                      <div className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
-                          type="radio"
-                          name="campusNetwork"
+                          type="checkbox"
+                          name="campusNetworkCt"
                           id="campus-network-ct"
                           className="m-2"
-                          value="济南电信"
+                          checked={campusNetworkSelections[2] === '济南电信'}
+                          onChange={e => handleCampusNetworkChange(2,
+                            e.target.checked, '济南电信')}
                         />
                         <label htmlFor="campus-network-ct"
                                className="py-3 w-full inline-block">济南电信</label>
