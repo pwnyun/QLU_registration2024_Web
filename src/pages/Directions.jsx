@@ -202,11 +202,22 @@ export default function Directions () {
       }
     })
 
+    // 如果人脸未上传，但 SSO 已阅读，则修正 SSO 提示文本
+    if (!statuses.user_face_exists && statuses.sso_registration_status) {
+      setFeatures(draft => {
+        const index = draft.findIndex(feature => feature.id === 'sso_registration')
+        if (index !== -1) {
+          draft[index].status = 'false'
+          draft[index].description = '人脸识别图片未上传'
+          draft[index].finishDescription = '人脸识别图片未上传'
+        }
+      })
+    }
+
     // 如果人脸已上传，但 SSO 未阅读，则修正 SSO 阅读状态
     if (statuses.user_face_exists && !statuses.sso_registration_status) {
       setFeatures(draft => {
-        const index = draft.findIndex(
-          feature => feature.id === 'sso_registration')
+        const index = draft.findIndex(feature => feature.id === 'sso_registration')
         if (index !== -1) {
           draft[index].status = 'true'
           updateReadStatus({ id: 'sso_registration' })
