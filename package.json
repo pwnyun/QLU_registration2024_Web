@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.6",
+    "@headlessui/react": "^2.2.7",
     "axios": "^1.11.0",
     "crypto-js": "^4.2.0",
     "gb3304": "^1.0.1",
@@ -22,7 +22,7 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.30.1",
     "use-immer": "^0.10.0",
-    "zustand": "^5.0.6"
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@province-city-china/level": "^8.5.8",

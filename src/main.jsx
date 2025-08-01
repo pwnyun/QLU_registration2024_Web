@@ -8,7 +8,6 @@ import CollectionForm from "./pages/CollectionForm.jsx";
 import PreCheckIn from "./pages/PreCheckIn.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import AllocateClass from "./pages/AllocateClass.jsx";
-import SAMBind from "./pages/SAMBind.jsx";
 import AllocateDormitory from './pages/AllocateDormitory.jsx'
 
 const router = createBrowserRouter([
@@ -31,9 +30,6 @@ const router = createBrowserRouter([
   }, {
     path: '/allocate-class',
     element: <AllocateClass/>
-  }, {
-    path: '/sam-bind',
-    element: <SAMBind/>
   },
 
   // xyw.qlu.edu.cn 使用：

@@ -11,6 +11,7 @@ import { getLoginInfo } from '../libs/getLoginInfo.js'
 import localforage from 'localforage'
 import useStatusStore from '../libs/statusStore.js'
 import { Switch } from '@headlessui/react'
+import { PageFooter } from '../components/page-footer.jsx'
 
 export default function CollectionForm () {
   const navigate = useNavigate()
@@ -335,20 +336,15 @@ export default function CollectionForm () {
           </div>
         </div>
 
-        <div
-          className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
-          <div
-            className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">信息采集须知
+        <div className="border rounded-lg border-gray-400/50 bg-white/30 backdrop-blur px-4 py-4 mx-4 mt-16 text-gray-700">
+          <div className="text-xl underline underline-offset-8 decoration-pink-500 decoration-2 font-medium py-2">
+            信息采集须知
           </div>
-          <div className="pt-2">
+          <div className="pt-2 indent-8">
             本表单为齐鲁工业大学官方新生信息采集表单，请详细、准确的填写信息。<b>我们将会妥善的保护您的隐私数据</b>。
           </div>
-          <div
-            className="py-1 text-center text-gray-400 select-none">·&ensp;·&ensp;·&ensp;·
-          </div>
-          <div className="pb-2">
-            除本表单外，任何第三方提供的、以校园网开通或赠送礼品等为名义的个人信息收集表单均非官方渠道，请各位新生注意保护信息安全，谨防电信诈骗。有任何疑问请联系齐鲁工业大学网络信息中心
-            <a href="tel:0531-89631358">0531-89631358</a>。
+          <div className="pb-2 indent-8">
+            除本表单外，任何第三方提供的、以校园网开通或赠送礼品等为名义的个人信息收集表单均非官方渠道，请各位新生注意保护信息安全，谨防电信诈骗。
           </div>
         </div>
 
@@ -987,11 +983,7 @@ export default function CollectionForm () {
         </form>
       </div>
 
-      <div
-        className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
-        <div>&copy;2025 齐鲁工业大学 | 网络信息中心</div>
-        <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
-      </div>
+      <PageFooter/>
 
       <Modal isOpen={showModal} setIsOpen={setShowModal}
              buttonText={modalButtonText}

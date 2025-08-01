@@ -8,6 +8,7 @@ import FileUploaderZone from "../components/file-uploader-zone.jsx";
 import {PiSealWarning} from "react-icons/pi";
 import { request } from '../libs/request.js'
 import { getLoginInfo } from '../libs/getLoginInfo.js'
+import { PageFooter } from '../components/page-footer.jsx'
 
 const plans = ['私家车', '出租车', '公共交通']
 
@@ -457,11 +458,7 @@ export default function PreCheckIn() {
         </form>
       </div>
 
-      <div
-        className="w-full sticky bottom-0 bg-white/50 backdrop-blur mt-16 py-4 flex flex-col justify-center items-center text-sm text-gray-600 bg-white">
-        <div>&copy;2025 齐鲁工业大学 | 网络信息中心</div>
-        <div>联系方式：<a href="tel:0531-89631358">0531-89631358</a></div>
-      </div>
+      <PageFooter/>
 
       <Modal isOpen={showModal} setIsOpen={setShowModal} buttonText={modalButtonText}
              optionalButton={modalOptionalButton}>
