@@ -141,7 +141,7 @@ export default function Directions () {
     const refreshStatus = () => {
       fetchStatus().catch(async (err) => {
         console.error('directions: fetchStatus failed.', err)
-        if (err.code === 401) {
+        if (err.code === 413) {
           await localforage.clear()
           navigate('/')
         } else {
@@ -169,7 +169,7 @@ export default function Directions () {
     getLoginInfo().then(res => {
       if (res.code !== 200) {
         console.error('directions: getLoginInfo fail.', res.msg)
-        if (res.code === 401) {
+        if (res.code === 413) {
           localforage.clear().then(() => navigate('/'))
         }
         return

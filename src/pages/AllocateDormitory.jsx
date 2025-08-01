@@ -44,7 +44,7 @@ export default function AllocateDormitory() {
       })
 
       console.log(dormitoryInfoRes)
-      if (dormitoryInfoRes.code === 401) {
+      if (dormitoryInfoRes.code === 41) {
         await localforage.clear()
         navigate('/login')
         return

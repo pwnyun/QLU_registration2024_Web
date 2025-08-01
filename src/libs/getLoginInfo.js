@@ -7,7 +7,7 @@ export async function getLoginInfo () {
     console.debug('[User Info]', info)
 
     if (!info.name || !info.idCard || !info.token) {
-      return { code: 401 }
+      return { code: 413 }
     }
 
     return { code: 200, ...info }
@@ -16,7 +16,7 @@ export async function getLoginInfo () {
     console.error('catch getLoginInfo error: ', e)
     await localforage.clear()
     return {
-      code: 403,
+      code: 413,
       msg: '检查身份核验状态失败，请尝试重新进行身份核验。',
     }
   }

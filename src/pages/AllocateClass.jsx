@@ -40,7 +40,7 @@ export default function AllocateClass() {
       })
 
       console.log(classInfoRes)
-      if (classInfoRes.code === 401) {
+      if (classInfoRes.code === 413) {
         localforage.clear()
         navigate('/login')
         return
@@ -67,7 +67,7 @@ export default function AllocateClass() {
 
     }
     fn()
-  }, [])
+  }, [navigate])
 
   return (<>
     <div className="container mx-auto max-w-[750px]">

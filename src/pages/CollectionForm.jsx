@@ -152,7 +152,7 @@ export default function CollectionForm () {
 
         // 4. setHasFinishedForm - 判定优先级高于 `/api/status` 状态接口
         setHasFinishedForm(true)
-      } else if (historyResponse.code === 401) {
+      } else if (historyResponse.code === 413) {
         await localforage.clear()
         navigate('/')
       } else {
@@ -161,32 +161,32 @@ export default function CollectionForm () {
       }
 
       // Load contact sharing preferences
-      const sharingResponse = await request({
-        url: '/api/contact_sharing/get',
-        method: 'GET',
-      })
-
-      if (sharingResponse.code === 200 && sharingResponse.data) {
-        const {
-          share_phone_roommate,
-          share_qq_roommate,
-          share_phone_classmate,
-          share_qq_classmate,
-        } = sharingResponse.data
-        setContactSharingOptions({
-          roommate: {
-            sharePhone: !!share_phone_roommate,
-            shareQq: !!share_qq_roommate,
-          },
-          classmate: {
-            sharePhone: !!share_phone_classmate,
-            shareQq: !!share_qq_classmate,
-          },
-        })
-      } else if (sharingResponse.code !== 401) {
-        console.warn('Could not load contact sharing preferences:',
-          sharingResponse.msg)
-      }
+      // const sharingResponse = await request({
+      //   url: '/api/contact_sharing/get',
+      //   method: 'GET',
+      // })
+      //
+      // if (sharingResponse.code === 200 && sharingResponse.data) {
+      //   const {
+      //     share_phone_roommate,
+      //     share_qq_roommate,
+      //     share_phone_classmate,
+      //     share_qq_classmate,
+      //   } = sharingResponse.data
+      //   setContactSharingOptions({
+      //     roommate: {
+      //       sharePhone: !!share_phone_roommate,
+      //       shareQq: !!share_qq_roommate,
+      //     },
+      //     classmate: {
+      //       sharePhone: !!share_phone_classmate,
+      //       shareQq: !!share_qq_classmate,
+      //     },
+      //   })
+      // } else if (sharingResponse.code !== 401) {
+      //   console.warn('Could not load contact sharing preferences:',
+      //     sharingResponse.msg)
+      // }
     }
 
     fn()
@@ -243,6 +243,7 @@ export default function CollectionForm () {
       errorMessage += '详细地址不能位空；'
     }
     if (networkApply && !formData.campusNetwork) {
+      // todo))
       errorMessage += '您选择了开通融合校园网，请选择运营商；'
     }
 

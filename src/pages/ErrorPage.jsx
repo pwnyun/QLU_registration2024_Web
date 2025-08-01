@@ -26,7 +26,8 @@ export default function ErrorPage() {
     }
     case 401:
     case 403:
-    case 405: {
+    case 405:
+    case 413: {
       message = '403 Access Denied';
       button = '返回首页';
       url = '/';
