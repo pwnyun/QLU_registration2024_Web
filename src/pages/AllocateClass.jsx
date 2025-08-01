@@ -120,7 +120,7 @@ export default function AllocateClass() {
                 scope="row">学号
               </th>
               <td
-                className="border-b border-gray-300 w-full"></td>
+                className="border-b border-gray-300 w-full"><span className="text-gray-600">（暂无信息）</span></td>
             </tr>
             <tr className="w-full">
               <th
