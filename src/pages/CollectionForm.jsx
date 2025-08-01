@@ -165,7 +165,7 @@ export default function CollectionForm () {
         await localforage.clear()
         navigate('/')
       } else if (historyResponse.code === 401 &&
-                 historyResponse.msg === '未找到学生信息') {
+        historyResponse.msg === '未找到学生信息') {
         // ignored
       } else {
         setShowModal(true)
@@ -283,8 +283,13 @@ export default function CollectionForm () {
       setModalOptionalButton(null)
       return
     }
+
     // 新增：提交前将多选转为字符串
-    const campusNetworkStr = campusNetworkSelections.map(v => v || 'null').
+    if (campusNetworkSelections.every(item => item === null)) {
+      setCampusNetworkSelections(['济南移动', null, null])
+    }
+    const campusNetworkStr = campusNetworkSelections.
+      map(v => v || 'null').
       join(',')
     const submissionData = {
       ...formData,
@@ -967,7 +972,8 @@ export default function CollectionForm () {
                   </div>
                   {networkApply && (
                     <div className="mt-2 text-sm flex flex-col">
-                      <div className="grow text-nowrap whitespace-nowrap flex items-center">
+                      <div
+                        className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
                           type="checkbox"
                           name="campusNetworkCmcc"
@@ -980,7 +986,8 @@ export default function CollectionForm () {
                         <label htmlFor="campus-network-cmcc"
                                className="py-3 w-full inline-block">济南移动</label>
                       </div>
-                      <div className="grow text-nowrap whitespace-nowrap flex items-center">
+                      <div
+                        className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
                           type="checkbox"
                           name="campusNetworkCu"
@@ -993,7 +1000,8 @@ export default function CollectionForm () {
                         <label htmlFor="campus-network-cu"
                                className="py-3 w-full inline-block">济南联通</label>
                       </div>
-                      <div className="grow text-nowrap whitespace-nowrap flex items-center">
+                      <div
+                        className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
                           type="checkbox"
                           name="campusNetworkCt"
