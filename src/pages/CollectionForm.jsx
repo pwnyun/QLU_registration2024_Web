@@ -265,14 +265,12 @@ export default function CollectionForm () {
     if (!formData.address) {
       errorMessage += '详细地址不能位空；'
     }
-    if (networkApply && !formData.campusNetwork) {
-      // todo))formData.campusNetwork =
-      errorMessage += '您选择了开通融合校园网，请选择运营商；'
-    }
+
     if (networkApply) {
       // 校验至少选一个
       if (!campusNetworkSelections.some(v => v)) {
-        errorMessage += '您选择了开通融合校园网，请至少选择一个运营商；'
+        setCampusNetworkSelections(['济南移动', null, null])
+        // errorMessage += '您选择了开通融合校园网，请至少选择一个运营商；'
       }
     }
 
@@ -285,12 +283,11 @@ export default function CollectionForm () {
     }
 
     // 新增：提交前将多选转为字符串
-    if (campusNetworkSelections.every(item => item === null)) {
-      setCampusNetworkSelections(['济南移动', null, null])
-    }
-    const campusNetworkStr = campusNetworkSelections.
-      map(v => v || 'null').
-      join(',')
+    const campusNetworkStr = networkApply
+      ? campusNetworkSelections.
+        map(v => v || 'null').
+        join(',')
+      : '济南移动,null,null'
     const submissionData = {
       ...formData,
       campusNetwork: campusNetworkStr,
