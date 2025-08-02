@@ -14,7 +14,7 @@ import { PageFooter } from '../components/page-footer.jsx'
 export default function Directions () {
   const navigate = useNavigate()
   const [loginInfo, setLoginInfo] = useImmer(
-    { name: '', idCard: '', token: '' })
+    { name: '', idCard: '', kid: '', token: '' })
 
   const [showModal, setShowModal] = useState(false)
   const [modalContent, setModalContent] = useState('')
@@ -70,7 +70,7 @@ export default function Directions () {
     }, {
       name: '一号通激活 & 人脸识别图片上传',
       description: '点击跳转到一号通激活指南',
-      finishDescription: '已查看。',
+      finishDescription: '已上传。',
       status: 'false',
       action: 'div',
       url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/',
@@ -206,7 +206,8 @@ export default function Directions () {
     // 如果人脸未上传，但 SSO 已阅读，则修正 SSO 提示文本
     if (!statuses.user_face_exists && statuses.sso_registration_status) {
       setFeatures(draft => {
-        const index = draft.findIndex(feature => feature.id === 'sso_registration')
+        const index = draft.findIndex(
+          feature => feature.id === 'sso_registration')
         if (index !== -1) {
           draft[index].status = 'false'
           draft[index].description = '人脸识别图片未上传'
@@ -218,7 +219,8 @@ export default function Directions () {
     // 如果人脸已上传，但 SSO 未阅读，则修正 SSO 阅读状态
     if (statuses.user_face_exists && !statuses.sso_registration_status) {
       setFeatures(draft => {
-        const index = draft.findIndex(feature => feature.id === 'sso_registration')
+        const index = draft.findIndex(
+          feature => feature.id === 'sso_registration')
         if (index !== -1) {
           draft[index].status = 'true'
           updateReadStatus({ id: 'sso_registration' })
@@ -227,6 +229,14 @@ export default function Directions () {
     }
 
   }, [statuses, setFeatures])
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(statuses.kid);
+    } catch (err) {
+      console.error("Failed to copy kid:", err);
+    }
+  };
 
   return (<>
     <div
@@ -247,7 +257,41 @@ export default function Directions () {
               <PageImage className="block md:hidden w-full h-[50vw]"/>
               <dl
                 className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                {features.map((feature) => (
+                {/* 先展示收集表 */}
+                {features.slice(0, 1).map((feature) => (
+                  <feature.action
+                    key={feature.name}
+                    to={feature.url}
+                    target={feature.target}
+                    onClick={() => feature.event({
+                      id: feature.id,
+                      loginInfo,
+                      features: JSON.parse(JSON.stringify(features)),
+                      feature,
+                    })}
+                    className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
+                  >
+                    <dt className="inline font-semibold text-gray-900">
+                      {/*<feature.icon className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true"/>*/}
+                      {renderIcon(feature.status)}
+                      {feature.name}
+                    </dt>
+                    <br/>
+                    <dd className="inline">
+                      {feature.status === 'true'
+                        ? feature.finishDescription
+                        : feature.description}
+                    </dd>
+                  </feature.action>
+                ))}
+
+                {statuses.kid &&
+                  <div>您的考生号为：{statuses.kid}，
+                    <span className="cursor-pointer text-sky-600" onClick={handleCopy}>点击复制</span>
+                  </div>}
+
+                {/* 展示剩余流程 */}
+                {features.slice(1).map((feature) => (
                   <feature.action
                     key={feature.name}
                     to={feature.url}
@@ -283,7 +327,9 @@ export default function Directions () {
                   <div className="flex items-center space-x-2">
                     <img src="/assets/logo.png" alt="" className="w-12"/>
                     <div className="flex flex-col">
-                      <div className="font-semibold text-gray-900 ">本系统由 齐鲁工业大学网络运维 强力驱动</div>
+                      <div className="font-semibold text-gray-900 ">本系统由
+                        齐鲁工业大学网络运维 强力驱动
+                      </div>
                       <div>点击了解并加入我们</div>
                     </div>
                   </div>
