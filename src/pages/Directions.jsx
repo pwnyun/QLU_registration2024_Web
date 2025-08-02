@@ -83,17 +83,17 @@ export default function Directions () {
       },
     }, {
       name: '线上缴费',
-      description: '点击跳转至计财处智慧财务系统',
+      description: '8 月 31 日后开启缴费流程。',
       finishDescription: '已查看。',
-      status: 'false',
-      action: Link,
+      status: 'disable',
+      action: 'div',
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'read_bill',
       event: (e) => {
-        updateReadStatus({ id: 'read_bill' }).then(() => {
-          window.location.href = 'https://qlgydx.mp.sinojy.cn'
-        })
+        // updateReadStatus({ id: 'read_bill' }).then(() => {
+        //   window.location.href = 'https://qlgydx.mp.sinojy.cn'
+        // })
       },
     }, {
       name: 'OS 平台注册',
