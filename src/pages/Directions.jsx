@@ -90,11 +90,12 @@ export default function Directions () {
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'read_bill',
-      event: (e) => {
-        // updateReadStatus({ id: 'read_bill' }).then(() => {
-        //   window.location.href = 'https://qlgydx.mp.sinojy.cn'
-        // })
-      },
+      event: showDisableTip,
+      // event: (e) => {
+      //   updateReadStatus({ id: 'read_bill' }).then(() => {
+      //     window.location.href = 'https://qlgydx.mp.sinojy.cn'
+      //   })
+      // },
     }, {
       name: 'OS 平台注册',
       description: '此步骤需分配学号后才能完成',// '点击跳转到工大OS激活指南',
