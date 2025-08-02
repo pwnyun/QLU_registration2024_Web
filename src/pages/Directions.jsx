@@ -53,7 +53,7 @@ export default function Directions () {
 
   const showDisableTip = () => {
     setShowModal(true)
-    setModalContent('正在升级维护中，请过几日再试。')
+    setModalContent('前面的区域以后再来探索吧。')
   }
 
   const [features, setFeatures] = useImmer([
@@ -97,7 +97,7 @@ export default function Directions () {
       },
     }, {
       name: 'OS 平台注册',
-      description: '点击跳转到工大OS激活指南',
+      description: '此步骤需分配学号后才能完成',// '点击跳转到工大OS激活指南',
       finishDescription: '已查看。',
       status: 'disable',
       action: 'div',
@@ -125,14 +125,14 @@ export default function Directions () {
       event: () => { },
     }, {
       name: '预报到',
-      description: '点击进入预报到系统',
+      description: '暂不开放',//'点击进入预报到系统',
       finishDescription: '已预报到。',
-      status: 'false',
-      action: Link,
+      status: 'disable',
+      action: 'div', //Link,
       url: '/pre-check-in',
       target: '_self',
       id: 'pre_arrival',
-      event: () => { },
+      event: showDisableTip,
     },
   ])
 

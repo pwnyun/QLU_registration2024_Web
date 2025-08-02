@@ -172,33 +172,32 @@ export default function CollectionForm () {
         setModalContent(`读取历史填写表单失败：` + historyResponse.msg)
       }
 
-      // Load contact sharing preferences
-      // const sharingResponse = await request({
-      //   url: '/api/contact_sharing/get',
-      //   method: 'GET',
-      // })
-      //
-      // if (sharingResponse.code === 200 && sharingResponse.data) {
-      //   const {
-      //     share_phone_roommate,
-      //     share_qq_roommate,
-      //     share_phone_classmate,
-      //     share_qq_classmate,
-      //   } = sharingResponse.data
-      //   setContactSharingOptions({
-      //     roommate: {
-      //       sharePhone: !!share_phone_roommate,
-      //       shareQq: !!share_qq_roommate,
-      //     },
-      //     classmate: {
-      //       sharePhone: !!share_phone_classmate,
-      //       shareQq: !!share_qq_classmate,
-      //     },
-      //   })
-      // } else if (sharingResponse.code !== 401) {
-      //   console.warn('Could not load contact sharing preferences:',
-      //     sharingResponse.msg)
-      // }
+      const sharingResponse = await request({
+        url: '/api/contact_sharing/get',
+        method: 'GET',
+      })
+
+      if (sharingResponse.code === 200 && sharingResponse.data) {
+        const {
+          share_phone_with_roommate,
+          share_qq_with_roommate,
+          share_phone_with_classmate,
+          share_qq_with_classmate,
+        } = sharingResponse.data
+        setContactSharingOptions({
+          roommate: {
+            sharePhone: !!share_phone_with_roommate,
+            shareQq: !!share_qq_with_roommate,
+          },
+          classmate: {
+            sharePhone: !!share_phone_with_classmate,
+            shareQq: !!share_qq_with_classmate,
+          },
+        })
+      } else if (sharingResponse.code !== 401) {
+        console.warn('Could not load contact sharing preferences:',
+          sharingResponse.msg)
+      }
     }
 
     fn()
@@ -266,15 +265,17 @@ export default function CollectionForm () {
       errorMessage += '详细地址不能位空；'
     }
 
-    if (networkApply) {
-      // 校验至少选一个
-      // equals to if (campusNetworkSelections.every(item => item === null))
-      if (!campusNetworkSelections.some(v => v)) {
-        setCampusNetworkSelections(['济南移动', null, null])
+    let shadowNetworkApply = networkApply;
+    let shadowCampusNetworkSelections = JSON.parse(JSON.stringify(campusNetworkSelections))
+
+    if (shadowNetworkApply) {
+      if (!campusNetworkSelections.some(v => v)) { // 什么都不选
+        shadowNetworkApply = false
+        shadowCampusNetworkSelections = ['济南移动', null, null]
         // errorMessage += '您选择了开通融合校园网，请至少选择一个运营商；'
       }
     } else {
-      setCampusNetworkSelections(['济南移动', null, null])
+      shadowCampusNetworkSelections = [null, null, null]
     }
 
     if (errorMessage !== '') {
@@ -286,18 +287,16 @@ export default function CollectionForm () {
     }
 
     // 新增：提交前将多选转为字符串
-    const campusNetworkStr = networkApply
-      ? campusNetworkSelections.
+    const campusNetworkStr = shadowCampusNetworkSelections.
         map(v => v || 'null').
         join(',')
-      : '济南移动,null,null'
     const submissionData = {
       ...formData,
-      campusNetwork: campusNetworkStr,
       province,
       prefecture,
       county,
-      networkApply,
+      networkApply: shadowNetworkApply,
+      campusNetwork: campusNetworkStr,
     }
 
     request({
@@ -410,7 +409,7 @@ export default function CollectionForm () {
                     name="name"
                     id="name"
                     value={name}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -427,7 +426,7 @@ export default function CollectionForm () {
                     value={formData.gender}
                     onChange={handleInputChange}
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     <option>男</option>
@@ -467,7 +466,7 @@ export default function CollectionForm () {
                     placeholder="个人电话"
                     autoComplete="tel"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -475,7 +474,7 @@ export default function CollectionForm () {
               <div className="sm:col-span-3">
                 <label htmlFor="qq"
                        className="block text-sm font-medium leading-6">
-                  个人QQ号
+                  个人 QQ 号
                 </label>
                 <div className="mt-2 w-full">
                   <input
@@ -484,9 +483,9 @@ export default function CollectionForm () {
                     id="qq"
                     value={formData.qq}
                     onChange={handleInputChange}
-                    placeholder="个人QQ号"
+                    placeholder="个人 QQ 号"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -501,14 +500,14 @@ export default function CollectionForm () {
                     </p>
                   </div>
 
-                  {/* Roommates */}
+                  {/* 舍友 */}
                   <div
-                    className="flex items-center justify-between w-full rounded-lg border border-gray-200 p-2 sm:w-auto sm:justify-start sm:gap-x-6 sm:border-none sm:p-0">
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 w-full rounded-lg border border-gray-200 p-2 sm:w-auto sm:justify-start sm:gap-x-6 sm:border-none sm:p-0">
                     <label
                       className="block text-sm font-medium leading-6 text-gray-900 sm:w-32">
-                      向 <b className="font-semibold">舍友</b> 共享:
+                      向<b className="font-semibold">舍友</b>共享:
                     </label>
-                    <div className="flex items-center gap-x-4">
+                    <div className="flex items-center flex-wrap gap-x-4">
                       <div className="flex items-center">
                         <input
                           id="share-phone-roommate"
@@ -517,11 +516,11 @@ export default function CollectionForm () {
                           checked={contactSharingOptions.roommate.sharePhone}
                           onChange={(e) => handleSharingChange('roommate',
                             'sharePhone', e.target.checked)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                         />
                         <label htmlFor="share-phone-roommate"
                                className="ml-2 block text-sm leading-6 text-gray-900">
-                          手机号
+                          个人电话
                         </label>
                       </div>
                       <div className="flex items-center">
@@ -532,24 +531,24 @@ export default function CollectionForm () {
                           checked={contactSharingOptions.roommate.shareQq}
                           onChange={(e) => handleSharingChange('roommate',
                             'shareQq', e.target.checked)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                         />
                         <label htmlFor="share-qq-roommate"
                                className="ml-2 block text-sm leading-6 text-gray-900">
-                          QQ号
+                          个人 QQ 号
                         </label>
                       </div>
                     </div>
                   </div>
 
-                  {/* Classmates */}
+                  {/* 同班同学 */}
                   <div
-                    className="flex items-center justify-between w-full rounded-lg border border-gray-200 p-2 sm:w-auto sm:justify-start sm:gap-x-6 sm:border-none sm:p-0">
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 w-full rounded-lg border border-gray-200 p-2 sm:w-auto sm:justify-start sm:gap-x-6 sm:border-none sm:p-0">
                     <label
                       className="block text-sm font-medium leading-6 text-gray-900 sm:w-32">
-                      向 <b className="font-semibold">同班同学</b> 共享:
+                      向<b className="font-semibold">同班同学</b>共享:
                     </label>
-                    <div className="flex items-center gap-x-4">
+                    <div className="flex items-center flex-wrap gap-x-4">
                       <div className="flex items-center">
                         <input
                           id="share-phone-classmate"
@@ -558,11 +557,11 @@ export default function CollectionForm () {
                           checked={contactSharingOptions.classmate.sharePhone}
                           onChange={(e) => handleSharingChange('classmate',
                             'sharePhone', e.target.checked)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                         />
                         <label htmlFor="share-phone-classmate"
                                className="ml-2 block text-sm leading-6 text-gray-900">
-                          手机号
+                          个人电话
                         </label>
                       </div>
                       <div className="flex items-center">
@@ -573,11 +572,11 @@ export default function CollectionForm () {
                           checked={contactSharingOptions.classmate.shareQq}
                           onChange={(e) => handleSharingChange('classmate',
                             'shareQq', e.target.checked)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                         />
                         <label htmlFor="share-qq-classmate"
                                className="ml-2 block text-sm leading-6 text-gray-900">
-                          QQ号
+                          个人 QQ 号
                         </label>
                       </div>
                     </div>
@@ -598,7 +597,7 @@ export default function CollectionForm () {
                     onChange={handleInputChange}
                     placeholder="监护人姓名"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -618,7 +617,7 @@ export default function CollectionForm () {
                     placeholder="监护人电话"
                     autoComplete="tel"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -645,7 +644,7 @@ export default function CollectionForm () {
                         setCounty('')
                       }
                     }}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     {level.map((province, index) =>
@@ -679,7 +678,7 @@ export default function CollectionForm () {
                         setCounty('')
                       }
                     }}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     {provinceIndex !== -1 &&
@@ -712,7 +711,7 @@ export default function CollectionForm () {
                         setCounty(e.target.value)
                       }
                     }}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300  focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     {prefectureIndex !== -1 &&
@@ -740,7 +739,7 @@ export default function CollectionForm () {
                     placeholder="详细地址"
                     autoComplete="address"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -809,7 +808,7 @@ export default function CollectionForm () {
                     value={formData.blood}
                     onChange={handleInputChange}
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     <option>A 型</option>
@@ -840,7 +839,7 @@ export default function CollectionForm () {
                         type="radio"
                         name="studentLoan"
                         id="loan-china-development-bank"
-                        className="m-2"
+                        className="m-2 accent-sky-600"
                         checked={formData.studentLoan === '是（国家开发银行）'}
                         onChange={handleInputChange}
                         value="是（国家开发银行）"
@@ -853,7 +852,7 @@ export default function CollectionForm () {
                         type="radio"
                         name="studentLoan"
                         id="loan-other-bank"
-                        className="m-2"
+                        className="m-2 accent-sky-600"
                         checked={formData.studentLoan === '是（其他银行）'}
                         onChange={handleInputChange}
                         value="是（其他银行）"
@@ -866,7 +865,7 @@ export default function CollectionForm () {
                         type="radio"
                         name="studentLoan"
                         id="loan-none"
-                        className="m-2"
+                        className="m-2 accent-sky-600"
                         checked={formData.studentLoan === '否'}
                         onChange={handleInputChange}
                         value="否"
@@ -890,7 +889,7 @@ export default function CollectionForm () {
                     value={formData.militaryDischarged}
                     onChange={handleInputChange}
                     required
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     <option>是</option>
@@ -910,7 +909,7 @@ export default function CollectionForm () {
                     name="militaryIntention"
                     value={formData.militaryIntention}
                     onChange={handleInputChange}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value="" disabled hidden></option>
                     <option>是</option>
@@ -930,7 +929,7 @@ export default function CollectionForm () {
                     name="militaryTime"
                     value={formData.militaryTime}
                     onChange={handleInputChange}
-                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 shadow-sm bg-white/20 backdrop-blur ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-600 text-sm sm:leading-6"
                   >
                     <option value=""></option>
                     <option>新生入学报到前</option>
@@ -971,20 +970,20 @@ export default function CollectionForm () {
                     齐鲁工业大学校园网可直接连入校内作业考试、教务管理、图书馆资源、正版化软件等信息化系统。若选择开通，运营商将免费寄送绑定校园网融合套餐的手机卡至填写的家庭地址，自行激活校园卡后即可享受校园优惠套餐。
                   </div>
                   {networkApply && (
-                    <div className="mt-2 text-sm flex flex-col">
+                    <div className="mt-4 text-sm flex flex-col space-y-4">
                       <div
                         className="grow text-nowrap whitespace-nowrap flex items-center">
                         <input
                           type="checkbox"
                           name="campusNetworkCmcc"
                           id="campus-network-cmcc"
-                          className="m-2"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                           checked={campusNetworkSelections[0] === '济南移动'}
                           onChange={e => handleCampusNetworkChange(0,
                             e.target.checked, '济南移动')}
                         />
                         <label htmlFor="campus-network-cmcc"
-                               className="py-3 w-full inline-block">济南移动</label>
+                               className="ml-2 block text-sm leading-6 text-gray-900">济南移动</label>
                       </div>
                       <div
                         className="grow text-nowrap whitespace-nowrap flex items-center">
@@ -992,13 +991,13 @@ export default function CollectionForm () {
                           type="checkbox"
                           name="campusNetworkCu"
                           id="campus-network-cu"
-                          className="m-2"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                           checked={campusNetworkSelections[1] === '济南联通'}
                           onChange={e => handleCampusNetworkChange(1,
                             e.target.checked, '济南联通')}
                         />
                         <label htmlFor="campus-network-cu"
-                               className="py-3 w-full inline-block">济南联通</label>
+                               className="ml-2 block text-sm leading-6 text-gray-900">济南联通</label>
                       </div>
                       <div
                         className="grow text-nowrap whitespace-nowrap flex items-center">
@@ -1006,13 +1005,13 @@ export default function CollectionForm () {
                           type="checkbox"
                           name="campusNetworkCt"
                           id="campus-network-ct"
-                          className="m-2"
+                          className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                           checked={campusNetworkSelections[2] === '济南电信'}
                           onChange={e => handleCampusNetworkChange(2,
                             e.target.checked, '济南电信')}
                         />
                         <label htmlFor="campus-network-ct"
-                               className="py-3 w-full inline-block">济南电信</label>
+                               className="ml-2 block text-sm leading-6 text-gray-900">济南电信</label>
                       </div>
                     </div>
                   )}

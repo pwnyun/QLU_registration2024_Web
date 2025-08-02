@@ -6,7 +6,7 @@ import { getLoginInfo } from '../libs/getLoginInfo.js'
 import localforage from 'localforage'
 import { PageFooter } from '../components/page-footer.jsx'
 
-export default function AllocateClass() {
+export default function AllocateClass () {
   const navigate = useNavigate()
   const [name, setName] = useState('')
 
@@ -17,7 +17,7 @@ export default function AllocateClass() {
 
   const [classInformation, setClassInformation] = useState({})
 
-  const [enableContractSharing, setEnableContractSharing] = useState(false)
+  const [contractError, setContractError] = useState('')
   const [classmateInformation, setClassmateInformation] = useState([])
 
   // 检查是否已登录
@@ -60,11 +60,8 @@ export default function AllocateClass() {
         method: 'GET',
       })
 
-      if (classmatesRes.code === 200) {
-        setEnableContractSharing(true)
-        setClassmateInformation(classmatesRes.data)
-      }
-
+      setContractError(classmatesRes.msg || '')
+      setClassmateInformation(classmatesRes.data)
     }
     fn()
   }, [navigate])
@@ -84,15 +81,15 @@ export default function AllocateClass() {
       <div className="image-container relative mb-[20px] bg-no-repeat w-full">
         <img
           className="object-cover object-bottom w-full h-[calc(100%-2px)] absolute left-0 top-0 z-[-10]"
-          src="/assets/banner-compressed.png" />
+          src="/assets/banner-compressed.png"/>
         <img className="object-cover w-full h-[calc(100%-4px)]"
-          src="/assets/index-bg-mask.svg" />
+             src="/assets/index-bg-mask.svg"/>
         <img
           className="object-cover translate-x-[-50%] h-[41.58%] absolute left-[50%] bottom-[12.3%] z-10"
-          src="/assets/index-avatar-circle.svg" />
+          src="/assets/index-avatar-circle.svg"/>
         <img
           className="object-cover translate-x-[-50%] h-[36.82%] absolute left-[50%] bottom-[15.5%] z-20"
-          src="/assets/qlu-logo-space.png" />
+          src="/assets/qlu-logo-space.png"/>
         {/*<img*/}
         {/*  className="object-cover translate-x-[-50%] translate-y-[3px] absolute bottom-[3.11%] left-[50%] h-[27px] md:h-[36px]"*/}
         {/*  src="images/index-title.svg"/>*/}
@@ -103,93 +100,104 @@ export default function AllocateClass() {
         </div>
       </div>
 
-      <div className={`p-4 ${enableContractSharing ? '' : 'pb-12 mb-12'}`}>
+      <div className={`p-4 ${contractError ? '' : 'pb-12 mb-12'}`}>
         <table className="mt-10 w-full">
           <tbody className="w-full">
-            <tr className="w-full">
-              <th
-                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">姓名
-              </th>
-              <td
-                className="border-y border-gray-300 w-full">{name}</td>
-            </tr>
-            <tr className="w-full">
-              <th
-                className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">学号
-              </th>
-              <td
-                className="border-b border-gray-300 w-full"><span className="text-gray-600">（暂无信息）</span></td>
-            </tr>
-            <tr className="w-full">
-              <th
-                className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">学部（院）
-              </th>
-              <td
-                className="border-b border-gray-300 w-full">{classInformation?.department || <span className="text-gray-600">（暂无信息）</span>}</td>
-            </tr>
-            <tr className="w-full">
-              <th
-                className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">专业
-              </th>
-              <td
-                className="border-b border-gray-300 w-full">{classInformation?.major || <span className="text-gray-600">（暂无信息）</span>}</td>
-            </tr>
-            <tr className="w-full">
-              <th
-                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                scope="row">班级
-              </th>
-              <td
-                className="border-y border-gray-300 w-full">{classInformation?.class_name || <span className="text-gray-600">（暂无信息）</span>}</td>
-            </tr>
+          <tr className="w-full">
+            <th
+              className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+              scope="row">姓名
+            </th>
+            <td
+              className="border-y border-gray-300 w-full">{name}</td>
+          </tr>
+          <tr className="w-full">
+            <th
+              className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+              scope="row">学号
+            </th>
+            <td
+              className="border-b border-gray-300 w-full"><span
+              className="text-gray-600">（暂无信息）</span></td>
+          </tr>
+          <tr className="w-full">
+            <th
+              className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+              scope="row">学部（院）
+            </th>
+            <td
+              className="border-b border-gray-300 w-full">{classInformation?.department ||
+              <span className="text-gray-600">（暂无信息）</span>}</td>
+          </tr>
+          <tr className="w-full">
+            <th
+              className="border-b border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+              scope="row">专业
+            </th>
+            <td
+              className="border-b border-gray-300 w-full">{classInformation?.major ||
+              <span className="text-gray-600">（暂无信息）</span>}</td>
+          </tr>
+          <tr className="w-full">
+            <th
+              className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+              scope="row">班级
+            </th>
+            <td
+              className="border-y border-gray-300 w-full">{classInformation?.class_name ||
+              <span className="text-gray-600">（暂无信息）</span>}</td>
+          </tr>
           </tbody>
         </table>
       </div>
 
-      {enableContractSharing ? (
+      {!contractError || (Array.isArray(classmateInformation) && classmateInformation.length !== 0) ? (
         <div className="p-4 w-full">
           <div>您已选择共享联系方式，下面是您同班同学的联系方式：</div>
           <table className="mt-4 w-full">
             <thead className="w-full">
-              <tr className="w-full">
-                <th
-                  className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                  scope="col">姓名
-                </th>
-                <th
-                  className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                  scope="col">学号
-                </th>
-                <th
-                  className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                  scope="col">手机号
-                </th>
-                <th
-                  className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
-                  scope="col">QQ号
-                </th>
-              </tr>
+            <tr className="w-full">
+              <th
+                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+                scope="col">姓名
+              </th>
+              <th
+                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+                scope="col">学号
+              </th>
+              <th
+                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+                scope="col">手机号
+              </th>
+              <th
+                className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
+                scope="col">QQ号
+              </th>
+            </tr>
             </thead>
             <tbody className="w-full">
-              {classmateInformation.map(classmate => (
-                // todo: key 使用学号
-                <tr className="w-full" key={classmate.name}>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.name || <span className="text-gray-400">未共享</span>}</td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3"></td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.phone || <span className="text-gray-400">未共享</span>}</td>
-                  <td className="border-b border-gray-300 text-center py-2 px-3">{classmate.qq || <span className="text-gray-400">未共享</span>}</td>
-                </tr>
-              ))}
+            {classmateInformation.map(classmate => (
+              // todo: key 使用学号
+              <tr className="w-full" key={classmate.name}>
+                <td
+                  className="border-b border-gray-300 text-center py-2 px-3">{classmate.name ||
+                  <span className="text-gray-400">未共享</span>}</td>
+                <td
+                  className="border-b border-gray-300 text-center py-2 px-3"></td>
+                <td
+                  className="border-b border-gray-300 text-center py-2 px-3">{classmate.phone ||
+                  <span className="text-gray-400">未共享</span>}</td>
+                <td
+                  className="border-b border-gray-300 text-center py-2 px-3">{classmate.qq ||
+                  <span className="text-gray-400">未共享</span>}</td>
+              </tr>
+            ))}
             </tbody>
           </table>
         </div>
       ) : (
         <div className="p-4 flex">
-          <div>您未选择向同班同学共享联系方式，同理您也无法看到同班同学的联系方式。</div>
+          <div>{contractError}</div>
         </div>
       )}
 
@@ -198,8 +206,8 @@ export default function AllocateClass() {
     <PageFooter/>
 
     <Modal isOpen={showModal} setIsOpen={setShowModal}
-      buttonText={modalButtonText}
-      optionalButton={modalOptionalButton}>
+           buttonText={modalButtonText}
+           optionalButton={modalOptionalButton}>
       {modalContent}
     </Modal>
   </>)
