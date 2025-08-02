@@ -268,10 +268,13 @@ export default function CollectionForm () {
 
     if (networkApply) {
       // 校验至少选一个
+      // equals to if (campusNetworkSelections.every(item => item === null))
       if (!campusNetworkSelections.some(v => v)) {
         setCampusNetworkSelections(['济南移动', null, null])
         // errorMessage += '您选择了开通融合校园网，请至少选择一个运营商；'
       }
+    } else {
+      setCampusNetworkSelections(['济南移动', null, null])
     }
 
     if (errorMessage !== '') {
