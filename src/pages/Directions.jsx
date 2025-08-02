@@ -70,7 +70,7 @@ export default function Directions () {
     }, {
       name: '一号通激活 & 人脸识别图片上传',
       description: '点击跳转到一号通激活指南',
-      finishDescription: '已上传。',
+      finishDescription: '已上传图片。',
       status: 'false',
       action: 'div',
       url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/',
@@ -252,46 +252,13 @@ export default function Directions () {
               <p
                 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">线上报到流程</p>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                各位同学，请遵循以下流程完成线上报到。
+                {loginInfo.name}同学，您的考生号为{statuses.kid}，请遵循以下流程完成线上报到。
               </p>
               <PageImage className="block md:hidden w-full h-[50vw]"/>
               <dl
                 className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                {/* 先展示收集表 */}
-                {features.slice(0, 1).map((feature) => (
-                  <feature.action
-                    key={feature.name}
-                    to={feature.url}
-                    target={feature.target}
-                    onClick={() => feature.event({
-                      id: feature.id,
-                      loginInfo,
-                      features: JSON.parse(JSON.stringify(features)),
-                      feature,
-                    })}
-                    className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
-                  >
-                    <dt className="inline font-semibold text-gray-900">
-                      {/*<feature.icon className="absolute left-3 top-3 h-5 w-5 text-qlu" aria-hidden="true"/>*/}
-                      {renderIcon(feature.status)}
-                      {feature.name}
-                    </dt>
-                    <br/>
-                    <dd className="inline">
-                      {feature.status === 'true'
-                        ? feature.finishDescription
-                        : feature.description}
-                    </dd>
-                  </feature.action>
-                ))}
 
-                {statuses.kid &&
-                  <div>您的考生号为：{statuses.kid}，
-                    <span className="cursor-pointer text-sky-600" onClick={handleCopy}>点击复制</span>
-                  </div>}
-
-                {/* 展示剩余流程 */}
-                {features.slice(1).map((feature) => (
+                {features.map((feature) => (
                   <feature.action
                     key={feature.name}
                     to={feature.url}
