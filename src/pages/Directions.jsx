@@ -291,11 +291,13 @@ export default function Directions () {
                   }}
                   className="block relative py-2 pl-2 border rounded border-gray-300 select-none cursor-pointer shadow-[0_0_20px_5px_rgba(212,212,212,0.7)] animate-pulse"
                 >
-                  <div className="flex items-center space-x-2">
-                    <img src="/assets/logo.png" alt="" className="w-12"/>
+                  <div className="flex space-x-2">
+                    <img src="/assets/logo.png" alt="" className="w-12 h-12 mt-2 ml-2"/>
                     <div className="flex flex-col">
-                      <div className="font-semibold text-gray-900 ">本系统由
-                        齐鲁工业大学网络运维 强力驱动
+                      <div className="font-semibold text-gray-900 leading-normal">
+                        本系统由<br/>
+                        齐鲁工业大学网络运维<br/>
+                        强力驱动
                       </div>
                       <div>点击了解并加入我们</div>
                     </div>
