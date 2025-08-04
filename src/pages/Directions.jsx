@@ -51,6 +51,16 @@ export default function Directions () {
     }
   }
 
+  const checkCollectionForm = () => {
+    if (!statuses.information_submit_status) {
+      setShowModal(true)
+      setModalContent('请先完成新生信息采集。')
+      return false
+    }
+
+    return true
+  }
+
   const showDisableTip = () => {
     setShowModal(true)
     setModalContent('前面的区域以后再来探索吧。')
@@ -77,6 +87,7 @@ export default function Directions () {
       target: '_self',
       id: 'sso_registration',
       event: (e) => {
+        if (!checkCollectionForm()) return
         updateReadStatus({ id: 'sso_registration' }).then(() => {
           window.location.href = 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/'
         })
@@ -111,19 +122,25 @@ export default function Directions () {
       description: '点击查看宿舍分配信息',
       finishDescription: '已查询。',
       status: 'false',
-      action: Link,
+      action: 'div',
       url: '/allocate-dormitory',
       id: 'dormitory',
-      event: () => {},
+      event: () => {
+        if (!checkCollectionForm()) return
+        navigate('/allocate-dormitory')
+      },
     }, {
       name: '分班信息查询',
       description: '点击查看分班信息',
       finishDescription: '已查看。',
       status: 'false',
-      action: Link,
+      action: 'div',
       url: '/allocate-class',
       id: 'allocate_class',
-      event: () => { },
+      event: () => {
+        if (!checkCollectionForm()) return;
+        navigate('/allocate-class')
+      },
     }, {
       name: '预报到',
       description: '暂不开放',//'点击进入预报到系统',
@@ -233,11 +250,11 @@ export default function Directions () {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(statuses.kid);
+      await navigator.clipboard.writeText(statuses.kid)
     } catch (err) {
-      console.error("Failed to copy kid:", err);
+      console.error('Failed to copy kid:', err)
     }
-  };
+  }
 
   return (<>
     <div
@@ -293,9 +310,11 @@ export default function Directions () {
                   className="block relative py-2 pl-2 border rounded border-gray-300 select-none cursor-pointer shadow-[0_0_20px_5px_rgba(212,212,212,0.7)] animate-pulse"
                 >
                   <div className="flex space-x-2">
-                    <img src="/assets/logo.png" alt="" className="w-12 h-12 mt-2 ml-2"/>
+                    <img src="/assets/logo.png" alt=""
+                         className="w-12 h-12 mt-2 ml-2"/>
                     <div className="flex flex-col">
-                      <div className="font-semibold text-gray-900 leading-normal">
+                      <div
+                        className="font-semibold text-gray-900 leading-normal">
                         本系统由<br/>
                         齐鲁工业大学网络运维<br/>
                         强力驱动
