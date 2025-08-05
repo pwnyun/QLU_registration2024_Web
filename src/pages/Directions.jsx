@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { FaArrowRight, FaCheck } from 'react-icons/fa6'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Modal from '../components/modal.jsx'
 import { useImmer } from 'use-immer'
 import { MdOutlineRemoveCircleOutline } from 'react-icons/md'
@@ -38,6 +38,16 @@ export default function Directions () {
     }
   }
 
+  const checkCollectionForm = useCallback(() => {
+    if (!statuses.information_submit_status) {
+      setShowModal(true)
+      setModalContent('请先完成新生信息采集。')
+      return false
+    }
+
+    return true
+  }, [statuses])
+
   const updateReadStatus = async ({ id }) => {
     const response = await request({
       url: `/api/set_status`,
@@ -49,16 +59,6 @@ export default function Directions () {
       setShowModal(true)
       setModalContent(`更新状态失败：${response.msg}`)
     }
-  }
-
-  const checkCollectionForm = () => {
-    if (!statuses.information_submit_status) {
-      setShowModal(true)
-      setModalContent('请先完成新生信息采集。')
-      return false
-    }
-
-    return true
   }
 
   const showDisableTip = () => {
@@ -76,6 +76,7 @@ export default function Directions () {
       url: '/collection-form',
       target: '_self',
       id: 'information_submit',
+      checkCollectionForm: false,
       event: () => { },
     }, {
       name: '一号通激活 & 人脸识别图片上传',
@@ -86,8 +87,8 @@ export default function Directions () {
       url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/',
       target: '_self',
       id: 'sso_registration',
+      checkCollectionForm: true,
       event: (e) => {
-        if (!checkCollectionForm()) return
         updateReadStatus({ id: 'sso_registration' }).then(() => {
           window.location.href = 'https://wlyw.qlu.edu.cn/wiki/2025yx/sso/'
         })
@@ -101,6 +102,7 @@ export default function Directions () {
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'read_bill',
+      checkCollectionForm: true,
       event: showDisableTip,
       // event: (e) => {
       //   updateReadStatus({ id: 'read_bill' }).then(() => {
@@ -116,6 +118,7 @@ export default function Directions () {
       url: 'https://wlyw.qlu.edu.cn/wiki/2025yx/os/',
       target: '_self',
       id: 'os',
+      checkCollectionForm: true,
       event: showDisableTip, //updateReadStatus
     }, {
       name: '宿舍查询',
@@ -125,8 +128,8 @@ export default function Directions () {
       action: 'div',
       url: '/allocate-dormitory',
       id: 'dormitory',
+      checkCollectionForm: true,
       event: () => {
-        if (!checkCollectionForm()) return
         navigate('/allocate-dormitory')
       },
     }, {
@@ -137,8 +140,8 @@ export default function Directions () {
       action: 'div',
       url: '/allocate-class',
       id: 'allocate_class',
+      checkCollectionForm: true,
       event: () => {
-        if (!checkCollectionForm()) return;
         navigate('/allocate-class')
       },
     }, {
@@ -150,8 +153,21 @@ export default function Directions () {
       url: '/pre-check-in',
       target: '_self',
       id: 'pre_arrival',
+      checkCollectionForm: true,
       event: showDisableTip,
     },
+    // {
+    //   name: '融合校园卡寄送查询',
+    //   description: '暂不开放',//'点击进入预报到系统',
+    //   finishDescription: '暂不开放',
+    //   status: 'disable',
+    //   action: 'div', //Link,
+    //   url: '/shipping-inquiry',
+    //   target: '_self',
+    //   id: 'shipping-inquiry',
+    //   checkCollectionForm: true,
+    //   event: showDisableTip,
+    // },
   ])
 
   // 注册页面可见性监听 & 检查登录 & 获取状态
@@ -245,7 +261,6 @@ export default function Directions () {
         }
       })
     }
-
   }, [statuses, setFeatures])
 
   const handleCopy = async () => {
@@ -270,7 +285,7 @@ export default function Directions () {
               <p
                 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">线上报到流程</p>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                {loginInfo.name}同学，您的考生号为{statuses.kid}，请遵循以下流程完成线上报到。
+                {loginInfo.name}同学，您的考生号为 {statuses.kid}，请遵循以下流程完成线上报到。
               </p>
               <PageImage className="block md:hidden w-full h-[50vw]"/>
               <dl
@@ -281,12 +296,16 @@ export default function Directions () {
                     key={feature.name}
                     to={feature.url}
                     target={feature.target}
-                    onClick={() => feature.event({
-                      id: feature.id,
-                      loginInfo,
-                      features: JSON.parse(JSON.stringify(features)),
-                      feature,
-                    })}
+                    onClick={() => {
+                      if (feature.checkCollectionForm && !checkCollectionForm()) return
+
+                      feature.event({
+                        id: feature.id,
+                        loginInfo,
+                        features: JSON.parse(JSON.stringify(features)),
+                        feature,
+                      })
+                    }}
                     className="block relative py-2 pl-11 border rounded border-transparent hover:border-gray-300 select-none cursor-pointer"
                   >
                     <dt className="inline font-semibold text-gray-900">

@@ -9,6 +9,7 @@ import PreCheckIn from "./pages/PreCheckIn.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import AllocateClass from "./pages/AllocateClass.jsx";
 import AllocateDormitory from './pages/AllocateDormitory.jsx'
+import ShippingInquiry from './pages/ShippingInquiry.jsx'
 
 const router = createBrowserRouter([
   {
@@ -30,17 +31,10 @@ const router = createBrowserRouter([
   }, {
     path: '/allocate-class',
     element: <AllocateClass/>
+  }, {
+    path: '/shipping-inquiry',
+    element: <ShippingInquiry/>
   },
-
-  // xyw.qlu.edu.cn 使用：
-  // {
-  //   path: '/',
-  //   element: <CollectionFormForOld/>,
-  //   errorElement: <ErrorPage/>,
-  // }, {
-  //   path: '/sam-bind',
-  //   element: <SAMBind/>
-  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
