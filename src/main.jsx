@@ -10,6 +10,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import AllocateClass from "./pages/AllocateClass.jsx";
 import AllocateDormitory from './pages/AllocateDormitory.jsx'
 import ShippingInquiry from './pages/ShippingInquiry.jsx'
+import OfficialGroup from './pages/OfficialGroup.jsx'
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,10 @@ const router = createBrowserRouter([
   }, {
     path: '/shipping-inquiry',
     element: <ShippingInquiry/>
-  },
+  }, {
+    path: '/official-group',
+    element: <OfficialGroup/>
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -155,6 +155,17 @@ export default function Directions () {
       id: 'pre_arrival',
       checkCollectionForm: true,
       event: showDisableTip,
+    }, {
+      name: '工大官方新生群',
+      description: '点击查看',
+      finishDescription: '点击查看。',
+      status: 'false',
+      action: Link,
+      url: '/official-group',
+      target: '_self',
+      id: 'official_group',
+      checkCollectionForm: true,
+      event: () => { },
     },
     // {
     //   name: '融合校园卡寄送查询',
