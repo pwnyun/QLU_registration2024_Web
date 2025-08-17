@@ -117,8 +117,8 @@ export default function AllocateClass () {
               scope="row">学号
             </th>
             <td
-              className="border-b border-gray-300 w-full"><span
-              className="text-gray-600">（暂无信息）</span></td>
+              className="border-b border-gray-300 w-full">{classInformation?.student_id ||
+              <span className="text-gray-600">（暂无信息）</span>}</td>
           </tr>
           <tr className="w-full">
             <th
@@ -161,10 +161,10 @@ export default function AllocateClass () {
                 className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
                 scope="col">姓名
               </th>
-              <th
+              {/* <th
                 className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
                 scope="col">学号
-              </th>
+              </th> */}
               <th
                 className="border-y border-gray-300 text-nowrap whitespace-nowrap sm:px-12 px-3 py-2"
                 scope="col">手机号
@@ -182,8 +182,8 @@ export default function AllocateClass () {
                 <td
                   className="border-b border-gray-300 text-center py-2 px-3">{classmate.name ||
                   <span className="text-gray-400">未共享</span>}</td>
-                <td
-                  className="border-b border-gray-300 text-center py-2 px-3"></td>
+                {/* <td
+                  className="border-b border-gray-300 text-center py-2 px-3"></td> */}
                 <td
                   className="border-b border-gray-300 text-center py-2 px-3">{classmate.phone ||
                   <span className="text-gray-400">未共享</span>}</td>
