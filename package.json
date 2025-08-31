@@ -22,13 +22,13 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.30.1",
     "use-immer": "^0.10.0",
-    "zustand": "^5.0.7"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@province-city-china/level": "^8.5.8",
     "@small-tech/vite-plugin-sri": "^1.0.1",
     "@tailwindcss/forms": "^0.5.10",
-    "@types/react": "^18.3.23",
+    "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",

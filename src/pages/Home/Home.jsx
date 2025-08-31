@@ -239,7 +239,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="m-0 max-w-[30ch] text-sm opacity-80">
-              点击完成线上报道流程
+              点击完成线上报到流程
               {/* 8 月 8 日后，开启线上报到流程 */}
             </p>
           </div>
