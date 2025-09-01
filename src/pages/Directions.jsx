@@ -95,23 +95,23 @@ export default function Directions () {
       },
     }, {
       name: '线上缴费',
-      description: '8 月 31 日后开启缴费流程。',
-      finishDescription: '已查看。',
-      status: 'disable',
+      description: '点击前往齐鲁工业大学计财处',
+      finishDescription: '点击前往齐鲁工业大学计财处',
+      status: 'false',
       action: 'div',
       url: 'https://qlgydx.mp.sinojy.cn',
       target: '_self',
       id: 'read_bill',
       checkCollectionForm: true,
-      event: showDisableTip,
-      // event: (e) => {
-      //   updateReadStatus({ id: 'read_bill' }).then(() => {
-      //     window.location.href = 'https://qlgydx.mp.sinojy.cn'
-      //   })
-      // },
+      // event: showDisableTip,
+      event: () => {
+        updateReadStatus({ id: 'read_bill' }).then(() => {
+          window.location.href = 'https://qlgydx.mp.sinojy.cn'
+        })
+      },
     }, {
       name: 'OS 平台注册',
-      description: '此步骤需分配学号后才能完成',// '点击跳转到工大OS激活指南',
+      description: '暂不开放',// '点击跳转到工大OS激活指南',
       finishDescription: '已查看。',
       status: 'disable',
       action: 'div',
@@ -123,7 +123,7 @@ export default function Directions () {
     }, {
       name: '宿舍查询',
       description: '点击查看宿舍分配信息',
-      finishDescription: '已查询。',
+      finishDescription: '点击查看宿舍分配信息。',
       status: 'false',
       action: 'div',
       url: '/allocate-dormitory',
