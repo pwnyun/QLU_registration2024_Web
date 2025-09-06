@@ -256,7 +256,8 @@ export default function CollectionForm () {
         '天津市',
         '上海市',
         '重庆市',
-        '广东省'].filter(item => item === province).length === 0
+        '广东省',
+        '海南省'].filter(item => item === province).length === 0
       && (!county)
     ) {
       errorMessage += '请选择县级市；'

@@ -111,7 +111,7 @@ export default function Directions () {
       },
     }, {
       name: 'OS 平台注册',
-      description: '暂不开放',// '点击跳转到工大OS激活指南',
+      description: '暂不开放，开学后注册。',// '点击跳转到工大OS激活指南',
       finishDescription: '已查看。',
       status: 'disable',
       action: 'div',
@@ -145,17 +145,17 @@ export default function Directions () {
         navigate('/allocate-class')
       },
     }, {
-      name: '预报到',
-      description: '暂不开放',//'点击进入预报到系统',
-      finishDescription: '已预报到。',
-      status: 'disable',
-      action: 'div', //Link,
-      url: '/pre-check-in',
-      target: '_self',
-      id: 'pre_arrival',
-      checkCollectionForm: true,
-      event: showDisableTip,
-    }, {
+    //   name: '预报到',
+    //   description: '暂不开放',//'点击进入预报到系统',
+    //   finishDescription: '已预报到。',
+    //   status: 'disable',
+    //   action: 'div', //Link,
+    //   url: '/pre-check-in',
+    //   target: '_self',
+    //   id: 'pre_arrival',
+    //   checkCollectionForm: true,
+    //   event: showDisableTip,
+    // }, {
       name: '工大官方新生群',
       description: '点击查看',
       finishDescription: '点击查看。',
